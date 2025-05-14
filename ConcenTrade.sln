@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConcenTrade", "ConcenTrade\ConcenTrade.csproj", "{295D2669-104B-4EFD-94AB-774795728FD1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{295D2669-104B-4EFD-94AB-774795728FD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{295D2669-104B-4EFD-94AB-774795728FD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{295D2669-104B-4EFD-94AB-774795728FD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{295D2669-104B-4EFD-94AB-774795728FD1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {475BD698-471A-48F7-933A-8569A5051DDC}
+	EndGlobalSection
+EndGlobal
