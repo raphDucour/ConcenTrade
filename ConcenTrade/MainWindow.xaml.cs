@@ -8,19 +8,29 @@ namespace Concentrade
         {
             InitializeComponent();
 
-            // (optionnel) Pour vérifier la résolution détectée
+            // Détection résolution (optionnel)
             var screenWidth = SystemParameters.PrimaryScreenWidth;
             var screenHeight = SystemParameters.PrimaryScreenHeight;
 
-            // Si tu veux utiliser ces valeurs plus tard, tu peux les stocker
-            // MessageBox.Show($"Résolution détectée : {screenWidth} x {screenHeight}");
+            // Chargement du prénom sauvegardé
+            string savedName = Properties.Settings.Default.UserName;
+            if (!string.IsNullOrWhiteSpace(savedName))
+            {
+                GreetingText.Text = $"Rebonjour {savedName} !";
+                NameInput.Text = savedName;
+            }
         }
 
         private void Start_Click(object sender, RoutedEventArgs e)
         {
             string name = NameInput.Text;
+
             if (!string.IsNullOrWhiteSpace(name))
             {
+                // Sauvegarde du prénom
+                Properties.Settings.Default.UserName = name;
+                Properties.Settings.Default.Save();
+
                 GreetingText.Text = $"Bonjour {name} !";
             }
             else
@@ -31,7 +41,7 @@ namespace Concentrade
 
         private void NameInput_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-
+            GreetingText.Text = ""; // Nettoie l’ancien message pendant la saisie
         }
     }
 }

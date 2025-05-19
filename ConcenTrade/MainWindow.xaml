@@ -3,13 +3,67 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="ConcenTrade"
         WindowStartupLocation="CenterScreen"
-        WindowState="Maximized">
-    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
-        <TextBlock Text="Quel est ton prénom ?" Margin="0,0,0,10"/>
-        <TextBox x:Name="NameInput" Width="200" TextChanged="NameInput_TextChanged"/>
-        <TextBlock x:Name="GreetingText" FontWeight="Bold" FontSize="16" RenderTransformOrigin="0.519,-1.016"/>
-        <Button Content="Démarrer" Click="Start_Click" Width="200" RenderTransformOrigin="0.679,0.808"/>
-    </StackPanel>
+        WindowState="Maximized"
+        Background="#F5F5F7"
+        FontFamily="Segoe UI"
+        FontSize="16">
+
+    <Window.Resources>
+        <!-- Effet d’ombre (optionnel) -->
+        <DropShadowEffect x:Key="DropShadowEffect"
+                          BlurRadius="15"
+                          ShadowDepth="5"
+                          Direction="270"
+                          Color="#888" />
+    </Window.Resources>
+
+    <Grid>
+        <Border CornerRadius="20"
+                Background="White"
+                Padding="40"
+                Width="400"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Effect="{StaticResource DropShadowEffect}">
+
+            <StackPanel>
+                <!-- Question -->
+                <TextBlock Text="Quel est ton prénom ?"
+                           FontWeight="SemiBold"
+                           FontSize="18"
+                           Foreground="#333"
+                           Margin="0,0,0,10"/>
+
+                <!-- Champ de saisie -->
+                <TextBox x:Name="NameInput"
+                         Height="40"
+                         Margin="0,0,0,20"
+                         Background="#F0F0F0"
+                         BorderThickness="0"
+                         Padding="10"
+                         FontSize="16"
+                         TextChanged="NameInput_TextChanged"
+                         HorizontalAlignment="Stretch"/>
+
+                <!-- Message personnalisé -->
+                <TextBlock x:Name="GreetingText"
+                           FontWeight="SemiBold"
+                           FontSize="18"
+                           Foreground="#444"
+                           Margin="0,0,0,20"/>
+
+                <!-- Bouton dans un border arrondi -->
+                <Border CornerRadius="8" Background="#007AFF">
+                    <Button Content="Démarrer"
+                            Click="Start_Click"
+                            Height="40"
+                            Background="Transparent"
+                            Foreground="White"
+                            BorderThickness="0"
+                            FontWeight="Bold"
+                            Cursor="Hand"/>
+                </Border>
+            </StackPanel>
+        </Border>
+    </Grid>
 </Window>
-
-
