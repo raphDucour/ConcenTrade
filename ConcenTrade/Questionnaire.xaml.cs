@@ -2,9 +2,9 @@
 
 namespace Concentrade
 {
-    public partial class MainWindow : Window
+    public partial class Questionnaire : Window
     {
-        public MainWindow()
+        public Questionnaire()
         {
             InitializeComponent();
 
@@ -21,16 +21,24 @@ namespace Concentrade
             string name = NameInput.Text;
             if (!string.IsNullOrWhiteSpace(name))
             {
-                Properties.Settings.Default.UserName = name;//enregistrement du nom d'utilisateur
-                Properties.Settings.Default.Save();//sauvegarde du nom d'utilisateur
+                // Enregistrement et sauvegarde
+                Properties.Settings.Default.UserName = name;
+                Properties.Settings.Default.Save();
+
+                // Affiche un message de bienvenue
                 GreetingText.Text = $"Bonjour {name} !";
+
+                // Ouvre le menu principal
+                MenuWindow menu = new MenuWindow();
+                menu.Show();
+
+                this.Close();
             }
             else
             {
                 GreetingText.Text = "Bonjour !";
             }
         }
-
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -43,10 +51,9 @@ namespace Concentrade
             }
         }
 
-
         private void NameInput_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-
+            GreetingText.Text = "";
         }
     }
 }
