@@ -28,5 +28,10 @@ namespace Concentrade
                 GreetingText.Text = "Bonjour !";
             }
         }
+
+        private void NameInput_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+
+        }
     }
 }

@@ -6,9 +6,9 @@
         WindowState="Maximized">
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
         <TextBlock Text="Quel est ton prénom ?" Margin="0,0,0,10"/>
-        <TextBox x:Name="NameInput" Width="200" Margin="0,0,0,10"/>
-        <Button Content="Démarrer" Click="Start_Click" Width="200" Margin="0,0,0,10"/>
-        <TextBlock x:Name="GreetingText" FontWeight="Bold" FontSize="16"/>
+        <TextBox x:Name="NameInput" Width="200" TextChanged="NameInput_TextChanged"/>
+        <TextBlock x:Name="GreetingText" FontWeight="Bold" FontSize="16" RenderTransformOrigin="0.519,-1.016"/>
+        <Button Content="Démarrer" Click="Start_Click" Width="200" RenderTransformOrigin="0.679,0.808"/>
     </StackPanel>
 </Window>
 
