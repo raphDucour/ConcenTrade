@@ -21,6 +21,8 @@ namespace Concentrade
             string name = NameInput.Text;
             if (!string.IsNullOrWhiteSpace(name))
             {
+                Properties.Settings.Default.UserName = name;//enregistrement du nom d'utilisateur
+                Properties.Settings.Default.Save();//sauvegarde du nom d'utilisateur
                 GreetingText.Text = $"Bonjour {name} !";
             }
             else
@@ -28,6 +30,19 @@ namespace Concentrade
                 GreetingText.Text = "Bonjour !";
             }
         }
+
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            string savedName = Properties.Settings.Default.UserName;
+
+            if (!string.IsNullOrWhiteSpace(savedName))
+            {
+                NameInput.Text = savedName;
+                GreetingText.Text = $"Bonjour {savedName} !";
+            }
+        }
+
 
         private void NameInput_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
