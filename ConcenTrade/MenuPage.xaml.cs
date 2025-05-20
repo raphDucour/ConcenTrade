@@ -8,6 +8,12 @@ namespace Concentrade
         public MenuPage()
         {
             InitializeComponent();
+
+            string name = Properties.Settings.Default.UserName;
+            GreetingText.Text = !string.IsNullOrWhiteSpace(name)
+                ? $"Bonjour {name} !"
+                : "Bonjour !";
+
         }
 
         private void Quit_Click(object sender, RoutedEventArgs e)

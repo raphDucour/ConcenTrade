@@ -20,8 +20,20 @@ namespace Concentrade
         {
             InitializeComponent();
 
-            // Charger la première page (Questionnaire)
-            MainFrame.Navigate(new Questionnaire(this));
+            string savedName = Properties.Settings.Default.UserName;
+
+            if (!string.IsNullOrWhiteSpace(savedName))
+            {
+                // Aller directement à MenuPage si un nom est déjà enregistré
+                MainFrame.Navigate(new MenuPage());
+            }
+            else
+            {
+
+                // Charger la première page (Questionnaire)
+                MainFrame.Navigate(new Questionnaire(this));
+            }
+
         }
 
         // Méthode pour changer de page (ex. depuis Questionnaire)
