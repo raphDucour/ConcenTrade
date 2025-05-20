@@ -1,20 +1,22 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace Concentrade
 {
-    public partial class Questionnaire : Window
+    public partial class Questionnaire : Page
     {
-        public Questionnaire()
+        private MainWindow _mainWindow;
+
+        public Questionnaire(MainWindow mainWindow)
         {
             InitializeComponent();
+            _mainWindow = mainWindow;
 
-            // (optionnel) Pour vérifier la résolution détectée
             var screenWidth = SystemParameters.PrimaryScreenWidth;
             var screenHeight = SystemParameters.PrimaryScreenHeight;
-            // MessageBox.Show($"Résolution détectée : {screenWidth} x {screenHeight}");
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             string savedName = Properties.Settings.Default.UserName;
             if (!string.IsNullOrWhiteSpace(savedName))
@@ -29,16 +31,13 @@ namespace Concentrade
             string name = NameInput.Text;
             if (!string.IsNullOrWhiteSpace(name))
             {
-                // Sauvegarde
                 Properties.Settings.Default.UserName = name;
                 Properties.Settings.Default.Save();
 
                 GreetingText.Text = $"Bonjour {name} !";
 
-                // Ouvre MenuWindow (à condition qu’il existe)
-                MenuWindow menu = new MenuWindow();
-                menu.Show();
-                this.Close();
+                // Navigation vers MenuWindow si tu l’as converti en Page
+                _mainWindow.NavigateTo(new MenuPage()); // Ou utilise MenuWindow.ShowDialog() si c’est une Window
             }
             else
             {
@@ -46,7 +45,7 @@ namespace Concentrade
             }
         }
 
-        private void NameInput_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void NameInput_TextChanged(object sender, TextChangedEventArgs e)
         {
             GreetingText.Text = "";
         }
