@@ -24,8 +24,8 @@ namespace Concentrade
 
             if (!string.IsNullOrWhiteSpace(savedName))
             {
-                // Aller directement à MenuPage si un nom est déjà enregistré
-                MainFrame.Navigate(new MenuPage());
+                // Affiche la page de bienvenue avant d’aller au menu
+                MainFrame.Navigate(new WelcomePage(savedName));
             }
             else
             {
