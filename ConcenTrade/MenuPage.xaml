@@ -1,50 +1,96 @@
 ﻿<Page x:Class="Concentrade.MenuPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      Background="#F5F5F5"
       Title="Menu principal">
 
-    <Grid>
-        <!-- Définir 3 lignes: top, centre, bottom -->
+    <Page.Resources>
+        <!-- Ombre douce pour le bouton -->
+        <DropShadowEffect x:Key="DropShadow"
+                          BlurRadius="10"
+                          ShadowDepth="2"
+                          Color="#44000000"/>
+
+        <!-- Dégradé de fond violet clair -->
+        <LinearGradientBrush x:Key="BackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#E6D0FF" Offset="0.0"/>
+            <GradientStop Color="#BFA5FF" Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <!-- Style bouton Start avec animation au survol -->
+        <Style x:Key="StartButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#9C6BFF"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Width" Value="140"/>
+            <Setter Property="Height" Value="140"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="70"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}"
+                                Effect="{StaticResource DropShadow}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#7A45FF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#5C2ECC"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="{StaticResource BackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Paramètres en haut à gauche -->
-        <Button Content="Paramètres"
-                Width="120"
-                Height="40"
-                Margin="20"
-                Click="Settings_Click"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Grid.Row="0"/>
-
-        <!-- Centre: texte + boutons -->
-        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
-            <TextBlock Text="Bienvenue dans le menu principal"
-                       Margin="0,0,0,20"
-                       FontWeight="SemiBold"
-                       FontSize="16"
-                       HorizontalAlignment="Center"/>
-
-            <Button Content="Statistiques"
-                    Width="200"
+        <!-- Paramètres et Statistiques en haut à gauche -->
+        <StackPanel Grid.Row="0" Margin="20" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Button Content="Paramètres"
+                    Width="120"
                     Height="40"
                     Margin="0,0,0,10"
+                    Click="Settings_Click"/>
+            <Button Content="Statistiques"
+                    Width="120"
+                    Height="40"
                     Click="Stats_Click"/>
-
-            <TextBlock x:Name="GreetingText"
-                       FontSize="20"
-                       FontWeight="Bold"
-                       HorizontalAlignment="Center"
-                       Margin="0,20,0,20"/>
         </StackPanel>
 
-        <!-- Quitter en bas à droite -->
-        <Button Content="Quitter"
+        <!-- Texte bienvenue centré en haut -->
+        <TextBlock Grid.Row="0"
+                   Text="Bienvenue dans le menu principal"
+                   FontSize="28"
+                   FontWeight="SemiBold"
+                   Foreground="#3E2C7E"
+                   HorizontalAlignment="Center"
+                   Margin="0,30,0,20"/>
+
+        <!-- Bouton Start centré avec style animé -->
+        <Button Grid.Row="1"
+                Content="Start"
+                Style="{StaticResource StartButtonStyle}"
+                Click="StartSession_Click"
+                HorizontalAlignment="Center"
+                ToolTip="Démarrer une session"/>
+
+        <!-- Bouton Quitter en bas à droite -->
+        <Button Grid.Row="2"
+                Content="Quitter"
                 Width="100"
                 Height="35"
                 FontSize="14"
@@ -55,7 +101,6 @@
                 Click="Quit_Click"
                 Margin="20"
                 HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Grid.Row="2"/>
+                VerticalAlignment="Bottom"/>
     </Grid>
 </Page>

@@ -1,19 +1,46 @@
 ﻿<Page x:Class="Concentrade.WelcomePage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      Background="#F5F5F7">
+      Loaded="Page_Loaded"
+      Background="Black">
 
     <Grid>
+        <!-- Dégradé animé fluide -->
+        <Rectangle>
+            <Rectangle.Fill>
+                <LinearGradientBrush x:Name="AnimatedBrush"
+                                     StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#6C63FF" Offset="0.0" x:Name="Stop1"/>
+                    <GradientStop Color="#A389F4" Offset="0.5" x:Name="Stop2"/>
+                    <GradientStop Color="#3C3B5B" Offset="1.0" x:Name="Stop3"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <!-- Halo lumineux -->
+        <Ellipse Width="400" Height="400"
+                 Fill="#804FADF7"
+                 Opacity="0.15"
+                 RenderTransformOrigin="0.5,0.5"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center">
+            <Ellipse.RenderTransform>
+                <ScaleTransform x:Name="PulseEffect" ScaleX="1" ScaleY="1"/>
+            </Ellipse.RenderTransform>
+        </Ellipse>
+
+        <!-- Texte animé -->
         <TextBlock x:Name="WelcomeText"
                    Text="Bonjour !"
-                   FontSize="36"
+                   FontSize="42"
                    FontWeight="Bold"
-                   Foreground="#333"
-                   Opacity="0"
+                   Foreground="White"
                    HorizontalAlignment="Center"
-                   VerticalAlignment="Center">
+                   VerticalAlignment="Center"
+                   TextAlignment="Center"
+                   Opacity="0">
             <TextBlock.RenderTransform>
-                <TranslateTransform Y="20"/>
+                <TranslateTransform Y="40"/>
             </TextBlock.RenderTransform>
         </TextBlock>
     </Grid>

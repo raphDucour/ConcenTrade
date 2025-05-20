@@ -9,26 +9,26 @@ namespace Concentrade
         {
             InitializeComponent();
 
-            string name = Properties.Settings.Default.UserName;
-            GreetingText.Text = !string.IsNullOrWhiteSpace(name)
-                ? $"Bonjour {name} !"
-                : "Bonjour !";
+        }
 
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Paramètres ouverts !");
+        }
+
+        private void Stats_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Voici les statistiques de vos sessions  !");
+        }
+
+        private void StartSession_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Décompte session X temps");
         }
 
         private void Quit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
-        }
-
-        private void Settings_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Page des paramètres à venir !");
-        }
-
-        private void Stats_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Page des statistiques à venir !");
         }
     }
 }
