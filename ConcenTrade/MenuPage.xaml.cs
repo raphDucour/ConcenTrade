@@ -1,17 +1,18 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace Concentrade
 {
-    public partial class MenuWindow : Window
+    public partial class MenuPage : Page
     {
-        public MenuWindow()
+        public MenuPage()
         {
             InitializeComponent();
         }
 
         private void Quit_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Application.Current.Shutdown();
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
