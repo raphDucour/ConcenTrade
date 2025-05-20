@@ -3,8 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="ConcenTrade"
         WindowStartupLocation="CenterScreen"
-        WindowState="Maximized"
-        Loaded="Window_Loaded">
+        WindowState="Maximized">
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
         <TextBlock Text="Quel est ton prénom ?" Margin="0,0,0,10"/>
         <TextBox x:Name="NameInput" Width="200" TextChanged="NameInput_TextChanged"/>
