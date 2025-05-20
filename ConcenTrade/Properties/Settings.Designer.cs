@@ -34,5 +34,65 @@ namespace Concentrade.Properties {
                 this["UserName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int UserAge {
+            get {
+                return ((int)(this["UserAge"]));
+            }
+            set {
+                this["UserAge"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int FocusDuration {
+            get {
+                return ((int)(this["FocusDuration"]));
+            }
+            set {
+                this["FocusDuration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string BestMoment {
+            get {
+                return ((string)(this["BestMoment"]));
+            }
+            set {
+                this["BestMoment"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Distraction {
+            get {
+                return ((bool)(this["Distraction"]));
+            }
+            set {
+                this["Distraction"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LaunchOnStartup {
+            get {
+                return ((bool)(this["LaunchOnStartup"]));
+            }
+            set {
+                this["LaunchOnStartup"] = value;
+            }
+        }
     }
 }
