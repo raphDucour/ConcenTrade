@@ -1,67 +1,75 @@
 ﻿<Page x:Class="Concentrade.Questionnaire"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      mc:Ignorable="d"
-      Background="#F5F5FA">
+      Background="#DFFFE8">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="40" VerticalAlignment="Center" HorizontalAlignment="Center" Width="400" Background="White">
+    <Page.Resources>
+        <SolidColorBrush x:Key="MintGreen" Color="#A8E6CF"/>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Light"/>
+            <Setter Property="Margin" Value="10,5"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+        </Style>
+    </Page.Resources>
 
-            <TextBlock Text="🧠 Questionnaire de concentration" 
-                       FontSize="22" FontWeight="Bold" 
-                       TextAlignment="Center" Margin="0,0,0,20"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <!-- Prénom -->
-            <TextBlock Text="Quel est ton prénom ?" Margin="0,5"/>
-            <TextBox x:Name="NameInput" Margin="0,0,0,10"/>
+        <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="400" Margin="20">
 
-            <!-- Âge -->
-            <TextBlock Text="Quel est ton âge ?" Margin="0,5"/>
-            <TextBox x:Name="AgeInput" Margin="0,0,0,10"/>
+            <Label FontSize="24" FontWeight="Bold" Content="🧠 Questionnaire d'introduction"
+                   HorizontalAlignment="Center" Margin="0,10" />
 
-            <!-- Sexe -->
-            <TextBlock Text="Quel est ton sexe ?" Margin="0,5"/>
-            <ComboBox x:Name="SexeInput" Margin="0,0,0,10">
-                <ComboBoxItem Content="Homme"/>
-                <ComboBoxItem Content="Femme"/>
-                <ComboBoxItem Content="Autre"/>
-                <ComboBoxItem Content="Préférer ne pas dire"/>
-            </ComboBox>
+            <Label Content="Quel est ton prénom ?" />
+            <Border CornerRadius="10" Background="White" Margin="5" Padding="2">
+                <TextBox x:Name="NameInput" Background="Transparent" BorderThickness="0" Padding="8"/>
+            </Border>
 
-            <!-- Temps de concentration -->
-            <TextBlock Text="Combien de temps souhaitez-vous rester concentré ?" Margin="0,5"/>
-            <ComboBox x:Name="TempsConcentrationInput" Margin="0,0,0,10">
-                <ComboBoxItem Content="15 minutes"/>
-                <ComboBoxItem Content="25 minutes"/>
-                <ComboBoxItem Content="45 minutes"/>
-                <ComboBoxItem Content="60 minutes"/>
-                <ComboBoxItem Content="Autre"/>
-            </ComboBox>
+            <Label Content="Quel est ton âge ?" />
+            <Border CornerRadius="10" Background="White" Margin="5" Padding="2">
+                <TextBox x:Name="AgeInput" Background="Transparent" BorderThickness="0" Padding="8"/>
+            </Border>
 
-            <!-- Moment préféré -->
-            <TextBlock Text="À quel moment de la journée es-tu le plus concentré ?" Margin="0,5"/>
-            <TextBox x:Name="MomentInput" Margin="0,0,0,10"/>
+            <Label Content="Quel est ton sexe ?" />
+            <Border CornerRadius="10" Background="{StaticResource MintGreen}" Margin="5" Padding="2">
+                <ComboBox x:Name="SexeInput" SelectedIndex="0" Background="Transparent" BorderThickness="0" Padding="8">
+                    <ComboBoxItem>Homme</ComboBoxItem>
+                    <ComboBoxItem>Femme</ComboBoxItem>
+                    <ComboBoxItem>Autre</ComboBoxItem>
+                </ComboBox>
+            </Border>
 
-            <!-- Facilement distrait -->
-            <TextBlock Text="Te considères-tu facilement distrait ?" Margin="0,5"/>
-            <ComboBox x:Name="DistraitInput" Margin="0,0,0,10">
-                <ComboBoxItem Content="Oui"/>
-                <ComboBoxItem Content="Un petit peu"/>
-                <ComboBoxItem Content="Non"/>
-            </ComboBox>
+            <Label Content="À quel moment de la journée es-tu le plus concentré ?" />
+            <Border CornerRadius="10" Background="{StaticResource MintGreen}" Margin="5" Padding="2">
+                <ComboBox x:Name="MomentInput" SelectedIndex="0" Background="Transparent" BorderThickness="0" Padding="8">
+                    <ComboBoxItem>Matin</ComboBoxItem>
+                    <ComboBoxItem>Après-midi</ComboBoxItem>
+                    <ComboBoxItem>Soir</ComboBoxItem>
+                    <ComboBoxItem>Nuit</ComboBoxItem>
+                    <ComboBoxItem>Jamais</ComboBoxItem>
+                </ComboBox>
+            </Border>
 
-            <!-- Ouverture au démarrage -->
-            <TextBlock Text="Souhaites-tu que l'application s’ouvre au démarrage du PC ?" Margin="0,5"/>
-            <ComboBox x:Name="StartupInput" Margin="0,0,0,20">
-                <ComboBoxItem Content="Oui"/>
-                <ComboBoxItem Content="Non"/>
-            </ComboBox>
+            <Label Content="Te considères-tu facilement distrait ?" />
+            <Border CornerRadius="10" Background="{StaticResource MintGreen}" Margin="5" Padding="2">
+                <ComboBox x:Name="DistraitInput" SelectedIndex="0" Background="Transparent" BorderThickness="0" Padding="8">
+                    <ComboBoxItem>Oui</ComboBoxItem>
+                    <ComboBoxItem>Un petit peu</ComboBoxItem>
+                    <ComboBoxItem>Non</ComboBoxItem>
+                </ComboBox>
+            </Border>
 
-            <!-- Bouton Valider -->
-            <Button Content="Valider" Click="Submit_Click" Width="200" Height="40" HorizontalAlignment="Center" Background="#8A2BE2" Foreground="White" FontWeight="Bold" BorderThickness="0"/>
+            <Border CornerRadius="10" Margin="15,20">
+                <Button Content="Valider" Click="Submit_Click"
+                        Background="#00D9A6" Foreground="White"
+                        FontSize="18" Padding="10" BorderThickness="0"/>
+            </Border>
 
         </StackPanel>
-    </ScrollViewer>
+    </Grid>
 </Page>

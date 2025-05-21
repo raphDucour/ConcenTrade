@@ -20,21 +20,24 @@ namespace Concentrade
         {
             InitializeComponent();
 
+            // METTRE L'APPLICATION EN PLEIN ÉCRAN
+            this.WindowStyle = WindowStyle.None;
+            this.WindowState = WindowState.Maximized;
+            this.ResizeMode = ResizeMode.NoResize;
+            this.Background = new SolidColorBrush(Color.FromRgb(223, 255, 232)); // Vert menthe apaisant
+
             string savedName = Properties.Settings.Default.UserName;
 
             if (!string.IsNullOrWhiteSpace(savedName))
             {
-                // Affiche la page de bienvenue avant d’aller au menu
                 MainFrame.Navigate(new WelcomePage(savedName));
             }
             else
             {
-
-                // Charger la première page (Questionnaire)
                 MainFrame.Navigate(new Questionnaire(this));
             }
-
         }
+
 
         // Méthode pour changer de page (ex. depuis Questionnaire)
         public void NavigateTo(Page page)
