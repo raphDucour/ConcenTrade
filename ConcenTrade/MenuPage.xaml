@@ -69,6 +69,11 @@
                     Width="120"
                     Height="40"
                     Click="Stats_Click"/>
+            <Button Content="Reset"
+                    Click="ResetData_Click"
+                    Width="200"
+                    Margin="10"/>
+
         </StackPanel>
 
         <!-- Texte bienvenue centré en haut -->

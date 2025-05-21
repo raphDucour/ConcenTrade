@@ -10,14 +10,66 @@
                  Width="200"
                  TextChanged="NameInput_TextChanged"/>
 
+        <!-- Âge -->
+        <TextBlock Text="Âge de l'utilisateur" />
+        <TextBox x:Name="AgeBox" />
+
+        <!-- Moment le plus concentré -->
+        <TextBlock Text="À quel moment de la journée êtes-vous le plus concentré ?" />
+        <ComboBox x:Name="MomentBox">
+            <ComboBoxItem>Matin</ComboBoxItem>
+            <ComboBoxItem>Après-midi</ComboBoxItem>
+            <ComboBoxItem>Soir</ComboBoxItem>
+            <ComboBoxItem>Peu importe</ComboBoxItem>
+        </ComboBox>
+
+        <!-- Êtes-vous facilement distrait -->
+        <TextBlock Text="Vous considérez-vous comme facilement distrait ?" />
+        <StackPanel Orientation="Horizontal">
+            <RadioButton GroupName="Distraction" Content="Oui" x:Name="DistraitOui" />
+            <RadioButton GroupName="Distraction" Content="Un peu" x:Name="DistraitUnPeu" />
+            <RadioButton GroupName="Distraction" Content="Non" x:Name="DistraitNon" />
+        </StackPanel>
+
+        <!-- Combien de temps souhaitez-vous rester concentré ? -->
+        <TextBlock Text="Combien de temps souhaitez-vous rester concentré ?" />
+        <ComboBox x:Name="DurationBox">
+            <ComboBoxItem>15</ComboBoxItem>
+            <ComboBoxItem>25</ComboBoxItem>
+            <ComboBoxItem>45</ComboBoxItem>
+            <ComboBoxItem>60</ComboBoxItem>
+            <ComboBoxItem>Personnalisé</ComboBoxItem>
+        </ComboBox>
+
+
+        <!-- Lancer au démarrage -->
+        <TextBlock Text="Souhaitez-vous que l'application se lance au démarrage ?" />
+        <StackPanel Orientation="Horizontal">
+            <RadioButton GroupName="AutoStart" Content="Oui" x:Name="AutoStartOui" />
+            <RadioButton GroupName="AutoStart" Content="Non" x:Name="AutoStartNon" />
+        </StackPanel>
+
+
         <TextBlock x:Name="GreetingText"
                    FontWeight="Bold"
                    FontSize="16"
                    RenderTransformOrigin="0.519,-1.016"/>
 
+        <!-- Fin du StackPanel -->
+        <Button Content="Réinitialiser les données"
+        Background="LightCoral"
+        Click="ResetData_Click"
+        Width="200"
+        Margin="0,10,0,0"/>
+
+
         <Button Content="Démarrer"
-                Click="Start_Click"
-                Width="200"
-                RenderTransformOrigin="0.679,0.808"/>
+        Click="Start_Click"
+        Width="200"
+        RenderTransformOrigin="0.679,0.808"/>
+
+
+
+
     </StackPanel>
 </Page>

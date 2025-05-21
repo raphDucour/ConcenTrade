@@ -26,6 +26,7 @@ namespace Concentrade
             {
                 // Affiche la page de bienvenue avant d’aller au menu
                 MainFrame.Navigate(new WelcomePage(savedName));
+                
             }
             else
             {
