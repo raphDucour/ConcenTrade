@@ -25,6 +25,7 @@ namespace Concentrade
             var slideUp = new DoubleAnimation(40, 0, TimeSpan.FromSeconds(0.8)) { EasingFunction = new QuadraticEase() };
 
             WelcomeText.BeginAnimation(OpacityProperty, fadeIn);
+            
             ((TranslateTransform)WelcomeText.RenderTransform).BeginAnimation(TranslateTransform.YProperty, slideUp);
 
             // Halo pulsant

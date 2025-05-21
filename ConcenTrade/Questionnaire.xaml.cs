@@ -5,49 +5,40 @@ namespace Concentrade
 {
     public partial class Questionnaire : Page
     {
-        private MainWindow _mainWindow;
+        public Questionnaire()
+        {
+            InitializeComponent();
+        }
+        private MainWindow? _mainWindow;
 
         public Questionnaire(MainWindow mainWindow)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
-
-            var screenWidth = SystemParameters.PrimaryScreenWidth;
-            var screenHeight = SystemParameters.PrimaryScreenHeight;
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+
+        private void Submit_Click(object sender, RoutedEventArgs e)
         {
-            string savedName = Properties.Settings.Default.UserName;
-            if (!string.IsNullOrWhiteSpace(savedName))
-            {
-                NameInput.Text = savedName;
-                GreetingText.Text = $"Bonjour {savedName} !";
-            }
-        }
+            string prenom = NameInput.Text!;
+            string age = AgeInput.Text!;
+            string sexe = (SexeInput.SelectedItem as ComboBoxItem)?.Content.ToString()!;
+            string temps = (TempsConcentrationInput.SelectedItem as ComboBoxItem)?.Content.ToString()!;
+            string moment = MomentInput.Text;
+            string distrait = (DistraitInput.SelectedItem as ComboBoxItem)?.Content.ToString()!;
+            string startup = (StartupInput.SelectedItem as ComboBoxItem)?.Content.ToString()!;
 
-        private void Start_Click(object sender, RoutedEventArgs e)
-        {
-            string name = NameInput.Text;
-            if (!string.IsNullOrWhiteSpace(name))
-            {
-                Properties.Settings.Default.UserName = name;
-                Properties.Settings.Default.Save();
+            // Tu peux temporairement afficher les infos pour tester
+            string resume = $"Nom : {prenom}\nÂge : {age}\nSexe : {sexe}\nTemps : {temps}\nMoment : {moment}\nDistrait : {distrait}\nStartup : {startup}";
+            MessageBox.Show(resume, "Réponses");
 
-                GreetingText.Text = $"Bonjour {name} !";
+            // Tu pourras plus tard : 
+            // - les sauvegarder dans une base de données
+            // - ou dans les Settings
+            // - ou les transmettre à une autre page
 
-                // Navigation vers MenuWindow si tu l’as converti en Page
-                _mainWindow.NavigateTo(new MenuPage()); // Ou utilise MenuWindow.ShowDialog() si c’est une Window
-            }
-            else
-            {
-                GreetingText.Text = "Bonjour !";
-            }
-        }
-
-        private void NameInput_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            GreetingText.Text = "";
+            // Exemple d'étape suivante :
+            // this.NavigationService.Navigate(new MenuPage());
         }
     }
 }
