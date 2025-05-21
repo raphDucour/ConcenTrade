@@ -49,18 +49,6 @@ namespace Concentrade.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int FocusDuration {
-            get {
-                return ((int)(this["FocusDuration"]));
-            }
-            set {
-                this["FocusDuration"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string BestMoment {
             get {
@@ -92,6 +80,18 @@ namespace Concentrade.Properties {
             }
             set {
                 this["LaunchOnStartup"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool QuestionnaireDone {
+            get {
+                return ((bool)(this["QuestionnaireDone"]));
+            }
+            set {
+                this["QuestionnaireDone"] = value;
             }
         }
     }

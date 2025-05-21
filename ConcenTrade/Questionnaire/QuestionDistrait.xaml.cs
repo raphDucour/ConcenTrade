@@ -24,13 +24,14 @@ namespace Concentrade
             }
 
             _answers.Distrait = selectedItem.Content.ToString()!;
+            _answers.SauvegarderDansSettings();
 
             // ➡️ Tu peux maintenant aller vers un écran de résumé ou Menu
             // this.NavigationService?.Navigate(new QuestionRecap(_answers));
-            MessageBox.Show(
-                $"Résumé :\n\nPrénom : {_answers.Prenom}\nÂge : {_answers.Age}\nSexe : {_answers.Sexe}\nMoment : {_answers.Moment}\nDistrait : {_answers.Distrait}",
-                "Réponses");
+            MessageBox.Show(_answers.ToString());
 
+            string savedName = Properties.Settings.Default.UserName;
+            this.NavigationService?.Navigate(new WelcomePage(savedName));
             // Ex : navigation finale
             // this.NavigationService?.Navigate(new MainMenu());
         }

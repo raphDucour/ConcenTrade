@@ -26,10 +26,12 @@ namespace Concentrade
             this.ResizeMode = ResizeMode.NoResize;
             this.Background = new SolidColorBrush(Color.FromRgb(223, 255, 232)); // Vert menthe apaisant
 
-            string savedName = Properties.Settings.Default.UserName;
+            bool QuestionnaireDone = Properties.Settings.Default.QuestionnaireDone;
+            
 
-            if (!string.IsNullOrWhiteSpace(savedName))
+            if (QuestionnaireDone)
             {
+                string savedName = Properties.Settings.Default.UserName;
                 MainFrame.Navigate(new WelcomePage(savedName));
             }
             else
