@@ -34,7 +34,7 @@ namespace Concentrade
             }
             else
             {
-                MainFrame.Navigate(new Questionnaire(this));
+                MainFrame.Navigate(new QuestionPrenom());
             }
         }
 
