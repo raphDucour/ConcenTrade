@@ -31,6 +31,32 @@ namespace Concentrade
             return true;
         }
 
+        public static void SetUserProfile(string email, string name, int age, string bestMoment, bool distraction, bool launchOnStartup = false)
+        {
+            var users = LoadUsers();
+            var user = users.Find(u => u.Email == email);
+
+            if (user != null)
+            {
+                user.Name = name;
+                user.Age = age;
+                user.BestMoment = bestMoment;
+                user.Distraction = distraction;
+                user.LaunchOnStartup = launchOnStartup;
+                user.QuestionnaireDone = true;
+
+                SaveUsers(users);
+            }
+        }
+
+        public static User? FindUser(string email)
+        {
+            var users = LoadUsers();
+            return users.Find(u => u.Email == email);
+        }
+
+
+
         public static User? Login(string email, string password)
         {
             var users = LoadUsers();

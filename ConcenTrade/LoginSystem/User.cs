@@ -12,7 +12,7 @@ namespace Concentrade
         public string Name { get; set; } = "";
         public int Age { get; set; } = 0;
         public string BestMoment { get; set; } = "";
-        public string Distraction { get; set; } = "";
+        public bool Distraction { get; set; } = "";
         public bool LaunchOnStartup { get; set; } = false;
         public bool QuestionnaireDone { get; set; } = false;
         
@@ -33,6 +33,15 @@ namespace Concentrade
                 byte[] bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(password));
                 return Convert.ToBase64String(bytes);
             }
+        }
+        public void RemplirDepuisQuestionnaire(string prenom, int age, string moment, bool launchOnStratup, bool distrait)
+        {
+            Name = prenom;
+            Age = age;
+            BestMoment = moment;
+            Distraction = distrait;
+            LaunchOnStartup = launchOnStratup;
+            QuestionnaireDone = true;
         }
     }
 }

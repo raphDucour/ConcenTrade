@@ -1,4 +1,6 @@
-﻿namespace Concentrade
+﻿using System.Windows;
+
+namespace Concentrade
 {
     public class UserAnswers
     {
@@ -38,5 +40,26 @@
             // Enregistre les modifications
             Properties.Settings.Default.Save();
         }
+
+
+        public void AuvegarderDansLaBasDeDonnées()
+        {
+            string email = Properties.Settings.Default.UserMail;
+
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                MessageBox.Show("Erreur : aucun email enregistré dans les paramètres.");
+                return;
+            }
+
+            // Conversion de l’âge en entier
+            int ageInt = int.TryParse(Age, out int a) ? a : 0;
+
+            // Appel à UserManager pour mise à jour dans le JSON
+            UserManager.SetUserProfile(
+                
+            );
+        }
+
     }
 }

@@ -44,5 +44,6 @@ namespace Concentrade
         {
             this.NavigationService.Navigate(new SignUpPage());
         }
+
     }
 }
