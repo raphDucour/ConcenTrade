@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Concentrade;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -9,11 +10,14 @@ namespace Concentrade
     {
         private DispatcherTimer _timer;
         private TimeSpan _remaining;
+        private AppBlocker _blocker = new AppBlocker();
 
         public TimerPage(int dureeMinutes)
         {
             InitializeComponent();
             _remaining = TimeSpan.FromMinutes(dureeMinutes);
+
+            _blocker.Start(); // 👈 démarre la surveillance
 
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(1);
