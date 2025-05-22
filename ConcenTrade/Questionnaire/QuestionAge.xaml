@@ -2,42 +2,80 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- Dégradé de fond -->
+    <!-- Fond dégradé doux -->
     <Page.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#C9FCE5" Offset="0.0"/>
-            <GradientStop Color="#A8E6CF" Offset="1.0"/>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#0F2027" Offset="0.0"/>
+            <GradientStop Color="#203A43" Offset="0.5"/>
+            <GradientStop Color="#2C5364" Offset="1.0"/>
         </LinearGradientBrush>
     </Page.Background>
+
+    <!-- Animation douce : montée + fade -->
+    <Page.Triggers>
+        <EventTrigger RoutedEvent="Page.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetName="MainPanel"
+                                     Storyboard.TargetProperty="Opacity"
+                                     From="0" To="1"
+                                     Duration="0:0:1"
+                                     AccelerationRatio="0.4"/>
+                    <DoubleAnimation Storyboard.TargetName="MainPanel"
+                                     Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                                     From="30" To="0"
+                                     Duration="0:0:1"
+                                     AccelerationRatio="0.4"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Page.Triggers>
 
     <Page.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="22"/>
-            <Setter Property="Foreground" Value="#222"/>
+            <Setter Property="FontSize" Value="40"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,30"/>
         </Style>
-        <Style TargetType="Button">
-            <Setter Property="FontSize" Value="16"/>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Width" Value="400"/>
+            <Setter Property="Height" Value="55"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#1E2A38"/>
+            <Setter Property="BorderBrush" Value="#3A4B5C"/>
+            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="10"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Width" Value="160"/>
+            <Setter Property="Height" Value="50"/>
             <Setter Property="Background" Value="#00D9A6"/>
             <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Margin" Value="0,20,0,0"/>
+            <Setter Property="Margin" Value="0,40,0,0"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
     </Page.Resources>
 
     <Grid>
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="400">
-            <TextBlock Text="Quel est ton âge ?" Margin="0,0,0,10"/>
+        <StackPanel x:Name="MainPanel" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Opacity="0">
+            <StackPanel.RenderTransform>
+                <TranslateTransform Y="30"/>
+            </StackPanel.RenderTransform>
 
-            <!-- Champ avec Border arrondi -->
-            <Border CornerRadius="10" Background="#F1F1F1" Margin="0,10,0,20">
-                <TextBox x:Name="AgeInput" Background="Transparent" BorderThickness="0" Padding="10"
-                         FontFamily="Segoe UI" FontSize="16" Foreground="#333"/>
-            </Border>
-
-            <Button Content="Suivant" Click="Suivant_Click" HorizontalAlignment="Right"/>
+            <TextBlock Text="Quel est ton âge ?" TextWrapping="Wrap"/>
+            <TextBox x:Name="AgeInput"/>
+            <Button Content="Suivant" Click="Suivant_Click"/>
         </StackPanel>
     </Grid>
 </Page>

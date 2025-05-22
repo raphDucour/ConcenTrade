@@ -28,7 +28,7 @@ namespace Concentrade
 
             // ➡️ Tu peux maintenant aller vers un écran de résumé ou Menu
             // this.NavigationService?.Navigate(new QuestionRecap(_answers));
-            MessageBox.Show(_answers.ToString());
+            
 
             string savedName = Properties.Settings.Default.UserName;
             this.NavigationService?.Navigate(new WelcomePage(savedName));
