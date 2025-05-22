@@ -160,12 +160,12 @@
                 <TranslateTransform Y="30"/>
             </StackPanel.RenderTransform>
 
-            <TextBlock Text="Quel est ton sexe ?" TextWrapping="Wrap"/>
+            <TextBlock Text="Quel est ton SEXXXXXXXXXXXXXXXXXXXXXXX ?" TextWrapping="Wrap"/>
             <ComboBox x:Name="SexeInput" SelectedIndex="0">
-                <ComboBoxItem Content="Homme"/>
-                <ComboBoxItem Content="Femme"/>
-                <ComboBoxItem Content="Autre"/>
-                <ComboBoxItem Content="Je préfère ne pas dire"/>
+                <ComboBoxItem Content="Chibre"/>
+                <ComboBoxItem Content="Pu$$y"/>
+                <ComboBoxItem Content="Anus"/>
+                <ComboBoxItem Content="Jprefere aller me faire enculer"/>
             </ComboBox>
             <Button Content="Suivant" Click="Suivant_Click"/>
         </StackPanel>
