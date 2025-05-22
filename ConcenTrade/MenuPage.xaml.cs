@@ -41,7 +41,29 @@ namespace Concentrade
 
         private void ResetData_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Données réinitialisées.");
+            MessageBoxResult result = MessageBox.Show(
+                "Êtes-vous sûr de vouloir réinitialiser vos données ? Cette action est irréversible.",
+                "Confirmation",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                // ✅ Réinitialisation des données
+                Properties.Settings.Default.Reset();
+                Properties.Settings.Default.Save();
+
+                // 🔁 Retour à la page Questionnaire
+                if (Application.Current.MainWindow is MainWindow mainWindow)
+                {
+                    mainWindow.NavigateTo(new QuestionPrenom());
+                }
+            }
+            else
+            {
+                // ❌ L'utilisateur a cliqué sur "Non"
+                MessageBox.Show("Réinitialisation annulée.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 }
