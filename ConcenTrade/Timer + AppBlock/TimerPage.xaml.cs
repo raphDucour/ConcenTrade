@@ -1,5 +1,6 @@
 ﻿using Concentrade;
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -17,8 +18,20 @@ namespace Concentrade
             InitializeComponent();
             _remaining = TimeSpan.FromMinutes(dureeMinutes);
 
-            _blocker.Start(); // 👈 démarre la surveillance
+            // Démarrer le bloqueur
+            _blocker.Start();
 
+            // 🔥 Fermer toutes les apps distrayantes déjà lancées
+            foreach (var proc in Process.GetProcesses())
+            {
+                string name = proc.ProcessName.ToLower();
+                if (_blocker.IsDistractingApp(name))
+                {
+                    try { proc.Kill(); } catch { }
+                }
+            }
+
+            // Lancer le timer
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += Timer_Tick;
@@ -35,7 +48,9 @@ namespace Concentrade
             {
                 _timer.Stop();
                 TimerText.Text = "Terminé 🎉";
-                // Tu peux ajouter ici une redirection ou son, etc.
+
+                // (facultatif) Tu peux arrêter le blocage ici aussi
+                _blocker.Stop();
             }
             else
             {
@@ -46,7 +61,6 @@ namespace Concentrade
         private void UpdateTimerText()
         {
             TimerText.Text = _remaining.ToString(@"hh\:mm\:ss");
-
         }
     }
 }

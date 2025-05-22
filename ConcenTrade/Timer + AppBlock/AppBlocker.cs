@@ -9,6 +9,8 @@ namespace Concentrade
     public class AppBlocker
     {
         private ManagementEventWatcher? _watcher;
+        private HashSet<string> _alreadyPrompted = new HashSet<string>();
+
 
         // Liste des applis à bloquer
         private readonly string[] _blockedApps = { "chrome.exe", "discord.exe", "spotify.exe", "tiktok.exe" };
@@ -19,24 +21,27 @@ namespace Concentrade
             _watcher.EventArrived += (s, e) =>
             {
                 string? processName = e.NewEvent.Properties["ProcessName"].Value?.ToString()?.ToLower();
+                int processId = Convert.ToInt32(e.NewEvent.Properties["ProcessID"].Value);
 
                 if (processName != null && _blockedApps.Contains(processName))
                 {
+               
+
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        MessageBox.Show(
-                            $"⛔ {processName} est bloqué pendant ta session.\nReste concentré 💪",
-                            "ConcenTrade - Blocage",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Warning
-                        );
+                        var popup = new BlocagePopup(processName);
+                        bool? result = popup.ShowDialog();
 
-                        foreach (var proc in Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(processName)))
+                        if (popup.ContinueAnyway == false)
                         {
-                            try { proc.Kill(); } catch { }
+                            foreach (var proc in Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(processName)))
+                            {
+                                try { proc.Kill(); } catch { }
+                            }
                         }
                     });
                 }
+
             };
             _watcher.Start();
         }
@@ -46,5 +51,23 @@ namespace Concentrade
             _watcher?.Stop();
             _watcher?.Dispose();
         }
+
+        public bool IsDistractingApp(string processName)
+        {
+            string[] blockedApps = new[]
+            {
+        "chrome",
+        "discord",
+        "spotify",
+        "edge",
+        "opera",
+        "teams",
+        "epicgameslauncher",
+        "steam"
+    };
+
+            return Array.Exists(blockedApps, name => processName.ToLower().Contains(name));
+        }
+
     }
 }
