@@ -21,12 +21,12 @@ namespace Concentrade
             File.WriteAllText(filePath, json);
         }
 
-        public static bool Register(string email, string username, string password)
+        public static bool Register(string email, string password)
         {
             var users = LoadUsers();
             if (users.Exists(u => u.Email == email)) return false;
 
-            users.Add(new User(email, username, User.HashPassword(password)));
+            users.Add(new User(email,User.HashPassword(password)));
             SaveUsers(users);
             return true;
         }

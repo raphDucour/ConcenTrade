@@ -6,13 +6,11 @@ namespace Concentrade
     public class User
     {
         public string? Email { get; set; }
-        public string? Username { get; set; }
         public string? PasswordHash { get; set; }
 
-        public User(string email, string username, string passwordHash)
+        public User(string email, string passwordHash)
         {
             Email = email;
-            Username = username;
             PasswordHash = passwordHash;
         }
 

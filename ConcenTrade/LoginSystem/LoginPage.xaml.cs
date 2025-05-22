@@ -14,21 +14,30 @@ namespace Concentrade
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            string input = EmailOrUsernameBox.Text;
+            string input = EmailBox.Text;
             string password = PasswordBox.Password;
 
             var users = UserManager.LoadUsers();
             var hash = User.HashPassword(password);
 
             var user = users.Find(u =>
-                (u.Email == input || u.Username == input) &&
+                u.Email == input  &&
                 u.PasswordHash == hash
             );
 
             if (user != null)
             {
-                MessageBox.Show($"Bienvenue {user.Username} !");
-                // ici, tu peux naviguer vers ta page principale
+                bool QuestionnaireDone = Properties.Settings.Default.QuestionnaireDone;
+                if (QuestionnaireDone)
+                {
+                    
+                    string savedName = Properties.Settings.Default.UserName;
+                    this.NavigationService?.Navigate(new WelcomePage(savedName));
+                }
+                else
+                {
+                    this.NavigationService?.Navigate(new QuestionPrenom());
+                }
             }
             else
             {
