@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 
+
 namespace Concentrade
 {
     public partial class MainWindow : Window
@@ -15,18 +16,9 @@ namespace Concentrade
             this.WindowState = WindowState.Maximized;
             this.ResizeMode = ResizeMode.CanResize;
             this.Background = new SolidColorBrush(Color.FromRgb(223, 255, 232)); // Vert menthe clair
-
-            bool QuestionnaireDone = Properties.Settings.Default.QuestionnaireDone;
-
-            if (QuestionnaireDone)
-            {
-                string savedName = Properties.Settings.Default.UserName;
-                MainFrame.Navigate(new WelcomePage(savedName));
-            }
-            else
-            {
-                MainFrame.Navigate(new QuestionPrenom());
-            }
+            
+            MainFrame.Navigate(new LoginPage());
+            
         }
         public void NavigateTo(Page page)
         {
