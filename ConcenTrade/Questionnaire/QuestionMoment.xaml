@@ -162,10 +162,10 @@
 
             <TextBlock Text="À quel moment de la journée es-tu le plus concentré ?" TextWrapping="Wrap"/>
             <ComboBox x:Name="MomentInput" SelectedIndex="0">
-                <ComboBoxItem Content="Homme"/>
-                <ComboBoxItem Content="Femme"/>
-                <ComboBoxItem Content="Autre"/>
-                <ComboBoxItem Content="Je préfère ne pas dire"/>
+                <ComboBoxItem Content="Matin"/>
+                <ComboBoxItem Content="Après-midi"/>
+                <ComboBoxItem Content="Soir"/>
+                <ComboBoxItem Content="Peu importe"/>
             </ComboBox>
             <Button Content="Suivant" Click="Suivant_Click"/>
         </StackPanel>

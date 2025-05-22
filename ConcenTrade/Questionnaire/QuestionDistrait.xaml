@@ -162,10 +162,9 @@
 
             <TextBlock Text="Te considères-tu facilement distrait ?" TextWrapping="Wrap"/>
             <ComboBox x:Name="DistraitInput" SelectedIndex="0">
-                <ComboBoxItem Content="Homme"/>
-                <ComboBoxItem Content="Femme"/>
-                <ComboBoxItem Content="Autre"/>
-                <ComboBoxItem Content="Je préfère ne pas dire"/>
+                <ComboBoxItem Content="Oui"/>
+                <ComboBoxItem Content="Non"/>
+                <ComboBoxItem Content="Un peu"/>
             </ComboBox>
             <Button Content="Terminer" Click="Terminer_Click" HorizontalAlignment="Center"/>
         </StackPanel>
