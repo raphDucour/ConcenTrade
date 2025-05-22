@@ -7,10 +7,18 @@ namespace Concentrade
     {
         private UserAnswers _answers;
 
+        // Constructeur vide : utile pour MainWindow ou tests
         public QuestionPrenom()
         {
             InitializeComponent();
-            _answers = new UserAnswers(); // première page, donc on crée les réponses
+            _answers = new UserAnswers(); // par défaut
+        }
+
+        // Constructeur avec données
+        public QuestionPrenom(UserAnswers answers)
+        {
+            InitializeComponent();
+            _answers = answers;
         }
 
         private void Suivant_Click(object sender, RoutedEventArgs e)

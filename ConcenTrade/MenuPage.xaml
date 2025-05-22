@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="Menu principal">
 
-    <!-- Dégradé fond sombre -->
+    <!-- Fond dégradé -->
     <Page.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="#0F2027" Offset="0"/>
@@ -14,7 +14,7 @@
     </Page.Background>
 
     <Page.Resources>
-        <!-- Style bouton moderne -->
+        <!-- Style boutons Apple -->
         <Style x:Key="ModernGlassButton" TargetType="Button">
             <Setter Property="FontFamily" Value="Segoe UI"/>
             <Setter Property="FontSize" Value="20"/>
@@ -40,11 +40,17 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- Style Slider -->
+        <Style TargetType="Slider" x:Key="AppleSliderStyle">
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Foreground" Value="#00D9A6"/>
+        </Style>
     </Page.Resources>
 
     <Grid>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <!-- Titre centré -->
             <TextBlock Text="ConcenTrade"
                        FontSize="48"
                        FontWeight="Bold"
@@ -52,14 +58,33 @@
                        HorizontalAlignment="Center"
                        Margin="0,0,0,40"/>
 
-            <!-- Boutons centrés -->
+            <!-- Boutons -->
             <Button Content="Start" Click="StartSession_Click" Style="{StaticResource ModernGlassButton}"/>
+
+            <!-- Curseur de durée -->
+            <StackPanel Margin="0,25,0,0" HorizontalAlignment="Center">
+                <TextBlock x:Name="SliderLabel"
+                           Text="Durée : 90 min"
+                           FontSize="18"
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,10"/>
+                <Slider x:Name="DureeSlider"
+                        Minimum="0"
+                        Maximum="180"
+                        Value="90"
+                        TickFrequency="30"
+                        IsSnapToTickEnabled="True"
+                        Style="{StaticResource AppleSliderStyle}"
+                        ValueChanged="DureeSlider_ValueChanged"/>
+            </StackPanel>
+
             <Button Content="Paramètres" Click="Settings_Click" Style="{StaticResource ModernGlassButton}"/>
             <Button Content="Statistiques" Click="Stats_Click" Style="{StaticResource ModernGlassButton}"/>
             <Button Content="Quitter" Click="Quit_Click" Style="{StaticResource ModernGlassButton}"/>
         </StackPanel>
 
-        <!-- Reset en bas à droite -->
+        <!-- Reset -->
         <Button Content="Reset"
                 Style="{StaticResource ModernGlassButton}"
                 Width="120"

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Concentrade
@@ -12,7 +13,15 @@ namespace Concentrade
 
         private void StartSession_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService?.Navigate(new QuestionPrenom());
+            int duree = (int)Math.Round(DureeSlider.Value);
+            this.NavigationService?.Navigate(new TimerPage(duree));
+        }
+
+
+        private void DureeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (SliderLabel != null)
+                SliderLabel.Text = $"Durée : {Math.Round(e.NewValue)} min";
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)

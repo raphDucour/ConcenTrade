@@ -7,6 +7,8 @@
         public string Sexe { get; set; } = "";
         public string Moment { get; set; } = "";
         public string Distrait { get; set; } = "";
+        public int DureeMinutes { get; set; } = 0;
+
 
         public override string ToString()
         {
