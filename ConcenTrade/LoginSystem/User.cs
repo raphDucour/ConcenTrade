@@ -8,6 +8,15 @@ namespace Concentrade
         public string? Email { get; set; }
         public string? PasswordHash { get; set; }
 
+        // Nouveaux champs personnalisés
+        public string Name { get; set; } = "";
+        public int Age { get; set; } = 0;
+        public string BestMoment { get; set; } = "";
+        public string Distraction { get; set; } = "";
+        public bool LaunchOnStartup { get; set; } = false;
+        public bool QuestionnaireDone { get; set; } = false;
+        
+
         public User(string email, string passwordHash)
         {
             Email = email;
