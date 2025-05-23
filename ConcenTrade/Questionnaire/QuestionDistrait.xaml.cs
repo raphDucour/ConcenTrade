@@ -32,6 +32,7 @@ namespace Concentrade
 
             _answers.Distrait = selectedItem.Content.ToString()!;
             _answers.SauvegarderDansSettings();
+            _answers.SauvegarderDansLaBaseDeDonnees();
 
             // ➡️ Tu peux maintenant aller vers un écran de résumé ou Menu
             // this.NavigationService?.Navigate(new QuestionRecap(_answers));

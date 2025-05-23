@@ -21,6 +21,7 @@ namespace Concentrade
 
             if (user != null)
             {
+                UserManager.LoadProperties(email);
                 bool questionnaireDone = Properties.Settings.Default.QuestionnaireDone;
                 if (questionnaireDone)
                 {

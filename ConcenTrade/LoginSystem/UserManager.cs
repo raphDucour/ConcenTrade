@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using System.Windows.Controls;
+using System.Xml.Linq;
 
 namespace Concentrade
 {
@@ -62,6 +64,24 @@ namespace Concentrade
             var users = LoadUsers();
             string hash = User.HashPassword(password);
             return users.Find(u => u.Email == email && u.PasswordHash == hash);
+        }
+
+        public static void LoadProperties(string email)
+        {
+            var users = LoadUsers();
+            var user = users.Find(u => u.Email == email);
+
+            if (user != null)
+            {
+                Properties.Settings.Default.UserEmail = email;
+                Properties.Settings.Default.UserName = user.Name;
+                Properties.Settings.Default.UserAge = user.Age;
+                Properties.Settings.Default.BestMoment = user.BestMoment;
+                Properties.Settings.Default.Distraction = user.Distraction;
+                Properties.Settings.Default.LaunchOnStartup = user.LaunchOnStartup;
+                Properties.Settings.Default.QuestionnaireDone = user.QuestionnaireDone;
+                Properties.Settings.Default.Save();
+            }
         }
     }
 }

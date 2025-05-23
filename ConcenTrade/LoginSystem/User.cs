@@ -12,7 +12,7 @@ namespace Concentrade
         public string Name { get; set; } = "";
         public int Age { get; set; } = 0;
         public string BestMoment { get; set; } = "";
-        public bool Distraction { get; set; } = "";
+        public bool Distraction { get; set; } = false;
         public bool LaunchOnStartup { get; set; } = false;
         public bool QuestionnaireDone { get; set; } = false;
         

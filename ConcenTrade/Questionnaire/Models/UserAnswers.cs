@@ -21,6 +21,8 @@ namespace Concentrade
                    $"Distrait : {Distrait}";
         }
 
+
+
         public void SauvegarderDansSettings()
         {
             Properties.Settings.Default.UserName = Prenom;
@@ -42,24 +44,31 @@ namespace Concentrade
         }
 
 
-        public void AuvegarderDansLaBasDeDonnées()
+        public void SauvegarderDansLaBaseDeDonnees()
         {
-            string email = Properties.Settings.Default.UserMail;
+            string email = Properties.Settings.Default.UserEmail;
 
             if (string.IsNullOrWhiteSpace(email))
             {
                 MessageBox.Show("Erreur : aucun email enregistré dans les paramètres.");
                 return;
             }
+            else {
+                if (int.TryParse(Age, out int ageInt))
+                    Properties.Settings.Default.UserAge = ageInt;
+                else
+                    Properties.Settings.Default.UserAge = 0;
 
-            // Conversion de l’âge en entier
-            int ageInt = int.TryParse(Age, out int a) ? a : 0;
-
-            // Appel à UserManager pour mise à jour dans le JSON
-            UserManager.SetUserProfile(
-                
-            );
+                // Appel à UserManager pour mise à jour dans le JSON
+                UserManager.SetUserProfile(
+                    email,
+                    Prenom,
+                    ageInt,
+                    Moment,
+                    Distrait.ToLower() == "oui" || Distrait.ToLower() == "un petit peu",
+                    false
+                );
+            }            
         }
-
     }
 }
