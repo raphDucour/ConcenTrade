@@ -13,7 +13,7 @@ namespace Concentrade
 
 
         // Liste des applis à bloquer
-        private readonly string[] _blockedApps = { "chrome.exe", "discord.exe", "spotify.exe", "tiktok.exe" };
+        private readonly string[] _blockedApps = { "discord.exe", "spotify.exe", "tiktok.exe" };
 
         public void Start()
         {
@@ -56,7 +56,6 @@ namespace Concentrade
         {
             string[] blockedApps = new[]
             {
-        "chrome",
         "discord",
         "spotify",
         "edge",
