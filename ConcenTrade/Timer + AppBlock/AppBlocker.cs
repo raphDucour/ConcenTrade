@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Management;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Concentrade
@@ -13,48 +14,77 @@ namespace Concentrade
         // Liste des applis à bloquer
         private readonly string[] _blockedApps = { "discord.exe", "spotify.exe", "tiktok.exe" };
 
-        // Cooldown de popup par appli
+        // Cooldown par application
         private readonly Dictionary<string, DateTime> _lastPromptTime = new();
-
-        // Durée de blocage (en secondes) avant de réafficher une popup pour la même appli
         private readonly TimeSpan _popupCooldown = TimeSpan.FromSeconds(10);
 
         public void Start()
         {
             _watcher = new ManagementEventWatcher(new WqlEventQuery("SELECT * FROM Win32_ProcessStartTrace"));
-            _watcher.EventArrived += (s, e) =>
+            _watcher.EventArrived += async (s, e) =>
             {
                 string? processName = e.NewEvent.Properties["ProcessName"].Value?.ToString()?.ToLower();
                 int processId = Convert.ToInt32(e.NewEvent.Properties["ProcessID"].Value);
 
                 if (processName != null && _blockedApps.Contains(processName))
                 {
-                    // Si on a déjà affiché une popup récemment pour cette appli, on ignore
                     if (_lastPromptTime.TryGetValue(processName, out DateTime lastTime))
                     {
                         if ((DateTime.Now - lastTime) < _popupCooldown)
                             return;
                     }
 
-                    // Marquer le moment de la dernière popup
-                    _lastPromptTime[processName] = DateTime.Now;
-
-                    Application.Current.Dispatcher.Invoke(() =>
+                    try
                     {
-                        var popup = new BlocagePopup(processName);
-                        bool? result = popup.ShowDialog();
+                        var process = Process.GetProcessById(processId);
+                        bool windowReady = await WaitForMainWindow(process, TimeSpan.FromSeconds(10));
 
-                        if (popup.ContinueAnyway == false)
+                        if (!windowReady) return; // La fenêtre n’est jamais apparue
+
+                        _lastPromptTime[processName] = DateTime.Now;
+
+                        Application.Current.Dispatcher.Invoke(() =>
                         {
-                            foreach (var proc in Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(processName)))
+                            var popup = new BlocagePopup(processName);
+                            bool? result = popup.ShowDialog();
+
+                            if (popup.ContinueAnyway == false)
                             {
-                                try { proc.Kill(); } catch { }
+                                foreach (var proc in Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(processName)))
+                                {
+                                    try { proc.Kill(); } catch { }
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    catch
+                    {
+                        // Le processus a peut-être été fermé avant qu'on agisse
+                    }
                 }
             };
             _watcher.Start();
+        }
+
+        // Attend que la fenêtre principale soit disponible
+        private async Task<bool> WaitForMainWindow(Process process, TimeSpan timeout)
+        {
+            var start = DateTime.Now;
+            while ((DateTime.Now - start) < timeout)
+            {
+                try
+                {
+                    if (process.HasExited) return false;
+
+                    process.Refresh();
+                    if (process.MainWindowHandle != IntPtr.Zero)
+                        return true;
+                }
+                catch { return false; }
+
+                await Task.Delay(500);
+            }
+            return false;
         }
 
         public void Stop()
