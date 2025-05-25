@@ -1,6 +1,8 @@
 ﻿<Page x:Class="Concentrade.QuestionDistrait"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      KeyDown="Page_KeyDown"
+      FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}">
 
     <Page.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -166,7 +168,7 @@
                 <ComboBoxItem Content="Non"/>
                 <ComboBoxItem Content="Un peu"/>
             </ComboBox>
-            <Button Content="Terminer" Click="Terminer_Click" HorizontalAlignment="Center"/>
+            <Button x:Name="TerminerButton" Content="Terminer" Click="Terminer_Click" HorizontalAlignment="Center"/>
         </StackPanel>
     </Grid>
 </Page>

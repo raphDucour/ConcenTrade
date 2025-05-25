@@ -14,23 +14,17 @@ namespace Concentrade
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            string input = EmailBox.Text;
-            string password = PasswordBox.Password;
+            string email = EmailBox.Text.Trim();
+            string password = PasswordBox.Password.Trim();
 
-            var users = UserManager.LoadUsers();
-            var hash = User.HashPassword(password);
-
-            var user = users.Find(u =>
-                u.Email == input  &&
-                u.PasswordHash == hash
-            );
+            var user = UserManager.Login(email, password);
 
             if (user != null)
             {
-                bool QuestionnaireDone = Properties.Settings.Default.QuestionnaireDone;
-                if (QuestionnaireDone)
+                UserManager.LoadProperties(email);
+                bool questionnaireDone = Properties.Settings.Default.QuestionnaireDone;
+                if (questionnaireDone)
                 {
-                    
                     string savedName = Properties.Settings.Default.UserName;
                     this.NavigationService?.Navigate(new WelcomePage(savedName));
                 }
@@ -45,10 +39,12 @@ namespace Concentrade
             }
         }
 
+
+        //si on a pas encore de compte
         private void SignUp_Click(object sender, RoutedEventArgs e)
         {
-            // Navigation vers la page d’inscription qu’on fera ensuite
-            this.NavigationService.Navigate(new SignUpPage()); // à créer plus tard
+            this.NavigationService.Navigate(new SignUpPage());
         }
+
     }
 }

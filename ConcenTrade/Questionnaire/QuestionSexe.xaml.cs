@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Concentrade
 {
@@ -13,6 +14,13 @@ namespace Concentrade
             _answers = answers;
         }
 
+        private void Page_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SuivantButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            }
+        }
         private void Suivant_Click(object sender, RoutedEventArgs e)
         {
             var selectedItem = SexeInput.SelectedItem as ComboBoxItem;

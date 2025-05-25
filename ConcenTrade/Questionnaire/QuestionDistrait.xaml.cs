@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Concentrade
 {
@@ -12,7 +13,13 @@ namespace Concentrade
             InitializeComponent();
             _answers = answers;
         }
-
+        private void Page_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                TerminerButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            }
+        }
         private void Terminer_Click(object sender, RoutedEventArgs e)
         {
             var selectedItem = DistraitInput.SelectedItem as ComboBoxItem;
@@ -25,6 +32,7 @@ namespace Concentrade
 
             _answers.Distrait = selectedItem.Content.ToString()!;
             _answers.SauvegarderDansSettings();
+            _answers.SauvegarderDansLaBaseDeDonnees();
 
             // ➡️ Tu peux maintenant aller vers un écran de résumé ou Menu
             // this.NavigationService?.Navigate(new QuestionRecap(_answers));
