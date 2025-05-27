@@ -1,58 +1,123 @@
 ﻿<Page x:Class="ConcenTrade.SettingsPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
       Title="Paramètres"
-      Background="#102A38">
+      Background="#0D1C26">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="30" VerticalAlignment="Center" HorizontalAlignment="Center" Width="400">
-            <TextBlock Text="Paramètres utilisateur"
-                       FontSize="26"
-                       Foreground="White"
-                       FontWeight="Bold"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,30"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-            <!-- Prénom -->
-            <TextBlock Text="Prénom :" Foreground="White"/>
-            <TextBox Name="PrenomBox" Height="30" Margin="0,5,0,15" Padding="8"/>
+        <!-- Titre principal -->
+        <TextBlock Text="Paramètres utilisateur"
+                   FontSize="32"
+                   FontWeight="Bold"
+                   Foreground="White"
+                   Margin="0,30,0,20"
+                   HorizontalAlignment="Center"/>
 
-            <!-- Âge -->
-            <TextBlock Text="Âge :" Foreground="White"/>
-            <TextBox Name="AgeBox" Height="30" Margin="0,5,0,15" Padding="8"/>
+        <!-- Formulaire central -->
+        <StackPanel Grid.Row="1" Width="500" Margin="0,30,0,30" VerticalAlignment="Center">
+            <StackPanel.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="Margin" Value="0,10,0,5"/>
+                </Style>
+            </StackPanel.Resources>
 
-            <!-- Moment préféré -->
-            <TextBlock Text="Moment de la journée préféré :" Foreground="White"/>
-            <ComboBox Name="MomentCombo" Height="30" Margin="0,5,0,15" Padding="4">
-                <ComboBoxItem Content="Matin" />
-                <ComboBoxItem Content="Après-midi" />
-                <ComboBoxItem Content="Soir" />
-            </ComboBox>
+            <TextBlock Text="Prénom :" />
+            <Border CornerRadius="6" Background="#122B37" BorderBrush="#29414E" BorderThickness="1" Margin="0,0,0,15">
+                <TextBox Name="PrenomBox"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Foreground="White"
+                         Padding="10"
+                         FontSize="14"/>
+            </Border>
 
-            <!-- Distraction -->
-            <TextBlock Text="Es-tu facilement distrait ?" Foreground="White"/>
-            <ComboBox Name="DistraitCombo" Height="30" Margin="0,5,0,30" Padding="4">
-                <ComboBoxItem Content="Non" />
-                <ComboBoxItem Content="Un petit peu" />
-                <ComboBoxItem Content="Oui" />
-            </ComboBox>
+            <TextBlock Text="Âge :" />
+            <Border CornerRadius="6" Background="#122B37" BorderBrush="#29414E" BorderThickness="1" Margin="0,0,0,15">
+                <TextBox Name="AgeBox"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Foreground="White"
+                         Padding="10"
+                         FontSize="14"/>
+            </Border>
 
-            <!-- Boutons -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
-                <Button Content="Sauvegarder"
-                        Width="120" Height="40" Margin="10,0"
-                        Background="#274A5E" Foreground="White"
-                        BorderBrush="Transparent" FontWeight="Bold"
-                        Cursor="Hand"
-                        Click="Sauvegarder_Click" />
+            <TextBlock Text="Moment de la journée préféré :" />
+            <Border CornerRadius="6" Background="#122B37" BorderBrush="#29414E" BorderThickness="1" Margin="0,0,0,15">
+                <ComboBox Name="MomentCombo"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          Foreground="White"
+                          Padding="6"
+                          FontSize="14">
+                    <ComboBoxItem Content="Matin" />
+                    <ComboBoxItem Content="Après-midi" />
+                    <ComboBoxItem Content="Soir" />
+                </ComboBox>
+            </Border>
 
-                <Button Content="Retour"
-                        Width="120" Height="40" Margin="10,0"
-                        Background="#3E3E3E" Foreground="White"
-                        BorderBrush="Transparent" FontWeight="Bold"
-                        Cursor="Hand"
-                        Click="Retour_Click" />
-            </StackPanel>
+            <TextBlock Text="Es-tu facilement distrait ?" />
+            <Border CornerRadius="6" Background="#122B37" BorderBrush="#29414E" BorderThickness="1" Margin="0,0,0,15">
+                <ComboBox Name="DistraitCombo"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          Foreground="White"
+                          Padding="6"
+                          FontSize="14">
+                    <ComboBoxItem Content="Non" />
+                    <ComboBoxItem Content="Un petit peu" />
+                    <ComboBoxItem Content="Oui" />
+                </ComboBox>
+            </Border>
         </StackPanel>
-    </ScrollViewer>
+
+        <!-- Boutons bas -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,40,0,30" >
+            <Button Content="Sauvegarder"
+                    Width="140" Height="45" Margin="10,0"
+                    FontWeight="SemiBold"
+                    Background="#274A5E" Foreground="White"
+                    BorderBrush="Transparent" Cursor="Hand"
+                    Click="Sauvegarder_Click">
+                <Button.RenderTransform>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Button.RenderTransform>
+                <Button.Triggers>
+                    <EventTrigger RoutedEvent="Button.MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="(Button.RenderTransform).(ScaleTransform.ScaleX)" To="1.05" Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="(Button.RenderTransform).(ScaleTransform.ScaleY)" To="1.05" Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="Button.MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="(Button.RenderTransform).(ScaleTransform.ScaleX)" To="1" Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="(Button.RenderTransform).(ScaleTransform.ScaleY)" To="1" Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Button.Triggers>
+            </Button>
+
+            <Button Content="Retour"
+                    Width="140" Height="45" Margin="10,0"
+                    FontWeight="SemiBold"
+                    Background="#3E3E3E" Foreground="White"
+                    BorderBrush="Transparent" Cursor="Hand"
+                    Click="Retour_Click"/>
+        </StackPanel>
+    </Grid>
 </Page>
