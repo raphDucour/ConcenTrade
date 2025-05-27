@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConcenTrade;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -26,8 +27,9 @@ namespace Concentrade
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Paramètres à venir.");
+            this.NavigationService?.Navigate(new SettingsPage());
         }
+
 
         private void Stats_Click(object sender, RoutedEventArgs e)
         {
