@@ -65,7 +65,7 @@ namespace Concentrade
                     Prenom,
                     ageInt,
                     Moment,
-                    Distrait.ToLower() == "oui" || Distrait.ToLower() == "un petit peu",
+                    //Distrait.ToLower() == "oui" || Distrait.ToLower() == "un petit peu",
                     false
                 );
             }            
