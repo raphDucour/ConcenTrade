@@ -1,4 +1,4 @@
-﻿ <Page x:Class="Concentrade.QuestionAge"
+﻿<Page x:Class="Concentrade.QuestionAge"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       KeyDown="Page_KeyDown"
@@ -75,8 +75,36 @@
                 <TranslateTransform Y="30"/>
             </StackPanel.RenderTransform>
 
-            <TextBlock Text="Quel est ton âge ?" TextWrapping="Wrap"/>
-            <TextBox x:Name="AgeInput" Loaded="AgeInput_Loaded" />
+            <TextBlock Text="Quelle est ta date de naissance ?" TextWrapping="Wrap"/>
+            <TextBlock Text="Format : JJ/MM/AAAA" FontSize="20" Margin="0,0,0,10" Opacity="0.7"/>
+            <TextBox x:Name="DateNaissanceInput" 
+                    MaxLength="10"
+                    PreviewTextInput="DateNaissance_PreviewTextInput"
+                    TextChanged="DateNaissance_TextChanged"
+                    Loaded="AgeInput_Loaded">
+                <TextBox.Resources>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="TextBox">
+                                    <Border Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="5">
+                                        <ScrollViewer x:Name="PART_ContentHost"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </TextBox.Resources>
+            </TextBox>
+            <TextBlock x:Name="ErrorMessage" 
+                      Text="Format invalide. Utilisez JJ/MM/AAAA" 
+                      FontSize="16" 
+                      Foreground="#FFE6E6" 
+                      Margin="0,5,0,0" 
+                      Visibility="Collapsed"/>
             <Button x:Name="SuivantButton" Content="Suivant" Click="Suivant_Click"/>
 
         </StackPanel>

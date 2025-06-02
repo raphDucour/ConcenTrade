@@ -42,15 +42,21 @@
                          FontSize="14"/>
             </Border>
 
-            <TextBlock Text="Âge :" />
+            <TextBlock Text="Date de naissance (JJ/MM/AAAA) :" />
             <Border CornerRadius="6" Background="#122B37" BorderBrush="#29414E" BorderThickness="1" Margin="0,0,0,15">
-                <TextBox Name="AgeBox"
+                <TextBox Name="DateNaissanceBox"
                          Background="Transparent"
                          BorderThickness="0"
                          Foreground="White"
                          Padding="10"
-                         FontSize="14"/>
+                         FontSize="14"
+                         MaxLength="10"
+                         PreviewTextInput="DateNaissance_PreviewTextInput"
+                         TextChanged="DateNaissance_TextChanged"/>
             </Border>
+
+            <TextBlock Text="Âge actuel :" Foreground="#8FA3B0"/>
+            <TextBlock Name="AgeActuelBlock" Text="-- ans" Margin="0,0,0,15" FontSize="14" Foreground="#8FA3B0"/>
 
             <TextBlock Text="Moment de la journée préféré :" />
             <Border CornerRadius="6" Background="#122B37" BorderBrush="#29414E" BorderThickness="1" Margin="0,0,0,15">

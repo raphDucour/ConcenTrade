@@ -1,11 +1,27 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace Concentrade
 {
     public class UserAnswers
     {
         public string Prenom { get; set; } = "";
-        public string Age { get; set; } = "";
+        private DateTime _dateNaissance;
+        public string DateNaissance
+        {
+            get => _dateNaissance.ToString("dd/MM/yyyy");
+            set => _dateNaissance = DateTime.ParseExact(value, "dd/MM/yyyy", null);
+        }
+        public int Age
+        {
+            get
+            {
+                var today = DateTime.Today;
+                var age = today.Year - _dateNaissance.Year;
+                if (_dateNaissance.Date > today.AddYears(-age)) age--;
+                return age;
+            }
+        }
         public string Sexe { get; set; } = "";
         public string Moment { get; set; } = "";
         public string Distrait { get; set; } = "";
@@ -15,7 +31,8 @@ namespace Concentrade
         public override string ToString()
         {
             return $"Prénom : {Prenom}\n" +
-                   $"Âge : {Age}\n" +
+                   $"Date de naissance : {DateNaissance}\n" +
+                   $"Âge : {Age} ans\n" +
                    $"Sexe : {Sexe}\n" +
                    $"Moment : {Moment}\n" +
                    $"Distrait : {Distrait}";
@@ -26,20 +43,10 @@ namespace Concentrade
         public void SauvegarderDansSettings()
         {
             Properties.Settings.Default.UserName = Prenom;
-
-            // Essayons de convertir l'âge en entier si possible
-            if (int.TryParse(Age, out int ageInt))
-                Properties.Settings.Default.UserAge = ageInt;
-            else
-                Properties.Settings.Default.UserAge = 0;
-
+            Properties.Settings.Default.UserAge = Age;
             Properties.Settings.Default.BestMoment = Moment;
-
-            // On considère "oui" ou "true" comme vrai pour "Distrait"
             Properties.Settings.Default.Distraction = Distrait.ToLower() == "oui" || Distrait.ToLower() == "un petit peu";
-
             Properties.Settings.Default.QuestionnaireDone = true;
-            // Enregistre les modifications
             Properties.Settings.Default.Save();
         }
 
@@ -53,22 +60,18 @@ namespace Concentrade
                 MessageBox.Show("Erreur : aucun email enregistré dans les paramètres.");
                 return;
             }
-            else {
-                if (int.TryParse(Age, out int ageInt))
-                    Properties.Settings.Default.UserAge = ageInt;
-                else
-                    Properties.Settings.Default.UserAge = 0;
-
+            else
+            {
                 // Appel à UserManager pour mise à jour dans le JSON
                 UserManager.SetUserProfile(
                     email,
                     Prenom,
-                    ageInt,
+                    Age,
                     Moment,
                     Distrait.ToLower() == "oui" || Distrait.ToLower() == "un petit peu",
                     false
                 );
-            }            
+            }
         }
     }
 }
