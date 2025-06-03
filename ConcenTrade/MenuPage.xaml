@@ -50,6 +50,17 @@
     </Page.Resources>
 
     <Grid>
+        <!-- Bouton Se déconnecter en haut à droite -->
+        <Button Content="Se déconnecter"
+                Style="{StaticResource ModernGlassButton}"
+                Width="150"
+                Height="40"
+                FontSize="14"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="0,20,20,0"
+                Click="Logout_Click"/>
+
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock Text="ConcenTrade"
                        FontSize="48"
