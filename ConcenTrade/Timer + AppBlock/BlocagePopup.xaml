@@ -3,13 +3,13 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:Concentrade"
-        Title="Blocage d'application"
+        Title="Application bloquée"
+        Height="400" 
+        Width="500"
         WindowStartupLocation="CenterScreen"
+        Background="#1F1F1F"
         WindowStyle="None"
         AllowsTransparency="True"
-        Background="#AA000000"
-        Width="400" Height="Auto"
-        SizeToContent="Height"
         ResizeMode="NoResize"
         Topmost="True">
     <Border Background="#1F1F1F" CornerRadius="20" Padding="20">
