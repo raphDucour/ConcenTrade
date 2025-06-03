@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window x:Class="Concentrade.DistractingAppsConfirmation"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Applications Distractives" 
+        Height="Auto"
+        Width="500"
+        SizeToContent="Height"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="NoResize">
+
+    <Window.Resources>
+        <Style x:Key="ModernToggleButton" TargetType="ToggleButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid>
+                            <Border x:Name="BackgroundBorder" 
+                                    Width="50" 
+                                    Height="24" 
+                                    Background="#333333" 
+                                    CornerRadius="12">
+                                <Border x:Name="Indicator"
+                                        Width="20" 
+                                        Height="20" 
+                                        Background="White" 
+                                        CornerRadius="10"
+                                        HorizontalAlignment="Left"
+                                        Margin="2,0,0,0"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="BackgroundBorder" Property="Background" Value="#00D09C"/>
+                                <Setter TargetName="Indicator" Property="HorizontalAlignment" Value="Right"/>
+                                <Setter TargetName="Indicator" Property="Margin" Value="0,0,2,0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="#1F1F1F" CornerRadius="20" Margin="20">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Icône et Titre -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,20">
+                <TextBlock Text="⚠️" FontSize="32" HorizontalAlignment="Center"/>
+                <TextBlock Text="Applications Distractives Détectées" 
+                         Foreground="White" 
+                         FontSize="24" 
+                         FontWeight="SemiBold"
+                         HorizontalAlignment="Center"
+                         Margin="0,10,0,0"/>
+                <TextBlock Text="Ces applications peuvent nuire à votre concentration" 
+                         Foreground="#8FA3B0" 
+                         FontSize="14"
+                         HorizontalAlignment="Center"
+                         Margin="0,5,0,0"/>
+            </StackPanel>
+
+            <!-- Liste des applications -->
+            <ItemsControl x:Name="AppsList" Grid.Row="2" Margin="0,10">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,5" 
+                                Padding="15" 
+                                Background="#2A2A2A" 
+                                CornerRadius="10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Name}" 
+                                             Foreground="White" 
+                                             FontSize="16"/>
+                                    <TextBlock Text="{Binding Description}" 
+                                             Foreground="#8FA3B0" 
+                                             FontSize="12"
+                                             Margin="0,4,0,0"/>
+                                </StackPanel>
+
+                                <ToggleButton Grid.Column="1" 
+                                            Style="{StaticResource ModernToggleButton}"
+                                            IsChecked="{Binding IsSelected}"
+                                            VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Boutons -->
+            <StackPanel Grid.Row="3" 
+                        Orientation="Horizontal" 
+                        HorizontalAlignment="Center" 
+                        Margin="0,20,0,0">
+                <Button x:Name="ContinueButton"
+                        Content="Continuer sans fermer" 
+                        Click="Continue_Click"
+                        Width="180"
+                        Height="40"
+                        Background="#444444"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Margin="0,0,10,0">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="20"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
+                <Button x:Name="CloseButton"
+                        Content="Fermer les applications" 
+                        Click="CloseSelected_Click"
+                        Width="180"
+                        Height="40"
+                        Background="#00D09C"
+                        Foreground="White"
+                        BorderThickness="0">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="20"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window> 
