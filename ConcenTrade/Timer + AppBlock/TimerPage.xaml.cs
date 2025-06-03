@@ -12,7 +12,7 @@ namespace Concentrade
     {
         private DispatcherTimer _timer;
         private TimeSpan _remaining;
-        private AppBlocker _blocker = new AppBlocker();
+        private AppBlocker _blocker;
         private Dictionary<string, DispatcherTimer> _temporaryAllowanceTimers = new();
         private bool _isPaused = false;
 
@@ -21,11 +21,14 @@ namespace Concentrade
             InitializeComponent();
             _remaining = TimeSpan.FromMinutes(dureeMinutes);
 
+            // Utiliser l'instance globale de AppBlocker
+            _blocker = ((App)Application.Current).AppBlocker;
+
             // S'abonner à l'événement d'autorisation temporaire
             _blocker.OnTemporaryAllowance += Blocker_OnTemporaryAllowance;
 
-            // Démarrer le bloqueur
-            _blocker.Start();
+            // Activer le blocage
+            _blocker.SetActive(true);
 
             // Utiliser Dispatcher.BeginInvoke pour s'assurer que la fenêtre est complètement initialisée
             Dispatcher.BeginInvoke(new Action(async () =>
@@ -114,8 +117,8 @@ namespace Concentrade
                 _timer.Stop();
                 TimerText.Text = "Terminé 🎉";
 
-                // Arrêter le blocage et tous les timers d'autorisation
-                _blocker.Stop();
+                // Désactiver le blocage et arrêter tous les timers d'autorisation
+                _blocker.SetActive(false);
                 foreach (var timer in _temporaryAllowanceTimers.Values)
                 {
                     timer.Stop();

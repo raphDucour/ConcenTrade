@@ -11,20 +11,10 @@ namespace Concentrade
     public class AppBlocker
     {
         private ManagementEventWatcher? _watcher;
+        private bool _isActive = false;
 
-        // Liste des applis à bloquer
-        private readonly string[] _blockedApps = 
-        { 
-            "discord",
-            "spotify",
-            "tiktok",
-            "chrome",
-            "msedge",
-            "firefox",
-            "opera",
-            "steam",
-            "epicgameslauncher"
-        };
+        // Liste modifiable des applications à bloquer
+        private string[] _blockedApps;
 
         // Cooldown par application
         private readonly Dictionary<string, DateTime> _lastPromptTime = new();
@@ -36,11 +26,40 @@ namespace Concentrade
         // Event pour notifier quand une application est temporairement autorisée
         public event EventHandler<TemporaryAllowanceEventArgs>? OnTemporaryAllowance;
 
+        public AppBlocker()
+        {
+            // Liste par défaut
+            _blockedApps = new[]
+            { 
+                "discord",
+                "spotify",
+                "tiktok",
+                "chrome",
+                "msedge",
+                "firefox",
+                "opera",
+                "steam",
+                "epicgameslauncher"
+            };
+        }
+
+        public void UpdateBlockedApps(string[] newBlockedApps)
+        {
+            _blockedApps = newBlockedApps;
+        }
+
+        public string[] GetBlockedApps()
+        {
+            return _blockedApps;
+        }
+
         public void Start()
         {
             _watcher = new ManagementEventWatcher(new WqlEventQuery("SELECT * FROM Win32_ProcessStartTrace"));
             _watcher.EventArrived += async (s, e) =>
             {
+                if (!_isActive) return; // Ne rien faire si le blocage n'est pas actif
+
                 string? processName = e.NewEvent.Properties["ProcessName"].Value?.ToString()?.ToLower();
                 int processId = Convert.ToInt32(e.NewEvent.Properties["ProcessID"].Value);
 
@@ -111,6 +130,16 @@ namespace Concentrade
                 }
             };
             _watcher.Start();
+        }
+
+        public void SetActive(bool active)
+        {
+            _isActive = active;
+            if (!active)
+            {
+                _temporaryAllowances.Clear();
+                _lastPromptTime.Clear();
+            }
         }
 
         public bool IsDistractingApp(string processName)
