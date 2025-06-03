@@ -67,5 +67,10 @@ namespace Concentrade
                 MessageBox.Show("Réinitialisation annulée.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
+        private void Logout_Click(object sender, RoutedEventArgs e)
+        {
+            // 🔒 Redirection vers la page de connexion
+            this.NavigationService?.Navigate(new LoginPage());
+        }
     }
 }
