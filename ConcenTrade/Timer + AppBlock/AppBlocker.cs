@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Management;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Linq;
 
 namespace Concentrade
 {
@@ -12,11 +13,28 @@ namespace Concentrade
         private ManagementEventWatcher? _watcher;
 
         // Liste des applis à bloquer
-        private readonly string[] _blockedApps = { "discord.exe", "spotify.exe", "tiktok.exe" };
+        private readonly string[] _blockedApps = 
+        { 
+            "discord",
+            "spotify",
+            "tiktok",
+            "chrome",
+            "msedge",
+            "firefox",
+            "opera",
+            "steam",
+            "epicgameslauncher"
+        };
 
         // Cooldown par application
         private readonly Dictionary<string, DateTime> _lastPromptTime = new();
         private readonly TimeSpan _popupCooldown = TimeSpan.FromSeconds(10);
+
+        // Autorisations temporaires
+        private readonly Dictionary<string, DateTime> _temporaryAllowances = new();
+        
+        // Event pour notifier quand une application est temporairement autorisée
+        public event EventHandler<TemporaryAllowanceEventArgs>? OnTemporaryAllowance;
 
         public void Start()
         {
@@ -26,8 +44,23 @@ namespace Concentrade
                 string? processName = e.NewEvent.Properties["ProcessName"].Value?.ToString()?.ToLower();
                 int processId = Convert.ToInt32(e.NewEvent.Properties["ProcessID"].Value);
 
-                if (processName != null && _blockedApps.Contains(processName))
+                if (processName != null && IsDistractingApp(processName))
                 {
+                    // Vérifier si l'application est temporairement autorisée
+                    if (_temporaryAllowances.TryGetValue(processName, out DateTime expirationTime))
+                    {
+                        if (DateTime.Now < expirationTime)
+                        {
+                            // L'application est encore autorisée
+                            return;
+                        }
+                        else
+                        {
+                            // L'autorisation a expiré, la supprimer
+                            _temporaryAllowances.Remove(processName);
+                        }
+                    }
+
                     if (_lastPromptTime.TryGetValue(processName, out DateTime lastTime))
                     {
                         if ((DateTime.Now - lastTime) < _popupCooldown)
@@ -39,7 +72,7 @@ namespace Concentrade
                         var process = Process.GetProcessById(processId);
                         bool windowReady = await WaitForMainWindow(process, TimeSpan.FromSeconds(10));
 
-                        if (!windowReady) return; // La fenêtre n’est jamais apparue
+                        if (!windowReady) return;
 
                         _lastPromptTime[processName] = DateTime.Now;
 
@@ -48,7 +81,21 @@ namespace Concentrade
                             var popup = new BlocagePopup(processName);
                             bool? result = popup.ShowDialog();
 
-                            if (popup.ContinueAnyway == false)
+                            if (result == true && popup.ContinueAnyway)
+                            {
+                                if (popup.TemporarilyAllowed)
+                                {
+                                    // Ajouter l'autorisation temporaire
+                                    _temporaryAllowances[processName] = DateTime.Now.Add(popup.AllowedDuration);
+                                    
+                                    // Notifier de l'autorisation temporaire
+                                    OnTemporaryAllowance?.Invoke(this, new TemporaryAllowanceEventArgs(
+                                        processName, 
+                                        popup.AllowedDuration
+                                    ));
+                                }
+                            }
+                            else
                             {
                                 foreach (var proc in Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(processName)))
                                 {
@@ -66,7 +113,25 @@ namespace Concentrade
             _watcher.Start();
         }
 
-        // Attend que la fenêtre principale soit disponible
+        public bool IsDistractingApp(string processName)
+        {
+            // Convertir en minuscules pour une comparaison insensible à la casse
+            processName = processName.ToLower();
+            
+            // Vérifier si le nom du processus contient l'un des noms bloqués
+            return _blockedApps.Any(blockedApp => 
+                processName.Contains(blockedApp) || 
+                processName == blockedApp || 
+                processName == blockedApp + ".exe");
+        }
+
+        public void Stop()
+        {
+            _watcher?.Stop();
+            _watcher?.Dispose();
+            _temporaryAllowances.Clear();
+        }
+
         private async Task<bool> WaitForMainWindow(Process process, TimeSpan timeout)
         {
             var start = DateTime.Now;
@@ -86,27 +151,17 @@ namespace Concentrade
             }
             return false;
         }
+    }
 
-        public void Stop()
+    public class TemporaryAllowanceEventArgs : EventArgs
+    {
+        public string ProcessName { get; }
+        public TimeSpan Duration { get; }
+
+        public TemporaryAllowanceEventArgs(string processName, TimeSpan duration)
         {
-            _watcher?.Stop();
-            _watcher?.Dispose();
-        }
-
-        public bool IsDistractingApp(string processName)
-        {
-            string[] blockedApps = new[]
-            {
-                "discord",
-                "spotify",
-                "edge",
-                "opera",
-                "teams",
-                "epicgameslauncher",
-                "steam"
-            };
-
-            return Array.Exists(blockedApps, name => processName.ToLower().Contains(name));
+            ProcessName = processName;
+            Duration = duration;
         }
     }
 }
