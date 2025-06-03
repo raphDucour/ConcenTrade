@@ -31,33 +31,13 @@ namespace Concentrade
         // Event pour notifier quand une application est temporairement autorisée
         public event EventHandler<TemporaryAllowanceEventArgs>? OnTemporaryAllowance;
 
-        // Liste des processus liés à bloquer (pour les applications spéciales)
-        private readonly Dictionary<string, List<string>> _relatedProcesses = new()
+        // Méthode pour déclencher l'événement
+        public void AllowTemporarily(string processName, TimeSpan duration)
         {
-            { "steam", new List<string> { "steam", "steamwebhelper", "steamservice", "steamclient", "gameoverlayui" } },
-            { "epicgameslauncher", new List<string> { "epicgameslauncher", "epicgameslauncherhelper", "epicwebhelper" } },
-            { "discord", new List<string> { "discord", "discordptb", "discordcanary", "discordhelper" } },
-            { "valorant", new List<string> { 
-                "valorant", 
-                "valorant-win64-shipping", 
-                "riot client", 
-                "riotclientservices",
-                "vgc",
-                "riotclientux"
-            } }
-        };
-
-        // Liste des alias d'applications (noms alternatifs)
-        private readonly Dictionary<string, string> _appAliases = new()
-        {
-            { "valorant", "riot" },
-            { "lol", "league of legends" },
-            { "battlenet", "battle.net" },
-            { "riot", "valorant" },
-            { "chrome", "google chrome" },
-            { "msedge", "microsoft edge" },
-            { "firefox", "mozilla firefox" }
-        };
+            var mainProcessName = GetMainProcessName(processName);
+            _temporaryAllowances[mainProcessName] = DateTime.Now.Add(duration);
+            OnTemporaryAllowance?.Invoke(this, new TemporaryAllowanceEventArgs(mainProcessName, duration));
+        }
 
         public AppBlocker()
         {
@@ -175,11 +155,7 @@ namespace Concentrade
                             {
                                 if (popup.TemporarilyAllowed)
                                 {
-                                    _temporaryAllowances[mainProcessName] = DateTime.Now.Add(popup.AllowedDuration);
-                                    OnTemporaryAllowance?.Invoke(this, new TemporaryAllowanceEventArgs(
-                                        mainProcessName, 
-                                        popup.AllowedDuration
-                                    ));
+                                    AllowTemporarily(mainProcessName, popup.AllowedDuration);
                                 }
                             }
                             else
@@ -195,6 +171,41 @@ namespace Concentrade
                 }
             };
             _watcher.Start();
+        }
+
+        public void Stop()
+        {
+            _watcher?.Stop();
+            _watcher?.Dispose();
+            _temporaryAllowances.Clear();
+        }
+
+        public void SetActive(bool active)
+        {
+            _isActive = active;
+            if (!active)
+            {
+                _temporaryAllowances.Clear();
+                _lastPromptTime.Clear();
+            }
+        }
+
+        public bool IsDistractingApp(string processName)
+        {
+            processName = processName.ToLower();
+            var mainProcessName = GetMainProcessName(processName);
+
+            return _blockedApps.Any(blockedApp =>
+            {
+                var normalizedBlockedApp = NormalizeAppName(blockedApp);
+                return mainProcessName == normalizedBlockedApp ||
+                       mainProcessName.Contains(normalizedBlockedApp) ||
+                       normalizedBlockedApp.Contains(mainProcessName) ||
+                       (_relatedProcesses.ContainsKey(normalizedBlockedApp) &&
+                        _relatedProcesses[normalizedBlockedApp].Any(p => 
+                            mainProcessName.Contains(p.ToLower()) || 
+                            p.ToLower().Contains(mainProcessName)));
+            });
         }
 
         private async Task<string> GetDisplayName(Process process, string fallbackName)
@@ -258,81 +269,6 @@ namespace Concentrade
             return processName;
         }
 
-        private void KillApplication(string processName)
-        {
-            var mainProcessName = GetMainProcessName(processName);
-            var processesToKill = new HashSet<string>();
-
-            // Ajouter les processus liés si c'est une application spéciale
-            if (_relatedProcesses.TryGetValue(mainProcessName, out var relatedProcesses))
-            {
-                processesToKill.UnionWith(relatedProcesses);
-            }
-            else
-            {
-                processesToKill.Add(processName);
-            }
-
-            // Tuer tous les processus
-            foreach (var procName in processesToKill)
-            {
-                try
-                {
-                    foreach (var proc in Process.GetProcesses())
-                    {
-                        if (proc.ProcessName.ToLower().Contains(procName.ToLower()))
-                        {
-                            try 
-                            { 
-                                proc.Kill(true);
-                                proc.WaitForExit(1000);
-                            }
-                            catch { }
-                        }
-                    }
-                }
-                catch { }
-            }
-        }
-
-        public void SetActive(bool active)
-        {
-            _isActive = active;
-            if (!active)
-            {
-                _temporaryAllowances.Clear();
-                _lastPromptTime.Clear();
-            }
-        }
-
-        public bool IsDistractingApp(string processName)
-        {
-            processName = processName.ToLower();
-            var mainProcessName = GetMainProcessName(processName);
-
-            // Vérifier si le processus correspond à une application bloquée
-            return _blockedApps.Any(blockedApp =>
-            {
-                var normalizedBlockedApp = NormalizeAppName(blockedApp);
-
-                // Vérifier les correspondances exactes et partielles
-                return mainProcessName == normalizedBlockedApp ||
-                       mainProcessName.Contains(normalizedBlockedApp) ||
-                       normalizedBlockedApp.Contains(mainProcessName) ||
-                       (_relatedProcesses.ContainsKey(normalizedBlockedApp) &&
-                        _relatedProcesses[normalizedBlockedApp].Any(p => 
-                            mainProcessName.Contains(p.ToLower()) || 
-                            p.ToLower().Contains(mainProcessName)));
-            });
-        }
-
-        public void Stop()
-        {
-            _watcher?.Stop();
-            _watcher?.Dispose();
-            _temporaryAllowances.Clear();
-        }
-
         private async Task<bool> WaitForMainWindow(Process process, TimeSpan timeout)
         {
             var start = DateTime.Now;
@@ -351,6 +287,50 @@ namespace Concentrade
             }
             return false;
         }
+
+        public void KillApplication(string processName)
+        {
+            try
+            {
+                var processes = Process.GetProcessesByName(processName);
+                foreach (var process in processes)
+                {
+                    process.Kill(true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Erreur lors de la fermeture de {processName}: {ex.Message}");
+            }
+        }
+
+        // Liste des processus liés à bloquer (pour les applications spéciales)
+        private readonly Dictionary<string, List<string>> _relatedProcesses = new()
+        {
+            { "steam", new List<string> { "steam", "steamwebhelper", "steamservice", "steamclient", "gameoverlayui" } },
+            { "epicgameslauncher", new List<string> { "epicgameslauncher", "epicgameslauncherhelper", "epicwebhelper" } },
+            { "discord", new List<string> { "discord", "discordptb", "discordcanary", "discordhelper" } },
+            { "valorant", new List<string> { 
+                "valorant", 
+                "valorant-win64-shipping", 
+                "riot client", 
+                "riotclientservices",
+                "vgc",
+                "riotclientux"
+            } }
+        };
+
+        // Liste des alias d'applications (noms alternatifs)
+        private readonly Dictionary<string, string> _appAliases = new()
+        {
+            { "valorant", "riot" },
+            { "lol", "league of legends" },
+            { "battlenet", "battle.net" },
+            { "riot", "valorant" },
+            { "chrome", "google chrome" },
+            { "msedge", "microsoft edge" },
+            { "firefox", "mozilla firefox" }
+        };
     }
 
     public class TemporaryAllowanceEventArgs : EventArgs

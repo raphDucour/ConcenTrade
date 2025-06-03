@@ -31,7 +31,7 @@ namespace Concentrade
             _blocker.SetActive(true);
 
             // Utiliser Dispatcher.BeginInvoke pour s'assurer que la fenêtre est complètement initialisée
-            Dispatcher.BeginInvoke(new Action(async () =>
+            Dispatcher.BeginInvoke(new Action(() =>
             {
                 // Afficher la fenêtre de confirmation pour les applications déjà lancées
                 var confirmationWindow = new RunningAppsPopup(_blocker);
@@ -44,8 +44,7 @@ namespace Concentrade
                             try 
                             { 
                                 app.Process.Kill();
-                                // Attendre un peu pour s'assurer que le processus est bien terminé
-                                await System.Threading.Tasks.Task.Delay(100);
+                                System.Threading.Thread.Sleep(100);
                             }
                             catch { }
                         }
@@ -94,13 +93,55 @@ namespace Concentrade
                     allowanceTimer.Stop();
                     _temporaryAllowanceTimers.Remove(e.ProcessName);
 
-                    // Si c'était le dernier timer d'autorisation, reprendre le timer principal
-                    if (_temporaryAllowanceTimers.Count == 0 && _isPaused)
+                    // Afficher le popup de fin de temps
+                    Application.Current.Dispatcher.Invoke(() =>
                     {
-                        _isPaused = false;
-                        _timer.Start();
-                        UpdateTimerText();
-                    }
+                        var popup = new TimeUpPopup(e.ProcessName);
+                        if (popup.ShowDialog() == true)
+                        {
+                            switch (popup.Action)
+                            {
+                                case TimeUpPopup.TimeUpAction.Prolonger:
+                                    // Prolonger de 5 minutes
+                                    _blocker.AllowTemporarily(e.ProcessName, TimeSpan.FromMinutes(5));
+                                    break;
+
+                                case TimeUpPopup.TimeUpAction.Reprendre:
+                                    // Si c'était le dernier timer d'autorisation, reprendre le timer principal
+                                    if (_temporaryAllowanceTimers.Count == 0 && _isPaused)
+                                    {
+                                        _isPaused = false;
+                                        _timer.Start();
+                                        UpdateTimerText();
+                                    }
+                                    break;
+
+                                case TimeUpPopup.TimeUpAction.Fermer:
+                                    try
+                                    {
+                                        // Trouver et tuer le processus
+                                        var processes = Process.GetProcessesByName(e.ProcessName);
+                                        foreach (var process in processes)
+                                        {
+                                            process.Kill(true);
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Debug.WriteLine($"Erreur lors de la fermeture de {e.ProcessName}: {ex.Message}");
+                                    }
+
+                                    // Si c'était le dernier timer d'autorisation, reprendre le timer principal
+                                    if (_temporaryAllowanceTimers.Count == 0 && _isPaused)
+                                    {
+                                        _isPaused = false;
+                                        _timer.Start();
+                                        UpdateTimerText();
+                                    }
+                                    break;
+                            }
+                        }
+                    });
                 }
             };
 
@@ -108,7 +149,7 @@ namespace Concentrade
             allowanceTimer.Start();
         }
 
-        private void Timer_Tick(object? sender, EventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
             _remaining = _remaining.Subtract(TimeSpan.FromSeconds(1));
 
