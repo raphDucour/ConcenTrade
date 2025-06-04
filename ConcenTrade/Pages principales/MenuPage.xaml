@@ -14,38 +14,111 @@
     </Page.Background>
 
     <Page.Resources>
-        <!-- Style boutons Apple -->
-        <Style x:Key="ModernGlassButton" TargetType="Button">
+        <!-- Style pour les boutons principaux -->
+        <Style x:Key="MainActionButton" TargetType="Button">
             <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Light"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#22FFFFFF"/>
-            <Setter Property="Width" Value="300"/>
-            <Setter Property="Height" Value="50"/>
-            <Setter Property="Margin" Value="0,12,0,0"/>
-            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="120"/>
+            <Setter Property="Margin" Value="0,20"/>
+            <Setter Property="BorderBrush" Value="#44FFFFFF"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="12"
+                        <Border x:Name="border" 
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="60">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="15" 
+                                                ShadowDepth="0" 
+                                                Color="#40000000"/>
+                            </Border.Effect>
+                            <Grid>
+                                <ContentPresenter x:Name="contentPresenter" 
+                                                HorizontalAlignment="Center" 
+                                                VerticalAlignment="Center"/>
+                            </Grid>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#44FFFFFF"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#88FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style pour le bouton statistiques -->
+        <Style x:Key="StatsButton" TargetType="Button">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Light"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#22FFFFFF"/>
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="Margin" Value="0,40,0,0"/>
+            <Setter Property="BorderBrush" Value="#44FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="30">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="15" 
+                                                ShadowDepth="0" 
+                                                Color="#40000000"/>
+                            </Border.Effect>
+                            <Grid>
+                                <StackPanel Orientation="Horizontal" 
+                                          HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center">
+                                    <TextBlock Text="&#xE9D9;" 
+                                             FontFamily="Segoe MDL2 Assets" 
+                                             Margin="0,0,15,0"
+                                             VerticalAlignment="Center"/>
+                                    <StackPanel>
+                                        <TextBlock Text="Statistiques" 
+                                                 FontSize="20"/>
+                                        <TextBlock x:Name="PointsText"
+                                                 Text="1520 pts" 
+                                                 FontSize="14" 
+                                                 Opacity="0.7"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#44FFFFFF"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#88FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
         <!-- Style Slider -->
-        <Style TargetType="Slider" x:Key="AppleSliderStyle">
+        <Style x:Key="ModernSlider" TargetType="Slider">
             <Setter Property="Width" Value="300"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Foreground" Value="#00D9A6"/>
+            <Setter Property="Foreground" Value="#80FFFFFF"/>
+            <Setter Property="Background" Value="#40FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#60FFFFFF"/>
         </Style>
 
         <!-- Style pour les boutons du menu popup -->
@@ -118,6 +191,78 @@
     </Page.Resources>
 
     <Grid>
+        <!-- Logo et Titre -->
+        <StackPanel VerticalAlignment="Top" 
+                   HorizontalAlignment="Center" 
+                   Margin="0,40,0,0">
+            <StackPanel Orientation="Horizontal" 
+                       HorizontalAlignment="Center">
+                <TextBlock Text="&#xE9D9;" 
+                         FontFamily="Segoe MDL2 Assets"
+                         FontSize="36"
+                         Foreground="#80FFFFFF"
+                         VerticalAlignment="Center"
+                         Margin="0,0,15,0"/>
+                <TextBlock Text="ConcenTrade"
+                         FontSize="48"
+                         FontWeight="Light"
+                         Foreground="White"/>
+            </StackPanel>
+            <TextBlock Text="Améliore ta concentration, un point à la fois"
+                     FontSize="18"
+                     Foreground="#CCFFFFFF"
+                     HorizontalAlignment="Center"
+                     Margin="0,5,0,0"/>
+        </StackPanel>
+
+        <!-- Bouton principal Start -->
+        <Button Style="{StaticResource MainActionButton}"
+                Click="StartSession_Click"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center">
+            <TextBlock Text="&#xE768;"
+                     FontFamily="Segoe MDL2 Assets"
+                     FontSize="48"/>
+        </Button>
+
+        <!-- Curseur de durée -->
+        <StackPanel Margin="0,200,0,0" 
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center">
+            <TextBlock x:Name="SliderLabel"
+                     Text="Durée : 90 min"
+                     FontSize="16"
+                     Foreground="#CCFFFFFF"
+                     HorizontalAlignment="Center"
+                     Margin="0,0,0,10"/>
+            <Slider x:Name="DureeSlider"
+                    Minimum="0"
+                    Maximum="180"
+                    Value="90"
+                    TickFrequency="30"
+                    IsSnapToTickEnabled="True"
+                    Style="{StaticResource ModernSlider}"/>
+        </StackPanel>
+
+        <!-- Bouton Statistiques -->
+        <Button Style="{StaticResource StatsButton}"
+                Click="Stats_Click"
+                VerticalAlignment="Bottom"
+                Margin="0,0,0,40"/>
+
+        <!-- Menu Settings -->
+        <Button x:Name="SettingsButton"
+                Content="&#xE713;"
+                FontFamily="Segoe MDL2 Assets"
+                FontSize="16"
+                Style="{StaticResource MainActionButton}"
+                Width="40"
+                Height="40"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="20,20,0,0"
+                Click="SettingsButton_Click"/>
+
         <!-- Menu Popup pour les paramètres -->
         <Popup x:Name="SettingsPopup" 
                PlacementTarget="{Binding ElementName=SettingsButton}" 
@@ -125,7 +270,7 @@
                AllowsTransparency="True"
                PopupAnimation="Fade"
                StaysOpen="False">
-            <Border Background="#AA203A43"
+            <Border Background="#CC203A43"
                     BorderBrush="#44FFFFFF"
                     BorderThickness="1"
                     CornerRadius="15"
@@ -178,61 +323,5 @@
                 </StackPanel>
             </Border>
         </Popup>
-
-        <!-- Bouton paramètre en haut à gauche avec effet de survol -->
-        <Button x:Name="SettingsButton"
-                Content="&#xE713;"
-                FontFamily="Segoe MDL2 Assets"
-                FontSize="24"
-                Style="{StaticResource ModernGlassButton}"
-                Width="50"
-                Height="50"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="20,20,0,0"
-                Click="SettingsButton_Click"/>
-
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock Text="ConcenTrade"
-                       FontSize="48"
-                       FontWeight="Bold"
-                       Foreground="White"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,40"/>
-
-            <!-- Boutons -->
-            <Button Content="Start" Click="StartSession_Click" Style="{StaticResource ModernGlassButton}"/>
-
-            <!-- Curseur de durée -->
-            <StackPanel Margin="0,25,0,0" HorizontalAlignment="Center">
-                <TextBlock x:Name="SliderLabel"
-                           Text="Durée : 90 min"
-                           FontSize="18"
-                           Foreground="White"
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,10"/>
-                <Slider x:Name="DureeSlider"
-                        Minimum="0"
-                        Maximum="180"
-                        Value="90"
-                        TickFrequency="30"
-                        IsSnapToTickEnabled="True"
-                        Style="{StaticResource AppleSliderStyle}"
-                        ValueChanged="DureeSlider_ValueChanged"/>
-            </StackPanel>
-
-            <Button Content="Statistiques" Click="Stats_Click" Style="{StaticResource ModernGlassButton}"/>
-        </StackPanel>
-
-        <!-- Reset -->
-        <Button Content="Reset"
-                Style="{StaticResource ModernGlassButton}"
-                Width="120"
-                Height="40"
-                FontSize="14"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Margin="0,0,20,20"
-                Click="ResetData_Click"/>
     </Grid>
 </Page>
