@@ -64,9 +64,9 @@
             <Setter Property="FontWeight" Value="Light"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#22FFFFFF"/>
-            <Setter Property="Width" Value="300"/>
-            <Setter Property="Height" Value="60"/>
-            <Setter Property="Margin" Value="0,40,0,0"/>
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Margin" Value="0,20,20,0"/>
             <Setter Property="BorderBrush" Value="#44FFFFFF"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -77,29 +77,17 @@
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="30">
+                                CornerRadius="20">
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="15" 
                                                 ShadowDepth="0" 
                                                 Color="#40000000"/>
                             </Border.Effect>
                             <Grid>
-                                <StackPanel Orientation="Horizontal" 
-                                          HorizontalAlignment="Center" 
-                                          VerticalAlignment="Center">
-                                    <TextBlock Text="&#xE9D9;" 
-                                             FontFamily="Segoe MDL2 Assets" 
-                                             Margin="0,0,15,0"
-                                             VerticalAlignment="Center"/>
-                                    <StackPanel>
-                                        <TextBlock Text="Statistiques" 
-                                                 FontSize="20"/>
-                                        <TextBlock x:Name="PointsText"
-                                                 Text="1520 pts" 
-                                                 FontSize="14" 
-                                                 Opacity="0.7"/>
-                                    </StackPanel>
-                                </StackPanel>
+                                <TextBlock Text="1520 points" 
+                                         FontSize="16"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"/>
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -194,25 +182,25 @@
         <!-- Logo et Titre -->
         <StackPanel VerticalAlignment="Top" 
                    HorizontalAlignment="Center" 
-                   Margin="0,40,0,0">
+                   Margin="0,80,0,0">
             <StackPanel Orientation="Horizontal" 
                        HorizontalAlignment="Center">
-                <TextBlock Text="&#xE9D9;" 
+                <TextBlock Text="&#xE945;" 
                          FontFamily="Segoe MDL2 Assets"
-                         FontSize="36"
+                         FontSize="48"
                          Foreground="#80FFFFFF"
                          VerticalAlignment="Center"
-                         Margin="0,0,15,0"/>
+                         Margin="0,0,20,0"/>
                 <TextBlock Text="ConcenTrade"
-                         FontSize="48"
+                         FontSize="64"
                          FontWeight="Light"
                          Foreground="White"/>
             </StackPanel>
             <TextBlock Text="Améliore ta concentration, un point à la fois"
-                     FontSize="18"
+                     FontSize="20"
                      Foreground="#CCFFFFFF"
                      HorizontalAlignment="Center"
-                     Margin="0,5,0,0"/>
+                     Margin="0,10,0,0"/>
         </StackPanel>
 
         <!-- Bouton principal Start -->
@@ -247,8 +235,8 @@
         <!-- Bouton Statistiques -->
         <Button Style="{StaticResource StatsButton}"
                 Click="Stats_Click"
-                VerticalAlignment="Bottom"
-                Margin="0,0,0,40"/>
+                VerticalAlignment="Top"
+                HorizontalAlignment="Right"/>
 
         <!-- Menu Settings -->
         <Button x:Name="SettingsButton"
