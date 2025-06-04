@@ -49,6 +49,18 @@ namespace Concentrade.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1900-01-01")]
+        public global::System.DateTime UserBirthDate {
+            get {
+                return ((global::System.DateTime)(this["UserBirthDate"]));
+            }
+            set {
+                this["UserBirthDate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string BestMoment {
             get {
@@ -106,19 +118,7 @@ namespace Concentrade.Properties {
                 this["UserEmail"] = value;
             }
         }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1900-01-01")]
-        public global::System.DateTime UserBirthDate {
-            get {
-                return ((global::System.DateTime)(this["UserBirthDate"]));
-            }
-            set {
-                this["UserBirthDate"] = value;
-            }
-        }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
@@ -128,6 +128,18 @@ namespace Concentrade.Properties {
             }
             set {
                 this["BlockedApps"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Points {
+            get {
+                return ((int)(this["Points"]));
+            }
+            set {
+                this["Points"] = value;
             }
         }
     }

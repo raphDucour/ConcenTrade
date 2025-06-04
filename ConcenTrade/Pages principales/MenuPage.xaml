@@ -84,7 +84,8 @@
                                                 Color="#40000000"/>
                             </Border.Effect>
                             <Grid>
-                                <TextBlock Text="1520 points" 
+                                <TextBlock x:Name="PointsDisplay"
+                                         Text="{Binding Points, StringFormat='{}{0} points'}"
                                          FontSize="16"
                                          HorizontalAlignment="Center"
                                          VerticalAlignment="Center"/>

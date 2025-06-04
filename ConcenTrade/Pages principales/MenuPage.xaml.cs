@@ -1,15 +1,38 @@
 ﻿using ConcenTrade;
 using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace Concentrade
 {
-    public partial class MenuPage : Page
+    public partial class MenuPage : Page, INotifyPropertyChanged
     {
+        private int _points;
+        public int Points
+        {
+            get => _points;
+            set
+            {
+                if (_points != value)
+                {
+                    _points = value;
+                    OnPropertyChanged(nameof(Points));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public MenuPage()
         {
             InitializeComponent();
+            DataContext = this;
+            Points = Properties.Settings.Default.Points;
         }
 
         private void StartSession_Click(object sender, RoutedEventArgs e)
@@ -34,7 +57,6 @@ namespace Concentrade
             this.NavigationService?.Navigate(new SettingsPage());
         }
 
-
         private void Stats_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Statistiques à venir.");
@@ -55,22 +77,12 @@ namespace Concentrade
 
             if (result == MessageBoxResult.Yes)
             {
-                // ✅ Réinitialisation des données
                 Properties.Settings.Default.Reset();
                 Properties.Settings.Default.Save();
-
-                // 🔁 Retour à la page Questionnaire
-                if (Application.Current.MainWindow is MainWindow mainWindow)
-                {
-                    mainWindow.NavigateTo(new QuestionPrenom());
-                }
-            }
-            else
-            {
-                // ❌ L'utilisateur a cliqué sur "Non"
-                MessageBox.Show("Réinitialisation annulée.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                Points = 0;
             }
         }
+
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             // 🔒 Redirection vers la page de connexion
