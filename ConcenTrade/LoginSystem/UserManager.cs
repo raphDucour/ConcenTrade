@@ -46,7 +46,6 @@ namespace Concentrade
                 user.Distraction = distraction;
                 user.LaunchOnStartup = launchOnStartup;
                 user.QuestionnaireDone = true;
-
                 SaveUsers(users);
             }
         }
@@ -56,8 +55,6 @@ namespace Concentrade
             var users = LoadUsers();
             return users.Find(u => u.Email == email);
         }
-
-
 
         public static User? Login(string email, string password)
         {
@@ -80,7 +77,20 @@ namespace Concentrade
                 Properties.Settings.Default.Distraction = user.Distraction;
                 Properties.Settings.Default.LaunchOnStartup = user.LaunchOnStartup;
                 Properties.Settings.Default.QuestionnaireDone = user.QuestionnaireDone;
+                Properties.Settings.Default.Points = user.Points;
                 Properties.Settings.Default.Save();
+            }
+        }
+
+        public static void SavePoints(string email, int points)
+        {
+            var users = LoadUsers();
+            var user = users.Find(u => u.Email == email);
+
+            if (user != null)
+            {
+                user.Points = points;
+                SaveUsers(users);
             }
         }
     }

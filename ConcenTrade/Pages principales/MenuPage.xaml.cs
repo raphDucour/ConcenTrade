@@ -85,6 +85,18 @@ namespace Concentrade
 
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
+            // Sauvegarder les points actuels dans le fichier JSON
+            string email = Properties.Settings.Default.UserEmail;
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                UserManager.SavePoints(email, Points);
+            }
+
+            // Réinitialiser les paramètres locaux
+            Properties.Settings.Default.Reset();
+            Properties.Settings.Default.Save();
+            Points = 0;
+
             // 🔒 Redirection vers la page de connexion
             this.NavigationService?.Navigate(new LoginPage());
         }

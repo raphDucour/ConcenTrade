@@ -80,6 +80,14 @@ namespace Concentrade
         {
             Properties.Settings.Default.Points += _pointsAccumules;
             Properties.Settings.Default.Save();
+
+            // Sauvegarder les points dans le fichier JSON
+            string email = Properties.Settings.Default.UserEmail;
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                UserManager.SavePoints(email, Properties.Settings.Default.Points);
+            }
+
             _pointsAccumules = 0;
             UpdatePointsText();
         }

@@ -15,6 +15,7 @@ namespace Concentrade
         public bool Distraction { get; set; } = false;
         public bool LaunchOnStartup { get; set; } = false;
         public bool QuestionnaireDone { get; set; } = false;
+        public int Points { get; set; } = 0;
         
 
         public User(string email, string passwordHash)
