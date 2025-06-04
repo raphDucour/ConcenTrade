@@ -11,10 +11,12 @@ namespace ConcenTrade
     public partial class SettingsPage : Page
     {
         private readonly Regex _dateRegex = new Regex(@"^(\d{0,2})/?\d{0,2}/?\d{0,4}$");
+        private readonly AppBlocker _appBlocker;
 
         public SettingsPage()
         {
             InitializeComponent();
+            _appBlocker = ((App)Application.Current).AppBlocker;
             ChargerDonneesUtilisateur();
         }
 
@@ -138,6 +140,15 @@ namespace ConcenTrade
         {
             if (NavigationService?.CanGoBack == true)
                 NavigationService.GoBack();
+        }
+
+        private void GererAppsBloquees_Click(object sender, RoutedEventArgs e)
+        {
+            var settingsWindow = new BlockedAppsSettings(_appBlocker.GetBlockedApps());
+            if (settingsWindow.ShowDialog() == true)
+            {
+                _appBlocker.UpdateBlockedApps(settingsWindow.BlockedApps);
+            }
         }
     }
 }

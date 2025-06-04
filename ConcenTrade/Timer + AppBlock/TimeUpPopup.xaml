@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window x:Class="Concentrade.TimeUpPopup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Temps écoulé" 
+        Height="300" 
+        Width="450"
+        WindowStartupLocation="CenterScreen"
+        Background="#1F1F1F"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="NoResize"
+        Topmost="True">
+
+    <Border CornerRadius="20" Background="#1F1F1F" BorderBrush="#333333" BorderThickness="1" Margin="10">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Icône -->
+            <TextBlock Text="⏰" 
+                     FontSize="48" 
+                     HorizontalAlignment="Center"
+                     Margin="0,0,0,10"/>
+
+            <!-- Titre -->
+            <TextBlock Grid.Row="1"
+                     Text="Temps d'autorisation écoulé" 
+                     Foreground="White" 
+                     FontSize="24" 
+                     FontWeight="SemiBold"
+                     HorizontalAlignment="Center"
+                     Margin="0,0,0,10"/>
+
+            <!-- Message -->
+            <TextBlock Grid.Row="2"
+                     Text="Que souhaitez-vous faire ?" 
+                     Foreground="#8FA3B0" 
+                     FontSize="16"
+                     TextAlignment="Center"
+                     Margin="0,0,0,20"/>
+
+            <!-- Boutons -->
+            <StackPanel Grid.Row="4" Orientation="Vertical">
+                <Button Content="Prolonger de 5 minutes" 
+                        Click="Prolonger_Click"
+                        Height="45"
+                        Background="#00D09C"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Margin="0,0,0,10">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="10"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
+                <Button Content="Reprendre le timer" 
+                        Click="Reprendre_Click"
+                        Height="45"
+                        Background="#274A5E"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Margin="0,0,0,10">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="10"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
+                <Button Content="Fermer l'application" 
+                        Click="Fermer_Click"
+                        Height="45"
+                        Background="#444444"
+                        Foreground="White"
+                        BorderThickness="0">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="10"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window> 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace Concentrade
 {
@@ -9,6 +10,7 @@ namespace Concentrade
     {
         public ObservableCollection<RunningApp> RunningApps { get; set; }
         private readonly AppBlocker _appBlocker;
+        public bool ContinueWithoutClosing { get; private set; }
 
         public RunningAppsPopup(AppBlocker appBlocker)
         {
@@ -42,39 +44,35 @@ namespace Concentrade
             // Si aucune application distrayante n'est trouvée, fermer directement la fenêtre
             if (RunningApps.Count == 0)
             {
-                Close();
+                // On utilise Dispatcher.BeginInvoke pour s'assurer que la fenêtre est complètement initialisée
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    DialogResult = true;
+                    Close();
+                }));
             }
         }
 
         private void CloseSelected_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var app in RunningApps)
-            {
-                if (app.IsSelected)
-                {
-                    try
-                    {
-                        app.Process?.Kill();
-                    }
-                    catch { }
-                }
-            }
+            ContinueWithoutClosing = false;
             DialogResult = true;
             Close();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
+            ContinueWithoutClosing = true;
+            DialogResult = true;
             Close();
         }
     }
 
     public class RunningApp
     {
-        public required string Name { get; set; }
-        public required string Description { get; set; }
-        public required Process Process { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public Process Process { get; set; }
         public bool IsSelected { get; set; }
     }
 } 
