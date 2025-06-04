@@ -16,11 +16,25 @@ namespace Concentrade
         private AppBlocker _blocker;
         private Dictionary<string, DispatcherTimer> _temporaryAllowanceTimers = new();
         private bool _isPaused = false;
+        private int _pointsAccumules = 0;
+        private TextBlock _pointsText;
 
         public TimerPage(int dureeMinutes)
         {
             InitializeComponent();
             _remaining = TimeSpan.FromMinutes(dureeMinutes);
+
+            // Créer et positionner le TextBlock pour les points
+            _pointsText = new TextBlock
+            {
+                FontSize = 20,
+                Foreground = System.Windows.Media.Brushes.White,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(0, 20, 20, 0)
+            };
+            UpdatePointsText();
+            MainGrid.Children.Add(_pointsText);
 
             // Utiliser l'instance globale de AppBlocker
             _blocker = ((App)Application.Current).AppBlocker;
@@ -55,6 +69,19 @@ namespace Concentrade
                 // Lancer le timer
                 StartTimer();
             }));
+        }
+
+        private void UpdatePointsText()
+        {
+            _pointsText.Text = $"{_pointsAccumules} points";
+        }
+
+        private void SavePoints()
+        {
+            Properties.Settings.Default.Points += _pointsAccumules;
+            Properties.Settings.Default.Save();
+            _pointsAccumules = 0;
+            UpdatePointsText();
         }
 
         private void StartTimer()
@@ -159,6 +186,9 @@ namespace Concentrade
                 _timer.Stop();
                 TimerText.Text = "Terminé 🎉";
 
+                // Sauvegarder les points accumulés
+                SavePoints();
+
                 // Désactiver le blocage et arrêter tous les timers d'autorisation
                 _blocker.SetActive(false);
                 foreach (var timer in _temporaryAllowanceTimers.Values)
@@ -170,6 +200,12 @@ namespace Concentrade
             else
             {
                 UpdateTimerText();
+                if (!_isPaused)
+                {
+                    // Incrémenter les points accumulés
+                    _pointsAccumules++;
+                    UpdatePointsText();
+                }
             }
         }
 
@@ -203,6 +239,9 @@ namespace Concentrade
 
         private async void StopButton_Click(object sender, RoutedEventArgs e)
         {
+            // Sauvegarder les points accumulés
+            SavePoints();
+            
             // Arrêter le timer
             _timer.Stop();
             

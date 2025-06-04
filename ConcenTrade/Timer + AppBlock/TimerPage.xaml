@@ -1,4 +1,5 @@
-﻿<Page x:Class="Concentrade.TimerPage"
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Page x:Class="Concentrade.TimerPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       Title="Timer"
@@ -56,34 +57,30 @@
         </EventTrigger>
     </Page.Triggers>
 
-    <Grid>
+    <Grid x:Name="MainGrid">
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock x:Name="TimerText"
-                       Text="00:00"
-                       FontSize="72"
-                       FontWeight="Bold"
-                       Margin="0,0,0,20"
-                       Foreground="White">
-                <TextBlock.RenderTransform>
-                    <TranslateTransform Y="40"/>
-                </TextBlock.RenderTransform>
-            </TextBlock>
-            
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                     Text="00:00:00"
+                     FontSize="72"
+                     Foreground="White"
+                     HorizontalAlignment="Center"
+                     Margin="0,0,0,30"/>
+
+            <StackPanel Orientation="Horizontal" 
+                      HorizontalAlignment="Center" 
+                      Margin="0,20">
                 <Button x:Name="PauseButton"
                         Content="⏯️ Pause"
+                        Style="{StaticResource RoundedButtonStyle}"
                         Click="PauseButton_Click"
-                        Width="120"
-                        Height="40"
-                        Margin="0,0,10,0"
-                        Style="{StaticResource RoundedButtonStyle}"/>
+                        Margin="0,0,20,0"
+                        Width="150"/>
                 
                 <Button x:Name="StopButton"
                         Content="⏹️ Arrêter"
+                        Style="{StaticResource RoundedButtonStyle}"
                         Click="StopButton_Click"
-                        Width="120"
-                        Height="40"
-                        Style="{StaticResource RoundedButtonStyle}"/>
+                        Width="150"/>
             </StackPanel>
         </StackPanel>
     </Grid>
