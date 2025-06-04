@@ -50,6 +50,18 @@
     </Page.Resources>
 
     <Grid>
+        <Button Content="&#xE713;"
+        FontFamily="Segoe MDL2 Assets"
+        FontSize="24"
+        Style="{StaticResource ModernGlassButton}"
+        Width="50"
+        Height="50"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        Margin="20,20,0,0"
+        Click="Settings_Click"/>
+
+
         <!-- Bouton Se déconnecter en haut à droite -->
         <Button Content="Se déconnecter"
                 Style="{StaticResource ModernGlassButton}"
@@ -90,7 +102,6 @@
                         ValueChanged="DureeSlider_ValueChanged"/>
             </StackPanel>
 
-            <Button Content="Paramètres" Click="Settings_Click" Style="{StaticResource ModernGlassButton}"/>
             <Button Content="Statistiques" Click="Stats_Click" Style="{StaticResource ModernGlassButton}"/>
             <Button Content="Quitter" Click="Quit_Click" Style="{StaticResource ModernGlassButton}"/>
         </StackPanel>
