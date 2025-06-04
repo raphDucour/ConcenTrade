@@ -182,25 +182,25 @@
         <!-- Logo et Titre -->
         <StackPanel VerticalAlignment="Top" 
                    HorizontalAlignment="Center" 
-                   Margin="0,80,0,0">
+                   Margin="0,120,0,0">
             <StackPanel Orientation="Horizontal" 
                        HorizontalAlignment="Center">
                 <TextBlock Text="&#xE945;" 
                          FontFamily="Segoe MDL2 Assets"
-                         FontSize="48"
+                         FontSize="72"
                          Foreground="#80FFFFFF"
                          VerticalAlignment="Center"
-                         Margin="0,0,20,0"/>
+                         Margin="0,0,25,0"/>
                 <TextBlock Text="ConcenTrade"
-                         FontSize="64"
+                         FontSize="86"
                          FontWeight="Light"
                          Foreground="White"/>
             </StackPanel>
             <TextBlock Text="Améliore ta concentration, un point à la fois"
-                     FontSize="20"
+                     FontSize="24"
                      Foreground="#CCFFFFFF"
                      HorizontalAlignment="Center"
-                     Margin="0,10,0,0"/>
+                     Margin="0,15,0,0"/>
         </StackPanel>
 
         <!-- Bouton principal Start -->
