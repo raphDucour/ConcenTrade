@@ -323,5 +323,16 @@
                 </StackPanel>
             </Border>
         </Popup>
+
+        <!-- Reset -->
+        <Button Content="Reset"
+                Style="{StaticResource MainActionButton}"
+                Width="120"
+                Height="40"
+                FontSize="14"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="0,0,20,20"
+                Click="ResetData_Click"/>
     </Grid>
 </Page>
