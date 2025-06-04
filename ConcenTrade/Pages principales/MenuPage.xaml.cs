@@ -18,6 +18,10 @@ namespace Concentrade
             this.NavigationService?.Navigate(new TimerPage(duree));
         }
 
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            SettingsPopup.IsOpen = !SettingsPopup.IsOpen;
+        }
 
         private void DureeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {

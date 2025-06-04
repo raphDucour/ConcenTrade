@@ -47,31 +47,150 @@
             <Setter Property="Height" Value="30"/>
             <Setter Property="Foreground" Value="#00D9A6"/>
         </Style>
+
+        <!-- Style pour les boutons du menu popup -->
+        <Style x:Key="PopupMenuButton" TargetType="Button">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Regular"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Margin" Value="0,3"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <Grid>
+                                <Border x:Name="glowBorder"
+                                        Background="#22FFFFFF"
+                                        CornerRadius="8"
+                                        Opacity="0">
+                                    <Border.Effect>
+                                        <BlurEffect Radius="10"/>
+                                    </Border.Effect>
+                                </Border>
+                                <ContentPresenter x:Name="contentPresenter"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                Margin="20,0,0,0"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="glowBorder"
+                                                           Storyboard.TargetProperty="Opacity"
+                                                           To="1" Duration="0:0:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetName="contentPresenter"
+                                                           Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                                                           To="5" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="glowBorder"
+                                                           Storyboard.TargetProperty="Opacity"
+                                                           To="0" Duration="0:0:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetName="contentPresenter"
+                                                           Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                                                           To="0" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
     <Grid>
-        <Button Content="&#xE713;"
-        FontFamily="Segoe MDL2 Assets"
-        FontSize="24"
-        Style="{StaticResource ModernGlassButton}"
-        Width="50"
-        Height="50"
-        HorizontalAlignment="Left"
-        VerticalAlignment="Top"
-        Margin="20,20,0,0"
-        Click="Settings_Click"/>
+        <!-- Menu Popup pour les paramètres -->
+        <Popup x:Name="SettingsPopup" 
+               PlacementTarget="{Binding ElementName=SettingsButton}" 
+               Placement="Bottom"
+               AllowsTransparency="True"
+               PopupAnimation="Fade"
+               StaysOpen="False">
+            <Border Background="#AA203A43"
+                    BorderBrush="#44FFFFFF"
+                    BorderThickness="1"
+                    CornerRadius="15"
+                    Padding="10">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" 
+                                    ShadowDepth="0" 
+                                    Color="#99000000"/>
+                </Border.Effect>
+                <StackPanel>
+                    <Button Style="{StaticResource PopupMenuButton}"
+                            Click="Settings_Click">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE713;" 
+                                         FontFamily="Segoe MDL2 Assets" 
+                                         VerticalAlignment="Center"
+                                         Margin="0,0,15,0"/>
+                                <TextBlock Text="Paramètres" 
+                                         VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Button Style="{StaticResource PopupMenuButton}"
+                            Click="Logout_Click">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE7E8;" 
+                                         FontFamily="Segoe MDL2 Assets" 
+                                         VerticalAlignment="Center"
+                                         Margin="0,0,15,0"/>
+                                <TextBlock Text="Se déconnecter" 
+                                         VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Button Style="{StaticResource PopupMenuButton}"
+                            Click="Quit_Click">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE7E8;" 
+                                         FontFamily="Segoe MDL2 Assets" 
+                                         VerticalAlignment="Center"
+                                         Margin="0,0,15,0"/>
+                                <TextBlock Text="Quitter" 
+                                         VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </Border>
+        </Popup>
 
-
-        <!-- Bouton Se déconnecter en haut à droite -->
-        <Button Content="Se déconnecter"
+        <!-- Bouton paramètre en haut à gauche avec effet de survol -->
+        <Button x:Name="SettingsButton"
+                Content="&#xE713;"
+                FontFamily="Segoe MDL2 Assets"
+                FontSize="24"
                 Style="{StaticResource ModernGlassButton}"
-                Width="150"
-                Height="40"
-                FontSize="14"
-                HorizontalAlignment="Right"
+                Width="50"
+                Height="50"
+                HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Margin="0,20,20,0"
-                Click="Logout_Click"/>
+                Margin="20,20,0,0"
+                Click="SettingsButton_Click"/>
 
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock Text="ConcenTrade"
@@ -103,7 +222,6 @@
             </StackPanel>
 
             <Button Content="Statistiques" Click="Stats_Click" Style="{StaticResource ModernGlassButton}"/>
-            <Button Content="Quitter" Click="Quit_Click" Style="{StaticResource ModernGlassButton}"/>
         </StackPanel>
 
         <!-- Reset -->
