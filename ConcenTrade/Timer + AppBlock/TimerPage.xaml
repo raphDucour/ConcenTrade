@@ -4,6 +4,35 @@
       Title="Timer"
       Opacity="0">
 
+    <Page.Resources>
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2C5364"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="20"
+                                Padding="15,8">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#203A43"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#0F2027"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+
     <Page.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="#0F2027" Offset="0"/>
@@ -28,16 +57,34 @@
     </Page.Triggers>
 
     <Grid>
-        <TextBlock x:Name="TimerText"
-                   Text="00:00"
-                   FontSize="72"
-                   FontWeight="Bold"
-                   Foreground="White"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center">
-            <TextBlock.RenderTransform>
-                <TranslateTransform Y="40"/>
-            </TextBlock.RenderTransform>
-        </TextBlock>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock x:Name="TimerText"
+                       Text="00:00"
+                       FontSize="72"
+                       FontWeight="Bold"
+                       Margin="0,0,0,20"
+                       Foreground="White">
+                <TextBlock.RenderTransform>
+                    <TranslateTransform Y="40"/>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="PauseButton"
+                        Content="⏯️ Pause"
+                        Click="PauseButton_Click"
+                        Width="120"
+                        Height="40"
+                        Margin="0,0,10,0"
+                        Style="{StaticResource RoundedButtonStyle}"/>
+                
+                <Button x:Name="StopButton"
+                        Content="⏹️ Arrêter"
+                        Click="StopButton_Click"
+                        Width="120"
+                        Height="40"
+                        Style="{StaticResource RoundedButtonStyle}"/>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Page>

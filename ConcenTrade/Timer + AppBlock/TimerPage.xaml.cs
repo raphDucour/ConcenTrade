@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using System.Threading.Tasks;
 
 namespace Concentrade
 {
@@ -179,6 +180,48 @@ namespace Concentrade
             {
                 TimerText.Text += " (Pause)";
             }
+        }
+
+        private void PauseButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_isPaused)
+            {
+                // Reprendre le timer
+                _timer.Start();
+                _isPaused = false;
+                PauseButton.Content = "⏯️ Pause";
+            }
+            else
+            {
+                // Mettre en pause
+                _timer.Stop();
+                _isPaused = true;
+                PauseButton.Content = "⏯️ Reprendre";
+            }
+            UpdateTimerText();
+        }
+
+        private async void StopButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Arrêter le timer
+            _timer.Stop();
+            
+            // Désactiver le blocage et arrêter tous les timers d'autorisation
+            _blocker.SetActive(false);
+            foreach (var timer in _temporaryAllowanceTimers.Values)
+            {
+                timer.Stop();
+            }
+            _temporaryAllowanceTimers.Clear();
+
+            // Retourner à la page principale
+            await Task.Run(() => 
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    NavigationService?.Navigate(new MenuPage());
+                });
+            });
         }
     }
 }
