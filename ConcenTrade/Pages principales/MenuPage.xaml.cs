@@ -95,7 +95,7 @@ namespace Concentrade
 
         private void Stats_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Statistiques à venir.");
+            this.NavigationService?.Navigate(new Pages_principales.BoutiquePage());
         }
 
         private void Quit_Click(object sender, RoutedEventArgs e)
