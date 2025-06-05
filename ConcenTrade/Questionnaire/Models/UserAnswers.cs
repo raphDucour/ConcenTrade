@@ -22,7 +22,6 @@ namespace Concentrade
                 return age;
             }
         }
-        public string Sexe { get; set; } = "";
         public string Moment { get; set; } = "";
         public string Distrait { get; set; } = "";
         public int DureeMinutes { get; set; } = 0;
@@ -33,7 +32,6 @@ namespace Concentrade
             return $"Prénom : {Prenom}\n" +
                    $"Date de naissance : {DateNaissance}\n" +
                    $"Âge : {Age} ans\n" +
-                   $"Sexe : {Sexe}\n" +
                    $"Moment : {Moment}\n" +
                    $"Distrait : {Distrait}";
         }

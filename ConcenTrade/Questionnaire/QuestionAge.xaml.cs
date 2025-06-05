@@ -88,7 +88,7 @@ namespace Concentrade
             }
 
             _answers.DateNaissance = dateNaissance;
-            this.NavigationService?.Navigate(new QuestionSexe(_answers));
+            this.NavigationService?.Navigate(new QuestionMoment(_answers));
         }
     }
 }
