@@ -8,8 +8,8 @@ namespace Concentrade
 {
     public partial class RunningAppsPopup : Window
     {
-        public ObservableCollection<RunningApp> RunningApps { get; set; }
-        private readonly AppBlocker _appBlocker;
+        public ObservableCollection<RunningApp> RunningApps { get; }
+        private readonly AppBlocker? _appBlocker;
         public bool ContinueWithoutClosing { get; private set; }
 
         public RunningAppsPopup(AppBlocker appBlocker)
@@ -17,12 +17,15 @@ namespace Concentrade
             InitializeComponent();
             _appBlocker = appBlocker;
             RunningApps = new ObservableCollection<RunningApp>();
+            ContinueWithoutClosing = false;
             AppsList.ItemsSource = RunningApps;
             LoadRunningApps();
         }
 
         private void LoadRunningApps()
         {
+            if (_appBlocker == null) return;
+
             foreach (var process in Process.GetProcesses())
             {
                 try
@@ -34,17 +37,15 @@ namespace Concentrade
                             Name = process.ProcessName,
                             Description = process.MainWindowTitle,
                             Process = process,
-                            IsSelected = true // Par défaut, on sélectionne toutes les applications
+                            IsSelected = true
                         });
                     }
                 }
                 catch { }
             }
 
-            // Si aucune application distrayante n'est trouvée, fermer directement la fenêtre
             if (RunningApps.Count == 0)
             {
-                // On utilise Dispatcher.BeginInvoke pour s'assurer que la fenêtre est complètement initialisée
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     DialogResult = true;
@@ -70,9 +71,9 @@ namespace Concentrade
 
     public class RunningApp
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public Process Process { get; set; }
+        public required string Name { get; set; }
+        public required string Description { get; set; }
+        public required Process Process { get; set; }
         public bool IsSelected { get; set; }
     }
 } 

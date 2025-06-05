@@ -19,10 +19,14 @@ namespace Concentrade
         private int _pointsAccumules = 0;
         private TextBlock _pointsText;
 
-        public TimerPage(int dureeMinutes)
+        public TimerPage(int minutes)
         {
             InitializeComponent();
-            _remaining = TimeSpan.FromMinutes(dureeMinutes);
+            _timer = new System.Windows.Threading.DispatcherTimer();
+            _timer.Tick += Timer_Tick;
+            _timer.Interval = TimeSpan.FromSeconds(1);
+            _remaining = TimeSpan.FromMinutes(minutes);
+            UpdateTimerText();
 
             // Créer et positionner le TextBlock pour les points
             _pointsText = new TextBlock
@@ -94,11 +98,7 @@ namespace Concentrade
 
         private void StartTimer()
         {
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromSeconds(1);
-            _timer.Tick += Timer_Tick;
             _timer.Start();
-
             UpdateTimerText();
         }
 
@@ -185,9 +185,12 @@ namespace Concentrade
             allowanceTimer.Start();
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        private void Timer_Tick(object? sender, EventArgs e)
         {
+            if (_timer == null) return;
+            
             _remaining = _remaining.Subtract(TimeSpan.FromSeconds(1));
+            UpdateTimerText();
 
             if (_remaining.TotalSeconds <= 0)
             {
@@ -207,7 +210,6 @@ namespace Concentrade
             }
             else
             {
-                UpdateTimerText();
                 if (!_isPaused)
                 {
                     // Incrémenter les points accumulés
