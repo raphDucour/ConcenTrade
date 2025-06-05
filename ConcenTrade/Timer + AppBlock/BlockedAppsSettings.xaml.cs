@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Linq;
 
 namespace Concentrade
 {
@@ -18,13 +19,18 @@ namespace Concentrade
             }
         }
 
-        private ObservableCollection<AppItem> _apps;
+        private ObservableCollection<AppItem> _apps = new();
+        public string[] BlockedApps { get; private set; }
 
         public BlockedAppsSettings(string[] currentBlockedApps)
         {
             InitializeComponent();
-            _apps = new ObservableCollection<AppItem>();
-            
+            BlockedApps = currentBlockedApps;
+            LoadBlockedApps();
+        }
+
+        private void LoadBlockedApps()
+        {
             // Suggestions par défaut
             var defaultApps = new[]
             {
@@ -40,7 +46,7 @@ namespace Concentrade
             };
 
             // Ajouter les applications actuellement bloquées
-            foreach (var app in currentBlockedApps)
+            foreach (var app in BlockedApps)
             {
                 _apps.Add(new AppItem(app));
             }
@@ -97,7 +103,5 @@ namespace Concentrade
             DialogResult = true;
             Close();
         }
-
-        public string[] BlockedApps { get; private set; }
     }
 } 

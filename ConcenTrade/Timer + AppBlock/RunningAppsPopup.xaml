@@ -22,7 +22,8 @@
             <!-- Titre -->
             <StackPanel Grid.Row="0" Margin="0,0,0,20">
                 <TextBlock Text="⚠️" FontSize="32" HorizontalAlignment="Center"/>
-                <TextBlock Text="Applications distractives détectées" 
+                <TextBlock x:Name="AppNameText"
+                         Text=""
                          Foreground="White" 
                          FontSize="24" 
                          FontWeight="SemiBold"

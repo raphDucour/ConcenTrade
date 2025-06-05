@@ -102,20 +102,27 @@ namespace Concentrade
         public void Start()
         {
             _watcher = new ManagementEventWatcher(new WqlEventQuery("SELECT * FROM Win32_ProcessStartTrace"));
-            _watcher.EventArrived += async (s, e) =>
+            _watcher.EventArrived += OnProcessStarted;
+            _watcher.Start();
+        }
+
+        private void OnProcessStarted(object sender, EventArrivedEventArgs e)
+        {
+            if (!_isActive) return;
+
+            string? processName = e.NewEvent.Properties["ProcessName"].Value?.ToString();
+            if (string.IsNullOrEmpty(processName)) return;
+
+            // Démarrer le traitement de manière asynchrone sans bloquer
+            Task.Run(async () =>
             {
-                if (!_isActive) return;
-
-                string? processName = e.NewEvent.Properties["ProcessName"].Value?.ToString();
-                if (string.IsNullOrEmpty(processName)) return;
-
-                // Normaliser le nom du processus
-                processName = Path.GetFileNameWithoutExtension(processName).ToLower();
-                int processId = Convert.ToInt32(e.NewEvent.Properties["ProcessID"].Value);
-
-                if (IsDistractingApp(processName))
+                try
                 {
-                    try
+                    // Normaliser le nom du processus
+                    processName = Path.GetFileNameWithoutExtension(processName).ToLower();
+                    int processId = Convert.ToInt32(e.NewEvent.Properties["ProcessID"].Value);
+
+                    if (IsDistractingApp(processName))
                     {
                         var process = Process.GetProcessById(processId);
                         var mainProcessName = GetMainProcessName(processName);
@@ -146,31 +153,30 @@ namespace Concentrade
                         // Obtenir le nom d'affichage
                         string displayName = await GetDisplayName(process, mainProcessName);
 
-                        Application.Current.Dispatcher.Invoke(() =>
+                        var result = await Application.Current.Dispatcher.InvokeAsync(() =>
                         {
                             var popup = new BlocagePopup(displayName);
-                            bool? result = popup.ShowDialog();
+                            bool? dialogResult = popup.ShowDialog();
 
-                            if (result == true && popup.ContinueAnyway)
+                            if (dialogResult == true && popup.ContinueAnyway)
                             {
                                 if (popup.TemporarilyAllowed)
                                 {
                                     AllowTemporarily(mainProcessName, popup.AllowedDuration);
                                 }
+                                return true;
                             }
-                            else
-                            {
-                                KillApplication(processName);
-                            }
+                            
+                            KillApplication(processName);
+                            return false;
                         });
                     }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"Erreur lors du traitement de {processName}: {ex.Message}");
-                    }
                 }
-            };
-            _watcher.Start();
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Erreur dans le traitement du processus {processName}: {ex.Message}");
+                }
+            });
         }
 
         public void Stop()
