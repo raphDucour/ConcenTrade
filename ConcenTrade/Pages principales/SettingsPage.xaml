@@ -32,6 +32,82 @@
                         <Setter Property="FontSize" Value="16"/>
                         <Setter Property="Margin" Value="0,10,0,5"/>
                     </Style>
+                    
+                    <Style x:Key="CustomComboBoxStyle" TargetType="ComboBox">
+                        <Setter Property="Background" Value="#122B37"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderBrush" Value="#29414E"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ComboBox">
+                                    <Grid>
+                                        <Border Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}">
+                                            <Grid>
+                                                <ToggleButton Name="ToggleButton"
+                                                            Background="Transparent"
+                                                            BorderBrush="Transparent"
+                                                            Foreground="White"
+                                                            IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                <ContentPresenter Name="ContentSite"
+                                                                Content="{TemplateBinding SelectionBoxItem}"
+                                                                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                                ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                                VerticalAlignment="Center"
+                                                                HorizontalAlignment="Left"
+                                                                Margin="8,0,0,0"/>
+                                                <Popup Name="Popup" 
+                                                       Placement="Bottom"
+                                                       IsOpen="{TemplateBinding IsDropDownOpen}"
+                                                       AllowsTransparency="True" 
+                                                       Focusable="False"
+                                                       PopupAnimation="Slide">
+                                                    <Grid Name="DropDown" 
+                                                          Background="#122B37"
+                                                          MinWidth="{TemplateBinding ActualWidth}"
+                                                          MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                                        <Border Name="DropDownBorder"
+                                                                Background="#122B37"
+                                                                BorderBrush="#29414E"
+                                                                BorderThickness="1"/>
+                                                        <ScrollViewer Margin="4,6,4,6" 
+                                                                    SnapsToDevicePixels="True">
+                                                            <StackPanel IsItemsHost="True"/>
+                                                        </ScrollViewer>
+                                                    </Grid>
+                                                </Popup>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                    <Style x:Key="CustomComboBoxItemStyle" TargetType="ComboBoxItem">
+                        <Setter Property="Background" Value="#122B37"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ComboBoxItem">
+                                    <Border Background="{TemplateBinding Background}"
+                                            Padding="8,6">
+                                        <ContentPresenter/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#1A3B4C"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#1A3B4C"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
                 </StackPanel.Resources>
 
                 <TextBlock Text="Prénom :" />
@@ -63,28 +139,24 @@
                 <TextBlock Text="Moment de la journée préféré :" />
                 <Border CornerRadius="6" Background="#122B37" BorderBrush="#29414E" BorderThickness="1" Margin="0,0,0,15">
                     <ComboBox Name="MomentCombo"
-                              Background="Transparent"
-                              BorderThickness="0"
-                              Foreground="White"
-                              Padding="6"
-                              FontSize="14">
-                        <ComboBoxItem Content="Matin" />
-                        <ComboBoxItem Content="Après-midi" />
-                        <ComboBoxItem Content="Soir" />
+                             Style="{StaticResource CustomComboBoxStyle}"
+                             Padding="6"
+                             FontSize="14">
+                        <ComboBoxItem Content="Matin" Style="{StaticResource CustomComboBoxItemStyle}"/>
+                        <ComboBoxItem Content="Après-midi" Style="{StaticResource CustomComboBoxItemStyle}"/>
+                        <ComboBoxItem Content="Soir" Style="{StaticResource CustomComboBoxItemStyle}"/>
                     </ComboBox>
                 </Border>
 
                 <TextBlock Text="Es-tu facilement distrait ?" />
                 <Border CornerRadius="6" Background="#122B37" BorderBrush="#29414E" BorderThickness="1" Margin="0,0,0,15">
                     <ComboBox Name="DistraitCombo"
-                              Background="Transparent"
-                              BorderThickness="0"
-                              Foreground="White"
-                              Padding="6"
-                              FontSize="14">
-                        <ComboBoxItem Content="Non" />
-                        <ComboBoxItem Content="Un petit peu" />
-                        <ComboBoxItem Content="Oui" />
+                             Style="{StaticResource CustomComboBoxStyle}"
+                             Padding="6"
+                             FontSize="14">
+                        <ComboBoxItem Content="Non" Style="{StaticResource CustomComboBoxItemStyle}"/>
+                        <ComboBoxItem Content="Un petit peu" Style="{StaticResource CustomComboBoxItemStyle}"/>
+                        <ComboBoxItem Content="Oui" Style="{StaticResource CustomComboBoxItemStyle}"/>
                     </ComboBox>
                 </Border>
 
