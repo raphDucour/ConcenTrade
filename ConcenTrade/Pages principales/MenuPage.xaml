@@ -177,6 +177,49 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- Style pour les boutons de durée -->
+        <Style x:Key="DureeButton" TargetType="Button">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Regular"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#22FFFFFF"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Height" Value="80"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="BorderBrush" Value="#44FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="40">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="10" 
+                                                ShadowDepth="0" 
+                                                Color="#40000000"/>
+                            </Border.Effect>
+                            <Grid>
+                                <ContentPresenter x:Name="contentPresenter" 
+                                                HorizontalAlignment="Center" 
+                                                VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#44FFFFFF"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#88FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
     <Grid>
@@ -219,18 +262,20 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center">
             <TextBlock x:Name="SliderLabel"
-                     Text="Durée : 90 min"
+                     Text="Durée : 25 min"
                      FontSize="16"
                      Foreground="#CCFFFFFF"
                      HorizontalAlignment="Center"
                      Margin="0,0,0,10"/>
             <Slider x:Name="DureeSlider"
                     Minimum="0"
-                    Maximum="180"
-                    Value="90"
-                    TickFrequency="30"
+                    Maximum="100"
+                    Value="50"
+                    TickFrequency="25"
                     IsSnapToTickEnabled="True"
-                    Style="{StaticResource ModernSlider}"/>
+                    IsMoveToPointEnabled="True"
+                    Style="{StaticResource ModernSlider}"
+                    ValueChanged="DureeSlider_ValueChanged"/>
         </StackPanel>
 
         <!-- Bouton Statistiques -->
