@@ -2,16 +2,13 @@ using System.Windows;
 using System.Windows.Controls;
 using Concentrade.Properties;
 using Concentrade.Pages_principales.Collection;
+using Concentrade.Collections_de_cartes;
 
 namespace Concentrade.Pages_principales
 {
     public partial class CollectionPage : Page
     {
-        private readonly string[] cardNames = new[]
-        {
-            "Chat Zen", "Chien Focus", "Panda Méditant", "Renard Sage",
-            "Dragon Concentré", "Hibou Studieux", "Koala Paisible", "Papillon Libre","caca"
-        };
+        private readonly string[] cardNames = Card.GetCardNamesArray();
 
         private int userPoints;
 
@@ -64,7 +61,16 @@ namespace Concentrade.Pages_principales
             if (userPoints >= cost)
             {
                 userPoints -= cost;
+
+                // Ajouter la carte aux Settings
+                Card.AddCard(cardName);
                 SaveUserPoints();
+                Settings.Default.Save();
+
+                // Rafraîchir l'affichage
+                CardsPanel.Children.Clear();
+                InitializeCards();
+
                 MessageBox.Show($"{cardName} acheté !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
                 return true;
             }

@@ -30,6 +30,15 @@ namespace Concentrade.Collections_de_cartes
                             .ToList();
         }
 
+        public static string[] GetCardNamesArray()
+        {
+            string cardsString = Settings.Default.Cards;
+            if (string.IsNullOrEmpty(cardsString))
+                return new string[0];
+
+            return cardsString.Split(',');
+        }
+
         public static void AddCard(string name)
         {
             var cards = GetAllCards();
