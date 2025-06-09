@@ -24,10 +24,11 @@ namespace Concentrade.Pages_principales
 
         private void InitializeCards()
         {
-            for (int i = 0; i < cardNames.Length; i++)
+            foreach (var cardName in cardNames)
             {
                 var cardControl = new CardControl();
-                cardControl.SetCardName(cardNames[i % cardNames.Length]);
+                cardControl.SetCardName(cardName);
+                cardControl.Margin = new Thickness(10);
                 CardsPanel.Children.Add(cardControl);
             }
         }
