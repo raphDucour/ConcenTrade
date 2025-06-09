@@ -14,11 +14,40 @@
     </Page.Background>
 
     <Page.Resources>
-        <!-- Style pour les boutons principaux -->
-        <Style x:Key="MainActionButton" TargetType="Button">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
+        <!-- Styles de texte -->
+        <Style x:Key="AppTitle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI Variable Display"/>
+            <Setter Property="FontSize" Value="86"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.3"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="AppSubtitle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI Variable Display"/>
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="FontWeight" Value="Light"/>
+            <Setter Property="Foreground" Value="#CCFFFFFF"/>
+            <Setter Property="TextOptions.TextRenderingMode" Value="ClearType"/>
+        </Style>
+
+        <Style x:Key="DurationText" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI Variable Text"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Foreground" Value="#CCFFFFFF"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Style pour les boutons principaux -->
+        <Style x:Key="MainActionButton" TargetType="Button">
+            <Setter Property="FontFamily" Value="Segoe UI Variable Display"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#22FFFFFF"/>
             <Setter Property="Width" Value="120"/>
@@ -59,9 +88,9 @@
 
         <!-- Style pour le bouton statistiques -->
         <Style x:Key="StatsButton" TargetType="Button">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontFamily" Value="Segoe UI Variable Text"/>
             <Setter Property="FontSize" Value="20"/>
-            <Setter Property="FontWeight" Value="Light"/>
+            <Setter Property="FontWeight" Value="Normal"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#22FFFFFF"/>
             <Setter Property="Width" Value="150"/>
@@ -112,7 +141,7 @@
 
         <!-- Style pour les boutons du menu popup -->
         <Style x:Key="PopupMenuButton" TargetType="Button">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontFamily" Value="Segoe UI Variable Display"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="Regular"/>
             <Setter Property="Foreground" Value="White"/>
@@ -180,7 +209,7 @@
 
         <!-- Style pour les boutons de durée -->
         <Style x:Key="DureeButton" TargetType="Button">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontFamily" Value="Segoe UI Variable Display"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="Regular"/>
             <Setter Property="Foreground" Value="White"/>
@@ -222,7 +251,35 @@
         </Style>
     </Page.Resources>
 
-    <Grid>
+    <Page.Triggers>
+        <EventTrigger RoutedEvent="Page.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <!-- Animation de fade simple et épurée -->
+                    <DoubleAnimation 
+                        Storyboard.TargetName="MainGrid"
+                        Storyboard.TargetProperty="Opacity"
+                        From="0" To="1"
+                        Duration="0:0:0.3">
+                        <DoubleAnimation.EasingFunction>
+                            <PowerEase Power="0.4" EasingMode="EaseOut"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Page.Triggers>
+
+    <Grid x:Name="MainGrid" Opacity="0">
+        <Grid.RenderTransform>
+            <TransformGroup>
+                <ScaleTransform/>
+                <SkewTransform/>
+                <RotateTransform/>
+                <TranslateTransform/>
+            </TransformGroup>
+        </Grid.RenderTransform>
+        
         <!-- Logo et Titre -->
         <StackPanel VerticalAlignment="Top" 
                    HorizontalAlignment="Center" 
@@ -236,13 +293,10 @@
                          VerticalAlignment="Center"
                          Margin="0,0,25,0"/>
                 <TextBlock Text="ConcenTrade"
-                         FontSize="86"
-                         FontWeight="Light"
-                         Foreground="White"/>
+                         Style="{StaticResource AppTitle}"/>
             </StackPanel>
             <TextBlock Text="Améliore ta concentration, un point à la fois"
-                     FontSize="24"
-                     Foreground="#CCFFFFFF"
+                     Style="{StaticResource AppSubtitle}"
                      HorizontalAlignment="Center"
                      Margin="0,15,0,0"/>
         </StackPanel>
@@ -262,10 +316,8 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center">
             <TextBlock x:Name="SliderLabel"
+                     Style="{StaticResource DurationText}"
                      Text="Durée : 25 min"
-                     FontSize="16"
-                     Foreground="#CCFFFFFF"
-                     HorizontalAlignment="Center"
                      Margin="0,0,0,10"/>
             <Slider x:Name="DureeSlider"
                     Minimum="0"
