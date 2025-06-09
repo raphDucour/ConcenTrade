@@ -1,17 +1,35 @@
 using System.Windows;
 using System.Windows.Controls;
 using Concentrade.Properties;
+using Concentrade.Pages_principales.Collection;
 
 namespace Concentrade.Pages_principales
 {
     public partial class CollectionPage : Page
     {
+        private readonly string[] cardNames = new[]
+        {
+            "Chat Zen", "Chien Focus", "Panda Méditant", "Renard Sage",
+            "Dragon Concentré", "Hibou Studieux", "Koala Paisible", "Papillon Libre","caca"
+        };
+
         private int userPoints;
 
         public CollectionPage()
         {
             InitializeComponent();
             LoadUserPoints();
+            InitializeCards();
+        }
+
+        private void InitializeCards()
+        {
+            for (int i = 0; i < cardNames.Length; i++)
+            {
+                var cardControl = new CardControl();
+                cardControl.SetCardName(cardNames[i % cardNames.Length]);
+                CardsPanel.Children.Add(cardControl);
+            }
         }
 
         private void LoadUserPoints()

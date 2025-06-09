@@ -8,5 +8,13 @@ namespace Concentrade.Pages_principales.Collection
         {
             InitializeComponent();
         }
+
+        public void SetCardName(string name)
+        {
+            if (CardNameText != null)
+            {
+                CardNameText.Text = name;
+            }
+        }
     }
 } 
