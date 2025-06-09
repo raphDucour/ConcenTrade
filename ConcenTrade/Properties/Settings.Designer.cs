@@ -142,5 +142,17 @@ namespace Concentrade.Properties {
                 this["Points"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Cards {
+            get {
+                return ((string)(this["Cards"]));
+            }
+            set {
+                this["Cards"] = value;
+            }
+        }
     }
 }

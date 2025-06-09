@@ -1,15 +1,43 @@
 using System.Windows;
 using System.Windows.Controls;
+using Concentrade.Properties;
+using Concentrade.Collections_de_cartes;
 
 namespace Concentrade.Pages_principales
 {
     public partial class CollectionPage : Page
     {
-        private int userPoints = 1000;
+        private int userPoints;
 
         public CollectionPage()
         {
             InitializeComponent();
+            LoadUserPoints();
+            UpdateCardsDisplay();
+        }
+
+        private void LoadUserPoints()
+        {
+            userPoints = 10000; //Settings.Default.Points;
+        }
+
+        private void SaveUserPoints()
+        {
+            Settings.Default.Points = userPoints;
+            Settings.Default.Save();
+        }
+
+        private void UpdateCardsDisplay()
+        {
+            var cards = Card.GetAllCards();
+            if (cards.Count == 0)
+            {
+                CardsListText.Text = "Vous n'avez pas encore de cartes dans votre collection.";
+            }
+            else
+            {
+                CardsListText.Text = $"Vos cartes ({cards.Count}):\n" + string.Join(", ", cards.Select(c => c.Name));
+            }
         }
 
         private void RetourButton_Click(object sender, RoutedEventArgs e)
@@ -25,123 +53,70 @@ namespace Concentrade.Pages_principales
         private void CloseAchatOverlay_Click(object sender, RoutedEventArgs e)
         {
             AchatOverlay.Visibility = Visibility.Collapsed;
+            UpdateCardsDisplay();
+        }
+
+        private bool TryBuyCard(string cardName, int cost)
+        {
+            if (userPoints >= cost)
+            {
+                userPoints -= cost;
+                SaveUserPoints();
+                Card.AddCard(cardName);
+                MessageBox.Show($"{cardName} acheté !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                UpdateCardsDisplay();
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("Points insuffisants !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
         }
 
         private void BuyCat_Click(object sender, RoutedEventArgs e)
         {
-            if (userPoints >= 500)
-            {
-                userPoints -= 500;
-                MessageBox.Show("Chat Zen acheté !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show("Points insuffisants !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            TryBuyCard("Chat Zen", 500);
         }
 
         private void BuyDog_Click(object sender, RoutedEventArgs e)
         {
-            if (userPoints >= 1000)
-            {
-                userPoints -= 1000;
-                MessageBox.Show("Chien Focus acheté !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show("Points insuffisants !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            TryBuyCard("Chien Focus", 1000);
         }
 
         private void BuyPanda_Click(object sender, RoutedEventArgs e)
         {
-            if (userPoints >= 750)
-            {
-                userPoints -= 750;
-                MessageBox.Show("Panda Méditant acheté !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show("Points insuffisants !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            TryBuyCard("Panda Méditant", 750);
         }
 
         private void BuyFox_Click(object sender, RoutedEventArgs e)
         {
-            if (userPoints >= 2000)
-            {
-                userPoints -= 2000;
-                MessageBox.Show("Renard Sage acheté !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show("Points insuffisants !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            TryBuyCard("Renard Sage", 2000);
         }
 
         private void BuyRabbit_Click(object sender, RoutedEventArgs e)
         {
-            if (userPoints >= 600)
-            {
-                userPoints -= 600;
-                MessageBox.Show("Lapin Paisible acheté !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show("Points insuffisants !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            TryBuyCard("Lapin Paisible", 600);
         }
 
         private void BuyWolf_Click(object sender, RoutedEventArgs e)
         {
-            if (userPoints >= 3000)
-            {
-                userPoints -= 3000;
-                MessageBox.Show("Loup Alpha acheté !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show("Points insuffisants !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            TryBuyCard("Loup Alpha", 3000);
         }
 
         private void BuyRooster_Click(object sender, RoutedEventArgs e)
         {
-            if (userPoints >= 550)
-            {
-                userPoints -= 550;
-                MessageBox.Show("Coq Matinal acheté !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show("Points insuffisants !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            TryBuyCard("Coq Matinal", 550);
         }
 
         private void BuyPeacock_Click(object sender, RoutedEventArgs e)
         {
-            if (userPoints >= 1500)
-            {
-                userPoints -= 1500;
-                MessageBox.Show("Paon Majestueux acheté !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show("Points insuffisants !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            TryBuyCard("Paon Majestueux", 1500);
         }
 
         private void BuyDragon_Click(object sender, RoutedEventArgs e)
         {
-            if (userPoints >= 2500)
-            {
-                userPoints -= 2500;
-                MessageBox.Show("Dragon Ancestral acheté !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show("Points insuffisants !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            TryBuyCard("Dragon Ancestral", 2500);
         }
     }
 } 
