@@ -8,7 +8,7 @@ namespace Concentrade.Pages_principales
 {
     public partial class CollectionPage : Page
     {
-        private readonly string[] cardNames = Card.GetCardNamesArray();
+        private string[] cardNames = Card.GetCardNamesArray();
 
         private int userPoints;
 
@@ -61,16 +61,15 @@ namespace Concentrade.Pages_principales
             if (userPoints >= cost)
             {
                 userPoints -= cost;
-
-                // Ajouter la carte aux Settings
-                Card.AddCard(cardName);
                 SaveUserPoints();
-                Settings.Default.Save();
-
-                // Rafraîchir l'affichage
+                Card.AddCard(cardName);
+                
+                // Mettre à jour le tableau avant de rafraîchir
+                cardNames = Card.GetCardNamesArray();
+                
                 CardsPanel.Children.Clear();
                 InitializeCards();
-
+                
                 MessageBox.Show($"{cardName} acheté !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
                 return true;
             }
