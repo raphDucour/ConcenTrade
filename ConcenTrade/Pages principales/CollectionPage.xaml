@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Concentrade.Pages_principales"
+      xmlns:collection="clr-namespace:Concentrade.Pages_principales.Collection"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CollectionPage"
@@ -51,14 +52,63 @@
         </Grid>
 
         <!-- Contenu principal -->
-        <ScrollViewer Grid.Row="1" Margin="20">
-            <StackPanel>
-                <TextBlock x:Name="CardsListText"
-                          Foreground="White"
-                          FontSize="16"
-                          TextWrapping="Wrap"
-                          Margin="0,0,0,20"/>
-            </StackPanel>
+        <ScrollViewer Grid.Row="1" 
+                     VerticalScrollBarVisibility="Visible"
+                     HorizontalScrollBarVisibility="Disabled">
+            <WrapPanel x:Name="CardsPanel" 
+                      Margin="20"
+                      HorizontalAlignment="Center">
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+                <collection:CardControl Margin="5"/>
+            </WrapPanel>
         </ScrollViewer>
 
         <!-- Overlay d'achat -->

@@ -1,7 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using Concentrade.Properties;
-using Concentrade.Collections_de_cartes;
 
 namespace Concentrade.Pages_principales
 {
@@ -13,7 +12,6 @@ namespace Concentrade.Pages_principales
         {
             InitializeComponent();
             LoadUserPoints();
-            UpdateCardsDisplay();
         }
 
         private void LoadUserPoints()
@@ -25,19 +23,6 @@ namespace Concentrade.Pages_principales
         {
             Settings.Default.Points = userPoints;
             Settings.Default.Save();
-        }
-
-        private void UpdateCardsDisplay()
-        {
-            var cards = Card.GetAllCards();
-            if (cards.Count == 0)
-            {
-                CardsListText.Text = "Vous n'avez pas encore de cartes dans votre collection.";
-            }
-            else
-            {
-                CardsListText.Text = $"Vos cartes ({cards.Count}):\n" + string.Join(", ", cards.Select(c => c.Name));
-            }
         }
 
         private void RetourButton_Click(object sender, RoutedEventArgs e)
@@ -53,7 +38,6 @@ namespace Concentrade.Pages_principales
         private void CloseAchatOverlay_Click(object sender, RoutedEventArgs e)
         {
             AchatOverlay.Visibility = Visibility.Collapsed;
-            UpdateCardsDisplay();
         }
 
         private bool TryBuyCard(string cardName, int cost)
@@ -62,9 +46,7 @@ namespace Concentrade.Pages_principales
             {
                 userPoints -= cost;
                 SaveUserPoints();
-                Card.AddCard(cardName);
                 MessageBox.Show($"{cardName} acheté !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
-                UpdateCardsDisplay();
                 return true;
             }
             else
