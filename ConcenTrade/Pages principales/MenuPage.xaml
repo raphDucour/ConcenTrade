@@ -222,7 +222,35 @@
         </Style>
     </Page.Resources>
 
-    <Grid>
+    <Page.Triggers>
+        <EventTrigger RoutedEvent="Page.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <!-- Animation de fade simple et épurée -->
+                    <DoubleAnimation 
+                        Storyboard.TargetName="MainGrid"
+                        Storyboard.TargetProperty="Opacity"
+                        From="0" To="1"
+                        Duration="0:0:0.3">
+                        <DoubleAnimation.EasingFunction>
+                            <PowerEase Power="0.4" EasingMode="EaseOut"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Page.Triggers>
+
+    <Grid x:Name="MainGrid" Opacity="0">
+        <Grid.RenderTransform>
+            <TransformGroup>
+                <ScaleTransform/>
+                <SkewTransform/>
+                <RotateTransform/>
+                <TranslateTransform/>
+            </TransformGroup>
+        </Grid.RenderTransform>
+        
         <!-- Logo et Titre -->
         <StackPanel VerticalAlignment="Top" 
                    HorizontalAlignment="Center" 
