@@ -20,197 +20,117 @@ namespace Concentrade
 
         private async void Page_Loaded(object? sender, RoutedEventArgs e)
         {
-            // Animation des éléments zen
-            AnimateZenElements();
-
-            // Animation du symbole de concentration
-            await AnimateFocusSymbol();
-
-            // Animation du texte
+            // Initialisez le texte
             WelcomeText.Text = $"Bonjour {userName} !";
-            BlurredText.Text = WelcomeText.Text;
-            await AnimateWelcomeText();
 
-            // Animation du message de concentration
-            await AnimateFocusMessage();
-
-            // Transition de sortie
-            var transitionStoryboard = (Storyboard)FindResource("TransitionOut");
-            transitionStoryboard.Begin();
+            // Démarrer l'animation principale
+            await AnimateWelcomeSequence();
 
             // Attente avant redirection
-            await Task.Delay(3000);
-            if (Application.Current.MainWindow is MainWindow main)
+            await Task.Delay(2000); // Réduit le délai pour une transition plus rapide
+
+            // Lancer l'animation de transition vers MenuPage
+            var transitionOutStoryboard = (Storyboard)FindResource("TransitionOutToMenu");
+            if (transitionOutStoryboard != null)
             {
-                main.NavigateTo(new MenuPage());
+                transitionOutStoryboard.Completed += (s, args) =>
+                {
+                    if (Application.Current.MainWindow is MainWindow main)
+                    {
+                        main.NavigateTo(new MenuPage());
+                    }
+                };
+                transitionOutStoryboard.Begin();
+            }
+            else
+            {
+                // Fallback if storyboard not found
+                if (Application.Current.MainWindow is MainWindow main)
+                {
+                    main.NavigateTo(new MenuPage());
+                }
             }
         }
 
-        private void AnimateZenElements()
+        private async Task AnimateWelcomeSequence()
         {
-            // Animation du cercle de méditation
-            var meditationFade = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(2))
+            // Animations du cercle de méditation
+            var meditationCircleScaleUp = new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(1.0))
+            {
+                EasingFunction = new BackEase { EasingMode = EasingMode.EaseOut, Amplitude = 0.3 }
+            };
+            var meditationCircleFadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.8));
+
+            MeditationCircle.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, meditationCircleScaleUp);
+            MeditationCircle.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, meditationCircleScaleUp);
+            MeditationCircle.BeginAnimation(OpacityProperty, meditationCircleFadeIn);
+
+            await Task.Delay(300); // Délai avant les vagues
+
+            // Animations des vagues zen
+            var wave1FadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(1.0)) { BeginTime = TimeSpan.FromSeconds(0.2) };
+            var wave2FadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(1.0)) { BeginTime = TimeSpan.FromSeconds(0.4) };
+
+            ZenWave1.BeginAnimation(OpacityProperty, wave1FadeIn);
+            ZenWave2.BeginAnimation(OpacityProperty, wave2FadeIn);
+
+            // CHANGEMENT ICI : Appel de la nouvelle méthode AnimateSubtleWave
+            AnimateSubtleWave(ZenWave1, "ZenWave1Transform", 3.0, 5, -5); // Durée plus courte, mouvement plus petit
+            AnimateSubtleWave(ZenWave2, "ZenWave2Transform", 3.5, -5, 5); // Durée légèrement différente, mouvement inverse
+
+            await Task.Delay(500); // Délai avant le symbole de concentration
+
+            // Animation du symbole de concentration
+            var focusSymbolFadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(1.0));
+            var focusSymbolScale = new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(1.0))
+            {
+                EasingFunction = new ElasticEase { EasingMode = EasingMode.EaseOut, Oscillations = 2, Springiness = 2.0 }
+            };
+
+            FocusSymbol.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, focusSymbolScale);
+            FocusSymbol.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, focusSymbolScale);
+            FocusSymbol.BeginAnimation(OpacityProperty, focusSymbolFadeIn);
+
+            await Task.Delay(500); // Délai avant le texte de bienvenue
+
+            // Animation du texte de bienvenue (plus dynamique)
+            var textSlideUp = new DoubleAnimation(30, 0, TimeSpan.FromSeconds(1.0))
+            {
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+            };
+            var textFadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.8));
+
+            WelcomeText.RenderTransform.BeginAnimation(TranslateTransform.YProperty, textSlideUp);
+            WelcomeText.BeginAnimation(OpacityProperty, textFadeIn);
+
+            await Task.Delay(500); // Délai avant le message de concentration
+
+            // Animation du message de concentration
+            var messageSlideUp = new DoubleAnimation(20, 0, TimeSpan.FromSeconds(0.8))
             {
                 EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
             };
+            var messageFadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.6));
 
-            var meditationPulse = new DoubleAnimation(0.95, 1.05, TimeSpan.FromSeconds(4))
+            FocusMessage.RenderTransform.BeginAnimation(TranslateTransform.YProperty, messageSlideUp);
+            FocusMessage.BeginAnimation(OpacityProperty, messageFadeIn);
+
+            await Task.Delay(1000); // Attendre la fin des animations avant de permettre la transition
+        }
+
+        // Nouvelle méthode pour une animation de vague plus subtile.
+        private void AnimateSubtleWave(Path wave, string transformName, double durationSeconds, double fromY, double toY)
+        {
+            var transform = (TranslateTransform)((TransformGroup)wave.RenderTransform).Children[0]; // Accéder au TranslateTransform
+
+            var waveAnimation = new DoubleAnimation(fromY, toY, TimeSpan.FromSeconds(durationSeconds))
             {
                 AutoReverse = true,
                 RepeatBehavior = RepeatBehavior.Forever,
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
+                EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut } // Mouvement plus doux
             };
 
-            MeditationCircle.BeginAnimation(OpacityProperty, meditationFade);
-            MeditationScale.BeginAnimation(ScaleTransform.ScaleXProperty, meditationPulse);
-            MeditationScale.BeginAnimation(ScaleTransform.ScaleYProperty, meditationPulse);
-
-            // Animation des vagues zen
-            var wave1Fade = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(2))
-            {
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-            };
-            var wave2Fade = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(2))
-            {
-                BeginTime = TimeSpan.FromSeconds(0.5),
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-            };
-
-            ZenWave1.BeginAnimation(OpacityProperty, wave1Fade);
-            ZenWave2.BeginAnimation(OpacityProperty, wave2Fade);
-
-            // Animation douce des vagues
-            AnimateWave(ZenWave1, 280, 320);
-            AnimateWave(ZenWave2, 330, 370);
-        }
-
-        private void AnimateWave(Path wave, double minY, double maxY)
-        {
-            var waveAnimation = new DoubleAnimation(minY, maxY, TimeSpan.FromSeconds(4))
-            {
-                AutoReverse = true,
-                RepeatBehavior = RepeatBehavior.Forever,
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
-            };
-
-            var geometry = wave.Data as PathGeometry;
-            var segment = (geometry?.Figures[0].Segments[0] as BezierSegment);
-            
-            if (segment != null)
-            {
-                var story = new Storyboard();
-                
-                var point1Animation = new PointAnimation(
-                    new Point(200, minY),
-                    new Point(200, maxY),
-                    TimeSpan.FromSeconds(4))
-                {
-                    AutoReverse = true,
-                    RepeatBehavior = RepeatBehavior.Forever,
-                    EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
-                };
-                
-                var point2Animation = new PointAnimation(
-                    new Point(400, maxY),
-                    new Point(400, minY),
-                    TimeSpan.FromSeconds(4))
-                {
-                    AutoReverse = true,
-                    RepeatBehavior = RepeatBehavior.Forever,
-                    EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
-                };
-
-                Storyboard.SetTarget(point1Animation, segment);
-                Storyboard.SetTargetProperty(point1Animation, new PropertyPath(BezierSegment.Point1Property));
-                
-                Storyboard.SetTarget(point2Animation, segment);
-                Storyboard.SetTargetProperty(point2Animation, new PropertyPath(BezierSegment.Point2Property));
-
-                story.Children.Add(point1Animation);
-                story.Children.Add(point2Animation);
-                story.Begin();
-            }
-        }
-
-        private async Task AnimateFocusSymbol()
-        {
-            var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(1.5))
-            {
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-            };
-            var scaleIn = new DoubleAnimation(0.8, 1, TimeSpan.FromSeconds(1.5))
-            {
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-            };
-
-            FocusSymbol.BeginAnimation(OpacityProperty, fadeIn);
-            FocusSymbolScale.BeginAnimation(ScaleTransform.ScaleXProperty, scaleIn);
-            FocusSymbolScale.BeginAnimation(ScaleTransform.ScaleYProperty, scaleIn);
-
-            await Task.Delay(750);
-        }
-
-        private async Task AnimateWelcomeText()
-        {
-            // Animation du texte principal
-            var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(1.2))
-            {
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-            };
-            var slideUp = new DoubleAnimation(15, 0, TimeSpan.FromSeconds(1.2))
-            {
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-            };
-            var scaleIn = new DoubleAnimation(0.98, 1, TimeSpan.FromSeconds(1.2))
-            {
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-            };
-
-            // Animation du texte flou
-            var blurFadeIn = new DoubleAnimation(0, 0.3, TimeSpan.FromSeconds(1.2))
-            {
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-            };
-            var blurSlideUp = new DoubleAnimation(20, 5, TimeSpan.FromSeconds(1.2))
-            {
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-            };
-            var blurScaleIn = new DoubleAnimation(0.98, 1.02, TimeSpan.FromSeconds(1.2))
-            {
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-            };
-
-            // Démarrage des animations
-            WelcomeText.BeginAnimation(OpacityProperty, fadeIn);
-            TextTransform.BeginAnimation(TranslateTransform.YProperty, slideUp);
-            TextScale.BeginAnimation(ScaleTransform.ScaleXProperty, scaleIn);
-            TextScale.BeginAnimation(ScaleTransform.ScaleYProperty, scaleIn);
-
-            BlurredText.BeginAnimation(OpacityProperty, blurFadeIn);
-            BlurredTextTransform.BeginAnimation(TranslateTransform.YProperty, blurSlideUp);
-            BlurredTextScale.BeginAnimation(ScaleTransform.ScaleXProperty, blurScaleIn);
-            BlurredTextScale.BeginAnimation(ScaleTransform.ScaleYProperty, blurScaleIn);
-
-            await Task.Delay(800);
-        }
-
-        private async Task AnimateFocusMessage()
-        {
-            var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(1))
-            {
-                BeginTime = TimeSpan.FromSeconds(0.5),
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-            };
-            var slideUp = new DoubleAnimation(10, 0, TimeSpan.FromSeconds(1))
-            {
-                BeginTime = TimeSpan.FromSeconds(0.5),
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-            };
-
-            FocusMessage.BeginAnimation(OpacityProperty, fadeIn);
-            MessageTransform.BeginAnimation(TranslateTransform.YProperty, slideUp);
-
-            await Task.Delay(1000);
+            transform.BeginAnimation(TranslateTransform.YProperty, waveAnimation);
         }
     }
 }
