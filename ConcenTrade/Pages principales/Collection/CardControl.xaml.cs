@@ -24,7 +24,7 @@ namespace Concentrade.Pages_principales.Collection
             if (_card != null)
             {
                 CardNameText.Text = _card.Name;
-                CardBorder.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Card.GetRarityColor(_card.Rarity)));
+                CardBorder.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(_card.color));
             }
         }
     }

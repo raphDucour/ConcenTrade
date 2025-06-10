@@ -8,7 +8,6 @@ namespace Concentrade.Collections_de_cartes
     public enum CardRarity
     {
         Common,
-        Uncommon,
         Rare,
         Epic,
         Legendary
@@ -18,14 +17,16 @@ namespace Concentrade.Collections_de_cartes
     {
         public string Name { get; set; }
         public bool IsFavorite { get; set; }
+        public CardRarity Rarity { get; set; }
+        public string color { get; set; }
 
         public Card(string name)
         {
             Name = name;
             IsFavorite = false;
+            Rarity = GetRarity(Name);
+            color = GetRarityColor(Rarity);
         }
-
-        public CardRarity Rarity => GetRarity(Name);
 
         public static CardRarity GetRarity(string name)
         {
@@ -34,8 +35,8 @@ namespace Concentrade.Collections_de_cartes
                 "Chat Zen" => CardRarity.Common,
                 "Lapin Paisible" => CardRarity.Common,
                 "Coq Matinal" => CardRarity.Common,
-                "Chien Focus" => CardRarity.Uncommon,
-                "Panda Méditant" => CardRarity.Uncommon,
+                "Chien Focus" => CardRarity.Common,
+                "Panda Méditant" => CardRarity.Epic,
                 "Renard Sage" => CardRarity.Rare,
                 "Paon Majestueux" => CardRarity.Rare,
                 "Loup Alpha" => CardRarity.Epic,
@@ -48,12 +49,11 @@ namespace Concentrade.Collections_de_cartes
         {
             return rarity switch
             {
-                CardRarity.Common => "#2A2A2A",
-                CardRarity.Uncommon => "#2B4C8C",
-                CardRarity.Rare => "#6B2B8C",
-                CardRarity.Epic => "#8C2B6B",
-                CardRarity.Legendary => "#8C6B2B",
-                _ => "#2A2A2A"
+                CardRarity.Common => "#7FB3F5",    // Bleu clair
+                CardRarity.Rare => "#CD853F",      // Orange mat/brun (Peru)
+                CardRarity.Epic => "#9B4DCA",      // Violet
+                CardRarity.Legendary => "#FFD700",  // Jaune doré/shiny
+                _ => "#7FB3F5"                     // Bleu clair par défaut
             };
         }
 
