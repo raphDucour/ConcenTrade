@@ -8,13 +8,11 @@ namespace Concentrade.Collections_de_cartes
     public class Card
     {
         public string Name { get; set; }
-        public DateTime AcquisitionDate { get; set; }
         public bool IsFavorite { get; set; }
 
         public Card(string name)
         {
             Name = name;
-            AcquisitionDate = DateTime.Now;
             IsFavorite = false;
         }
 
@@ -79,39 +77,12 @@ namespace Concentrade.Collections_de_cartes
                 .ToList();
         }
 
-        public static List<Card> GetRecentCards(int count = 5)
-        {
-            return GetAllCards()
-                .OrderByDescending(c => c.AcquisitionDate)
-                .Take(count)
-                .ToList();
-        }
 
         private static void SaveCards(List<Card> cards)
         {
             var cardsString = string.Join(",", cards.Select(c => c.Name));
             Settings.Default.Cards = cardsString;
             Settings.Default.Save();
-        }
-
-        // Méthodes d'instance
-        public override string ToString()
-        {
-            return Name;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is Card other)
-            {
-                return Name.Equals(other.Name, StringComparison.OrdinalIgnoreCase);
-            }
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return Name.ToLower().GetHashCode();
         }
     }
 } 
