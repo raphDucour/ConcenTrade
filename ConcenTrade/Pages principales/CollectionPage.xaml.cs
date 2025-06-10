@@ -24,7 +24,7 @@ namespace Concentrade.Pages_principales
             foreach (var cardName in cardNames)
             {
                 var cardControl = new CardControl();
-                cardControl.SetCardName(cardName);
+                cardControl.SetCard(cardName);
                 cardControl.Margin = new Thickness(10);
                 CardsPanel.Children.Add(cardControl);
             }

@@ -5,6 +5,15 @@ using Concentrade.Properties;
 
 namespace Concentrade.Collections_de_cartes
 {
+    public enum CardRarity
+    {
+        Common,
+        Uncommon,
+        Rare,
+        Epic,
+        Legendary
+    }
+
     public class Card
     {
         public string Name { get; set; }
@@ -14,6 +23,38 @@ namespace Concentrade.Collections_de_cartes
         {
             Name = name;
             IsFavorite = false;
+        }
+
+        public CardRarity Rarity => GetRarity(Name);
+
+        public static CardRarity GetRarity(string name)
+        {
+            return name switch
+            {
+                "Chat Zen" => CardRarity.Common,
+                "Lapin Paisible" => CardRarity.Common,
+                "Coq Matinal" => CardRarity.Common,
+                "Chien Focus" => CardRarity.Uncommon,
+                "Panda Méditant" => CardRarity.Uncommon,
+                "Renard Sage" => CardRarity.Rare,
+                "Paon Majestueux" => CardRarity.Rare,
+                "Loup Alpha" => CardRarity.Epic,
+                "Dragon Ancestral" => CardRarity.Legendary,
+                _ => CardRarity.Common // Par défaut, une carte est commune
+            };
+        }
+
+        public static string GetRarityColor(CardRarity rarity)
+        {
+            return rarity switch
+            {
+                CardRarity.Common => "#2A2A2A",
+                CardRarity.Uncommon => "#2B4C8C",
+                CardRarity.Rare => "#6B2B8C",
+                CardRarity.Epic => "#8C2B6B",
+                CardRarity.Legendary => "#8C6B2B",
+                _ => "#2A2A2A"
+            };
         }
 
         // Méthodes statiques pour gérer la collection de cartes
