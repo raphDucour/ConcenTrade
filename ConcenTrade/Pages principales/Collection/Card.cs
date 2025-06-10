@@ -10,12 +10,36 @@ namespace Concentrade.Collections_de_cartes
         public string Name { get; set; }
         public DateTime AcquisitionDate { get; set; }
         public bool IsFavorite { get; set; }
+        public string Rarity { get; set; }
 
         public Card(string name)
         {
             Name = name;
             AcquisitionDate = DateTime.Now;
             IsFavorite = false;
+            Rarity = GetCardRarity(name);
+        }
+
+        private string GetCardRarity(string cardName)
+        {
+            switch (cardName)
+            {
+                case "Chat Zen":
+                case "Lapin Paisible":
+                case "Coq Matinal":
+                    return "Commun";
+                case "Chien Focus":
+                case "Panda Méditant":
+                    return "Rare";
+                case "Renard Sage":
+                case "Paon Majestueux":
+                    return "Épique";
+                case "Loup Alpha":
+                case "Dragon Ancestral":
+                    return "Légendaire";
+                default:
+                    return "Commun";
+            }
         }
 
         // Méthodes statiques pour gérer la collection de cartes

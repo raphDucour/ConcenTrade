@@ -21,7 +21,23 @@ namespace Concentrade.Pages_principales
 
         private void InitializeCards()
         {
-            foreach (var cardName in cardNames)
+            CardsPanel.Children.Clear();
+            
+            // Liste de toutes les cartes disponibles
+            string[] allCards = new string[]
+            {
+                "Chat Zen",
+                "Chien Focus",
+                "Panda Méditant",
+                "Renard Sage",
+                "Lapin Paisible",
+                "Loup Alpha",
+                "Coq Matinal",
+                "Paon Majestueux",
+                "Dragon Ancestral"
+            };
+
+            foreach (var cardName in allCards)
             {
                 var cardControl = new CardControl();
                 cardControl.SetCardName(cardName);
