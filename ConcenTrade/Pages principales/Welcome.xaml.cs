@@ -118,7 +118,7 @@ namespace Concentrade
             await Task.Delay(1000); // Attendre la fin des animations avant de permettre la transition
         }
 
-        // Méthode pour une animation de vague plus subtile
+        // Méthode pour une animation de vague plus subtile.
         private void AnimateSubtleWave(Path wave, string transformName, double durationSeconds, double fromY, double toY)
         {
             var transform = (TranslateTransform)((TransformGroup)wave.RenderTransform).Children[0];
