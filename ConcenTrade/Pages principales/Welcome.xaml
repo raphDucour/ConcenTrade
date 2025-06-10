@@ -38,7 +38,7 @@
             </Ellipse.RenderTransform>
         </Ellipse>
 
-        <Path x:Name="ZenWave1" Opacity="0" Data="M0,300 C200,280 400,320 600,300 S1000,280 1280,300 V720 H0 Z" Stretch="Fill" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0.5,0.5">
+        <Path x:Name="ZenWave1" Opacity="0" Data="M0,380 C200,360 400,400 600,380 S1000,360 1280,380 V720 H0 Z" Stretch="Fill" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0.5,0.5">
             <Path.Fill>
                 <SolidColorBrush Color="#FF4A607C" Opacity="0.3"/>
             </Path.Fill>
@@ -64,7 +64,7 @@
             <Grid.RenderTransform>
                 <TranslateTransform Y="0"/>
             </Grid.RenderTransform>
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0, 30, 0, 0">
                 <Image x:Name="FocusSymbol" Source="/Images/Logo fond effacé.png" Opacity="0"
                        Width="500" Height="500"
                        RenderTransformOrigin="0.5,0.5" Margin="0,0,0,20" Stretch="Uniform">
@@ -80,17 +80,17 @@
                            HorizontalAlignment="Center" TextAlignment="Center" RenderTransformOrigin="0.5,0.5">
                     <TextBlock.RenderTransform>
                         <TransformGroup>
-                            <TranslateTransform x:Name="TextTransform" Y="30" />
+                            <TranslateTransform x:Name="TextTransform" Y="-50" />
                             <ScaleTransform x:Name="TextScale" />
                         </TransformGroup>
                     </TextBlock.RenderTransform>
                 </TextBlock>
 
-                <TextBlock x:Name="FocusMessage" Text="Préparons-nous pour une session de concentration !" TextWrapping="Wrap" Opacity="0" FontSize="28" FontWeight="Regular" Foreground="White"
+                <TextBlock x:Name="FocusMessage" Text="Préparons-nous pour une session de concentration !" TextWrapping="Wrap" Opacity="0" FontSize="28" FontWeight="Light" Foreground="White"
                            HorizontalAlignment="Center" TextAlignment="Center" Margin="0,10,0,0" RenderTransformOrigin="0.5,0.5">
                     <TextBlock.RenderTransform>
                         <TransformGroup>
-                            <TranslateTransform x:Name="MessageTransform" Y="20" />
+                            <TranslateTransform x:Name="MessageTransform" Y="-40" />
                             <ScaleTransform x:Name="MessageScale" />
                         </TransformGroup>
                     </TextBlock.RenderTransform>

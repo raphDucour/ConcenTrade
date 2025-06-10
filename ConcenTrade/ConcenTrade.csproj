@@ -9,6 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\Roboto-Italic-VariableFont_wdth,wght.ttf" />
+    <None Remove="Fonts\Roboto-VariableFont_wdth,wght.ttf" />
     <None Remove="Images\ConcenTrade logo sans texte.png" />
     <None Remove="Images\ConcenTrade Logo.png" />
     <None Remove="Images\Logo fond effacé.png" />
@@ -23,6 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Fonts\Roboto-Italic-VariableFont_wdth,wght.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Roboto-VariableFont_wdth,wght.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\ConcenTrade logo sans texte.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

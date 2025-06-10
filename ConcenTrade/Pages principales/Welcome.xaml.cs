@@ -74,9 +74,9 @@ namespace Concentrade
             ZenWave1.BeginAnimation(OpacityProperty, wave1FadeIn);
             ZenWave2.BeginAnimation(OpacityProperty, wave2FadeIn);
 
-            // CHANGEMENT ICI : Appel de la nouvelle méthode AnimateSubtleWave
-            AnimateSubtleWave(ZenWave1, "ZenWave1Transform", 3.0, 5, -5); // Durée plus courte, mouvement plus petit
-            AnimateSubtleWave(ZenWave2, "ZenWave2Transform", 3.5, -5, 5); // Durée légèrement différente, mouvement inverse
+            // CHANGEMENT ICI : Paramètres de l'animation de ZenWave1 ajustés pour plus d'amplitude et durée
+            AnimateSubtleWave(ZenWave1, "ZenWave1Transform", 4.0, 15, -15); // Augmenter l'amplitude de déplacement et la durée
+            AnimateSubtleWave(ZenWave2, "ZenWave2Transform", 3.5, -5, 5); // Conserver l'animation précédente pour ZenWave2
 
             await Task.Delay(500); // Délai avant le symbole de concentration
 
@@ -118,16 +118,16 @@ namespace Concentrade
             await Task.Delay(1000); // Attendre la fin des animations avant de permettre la transition
         }
 
-        // Nouvelle méthode pour une animation de vague plus subtile.
+        // Méthode pour une animation de vague plus subtile
         private void AnimateSubtleWave(Path wave, string transformName, double durationSeconds, double fromY, double toY)
         {
-            var transform = (TranslateTransform)((TransformGroup)wave.RenderTransform).Children[0]; // Accéder au TranslateTransform
+            var transform = (TranslateTransform)((TransformGroup)wave.RenderTransform).Children[0];
 
             var waveAnimation = new DoubleAnimation(fromY, toY, TimeSpan.FromSeconds(durationSeconds))
             {
                 AutoReverse = true,
                 RepeatBehavior = RepeatBehavior.Forever,
-                EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut } // Mouvement plus doux
+                EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
             };
 
             transform.BeginAnimation(TranslateTransform.YProperty, waveAnimation);
