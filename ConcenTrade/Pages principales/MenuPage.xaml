@@ -344,16 +344,17 @@
 
         <!-- Menu Settings -->
         <Button x:Name="SettingsButton"
-                Content="&#xE713;"
-                FontFamily="Segoe MDL2 Assets"
-                FontSize="16"
                 Style="{StaticResource MainActionButton}"
                 Width="40"
                 Height="40"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Margin="20,20,0,0"
-                Click="SettingsButton_Click"/>
+                Click="SettingsButton_Click">
+            <TextBlock Text="&#xE713;"
+                      FontFamily="Segoe MDL2 Assets"
+                      FontSize="16"/>
+        </Button>
 
         <!-- Menu Popup pour les paramètres -->
         <Popup x:Name="SettingsPopup" 
