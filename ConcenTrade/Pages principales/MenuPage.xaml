@@ -286,12 +286,18 @@
                    Margin="0,120,0,0">
             <StackPanel Orientation="Horizontal" 
                        HorizontalAlignment="Center">
-                <TextBlock Text="&#xE945;" 
-                         FontFamily="Segoe MDL2 Assets"
-                         FontSize="72"
-                         Foreground="#80FFFFFF"
-                         VerticalAlignment="Center"
-                         Margin="0,0,25,0"/>
+                <Image Width="120" Height="120" 
+                       Source="/Images/Logo fond effacé.png"
+                       Margin="0,0,25,0"
+                       Opacity="1"
+                       Stretch="Uniform"
+                       VerticalAlignment="Center">
+                    <Image.Effect>
+                        <DropShadowEffect BlurRadius="20" 
+                                        ShadowDepth="0" 
+                                        Opacity="0.3"/>
+                    </Image.Effect>
+                </Image>
                 <TextBlock Text="ConcenTrade"
                          Style="{StaticResource AppTitle}"/>
             </StackPanel>
