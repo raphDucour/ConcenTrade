@@ -26,7 +26,7 @@
             </LinearGradientBrush>
         </Grid.Background>
 
-        <Ellipse x:Name="MeditationCircle" Opacity="0" Width="300" Height="300" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,100" RenderTransformOrigin="0.5,0.5">
+        <Ellipse x:Name="MeditationCircle" Opacity="0" Width="650" Height="650" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,100" RenderTransformOrigin="0.5,0.5">
             <Ellipse.Fill>
                 <SolidColorBrush Color="#FF3A4C62" Opacity="0.5"/>
             </Ellipse.Fill>
@@ -65,17 +65,18 @@
                 <TranslateTransform Y="0"/>
             </Grid.RenderTransform>
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Path x:Name="FocusSymbol" Opacity="0" Fill="White" Stretch="Uniform" Width="100" Height="100" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,20"
-                      Data="M80,0 H20 A20,20 0 0,0 0,20 V80 A20,20 0 0,0 20,100 H80 A20,20 0 0,0 100,80 V20 A20,20 0 0,0 80,0 Z M50,28 C70,28 85,42 90,50 C85,58 70,72 50,72 C30,72 15,58 10,50 C15,42 30,28 50,28 Z M50,43 A7,7 0 1 0 50,57 A7,7 0 1 0 50,43 Z">
-                    <Path.RenderTransform>
+                <Image x:Name="FocusSymbol" Source="/Images/Logo fond effacé.png" Opacity="0"
+                       Width="500" Height="500"
+                       RenderTransformOrigin="0.5,0.5" Margin="0,0,0,20" Stretch="Uniform">
+                    <Image.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform x:Name="FocusSymbolScale" ScaleX="0.5" ScaleY="0.5"/>
                             <TranslateTransform x:Name="FocusSymbolTransform" />
                         </TransformGroup>
-                    </Path.RenderTransform>
-                </Path>
+                    </Image.RenderTransform>
+                </Image>
 
-                <TextBlock x:Name="WelcomeText" TextWrapping="Wrap" Opacity="0" FontSize="36" FontWeight="SemiBold" Foreground="White"
+                <TextBlock x:Name="WelcomeText" TextWrapping="Wrap" Opacity="0" FontSize="48" FontWeight="SemiBold" Foreground="White"
                            HorizontalAlignment="Center" TextAlignment="Center" RenderTransformOrigin="0.5,0.5">
                     <TextBlock.RenderTransform>
                         <TransformGroup>
@@ -85,7 +86,7 @@
                     </TextBlock.RenderTransform>
                 </TextBlock>
 
-                <TextBlock x:Name="FocusMessage" Text="Préparons-nous pour une session de concentration !" TextWrapping="Wrap" Opacity="0" FontSize="20" FontWeight="Regular" Foreground="White"
+                <TextBlock x:Name="FocusMessage" Text="Préparons-nous pour une session de concentration !" TextWrapping="Wrap" Opacity="0" FontSize="28" FontWeight="Regular" Foreground="White"
                            HorizontalAlignment="Center" TextAlignment="Center" Margin="0,10,0,0" RenderTransformOrigin="0.5,0.5">
                     <TextBlock.RenderTransform>
                         <TransformGroup>
