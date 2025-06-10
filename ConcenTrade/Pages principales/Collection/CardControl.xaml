@@ -32,10 +32,13 @@
                           Margin="10,8"/>
             </Border>
 
-            <!-- Espace pour le contenu futur -->
-            <Grid Grid.Row="1">
-                <!-- Contenu futur -->
-            </Grid>
+            <!-- Icône au milieu -->
+            <TextBlock x:Name="IconeText"
+                      Grid.Row="1"
+                      Text=""
+                      FontSize="72"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"/>
         </Grid>
     </Border>
 </UserControl> 

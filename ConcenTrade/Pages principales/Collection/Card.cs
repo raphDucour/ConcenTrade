@@ -19,13 +19,33 @@ namespace Concentrade.Collections_de_cartes
         public bool IsFavorite { get; set; }
         public CardRarity Rarity { get; set; }
         public string color { get; set; }
+        public string icone { get; set; }
 
         public Card(string name)
         {
             Name = name;
             IsFavorite = false;
-            Rarity = GetRarity(Name);
+            var (rarity, icon) = GetRarityAndIcone(Name);
+            Rarity = rarity;
+            icone = icon;
             color = GetRarityColor(Rarity);
+        }
+
+        public static (CardRarity rarity, string icone) GetRarityAndIcone(string name)
+        {
+            return name switch
+            {
+                "Chat Zen" => (CardRarity.Common, "🐱"),
+                "Lapin Paisible" => (CardRarity.Common, "🐰"),
+                "Coq Matinal" => (CardRarity.Common, "🐓"),
+                "Chien Focus" => (CardRarity.Common, "🐕"),
+                "Panda Méditant" => (CardRarity.Epic, "🐼"),
+                "Renard Sage" => (CardRarity.Rare, "🦊"),
+                "Paon Majestueux" => (CardRarity.Rare, "🦚"),
+                "Loup Alpha" => (CardRarity.Epic, "🐺"),
+                "Dragon Ancestral" => (CardRarity.Legendary, "🐲"),
+                _ => (CardRarity.Common, "❓")
+            };
         }
 
         public static CardRarity GetRarity(string name)

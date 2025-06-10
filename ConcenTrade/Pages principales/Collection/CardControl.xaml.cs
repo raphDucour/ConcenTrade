@@ -25,6 +25,7 @@ namespace Concentrade.Pages_principales.Collection
             {
                 CardNameText.Text = _card.Name;
                 CardBorder.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(_card.color));
+                IconeText.Text = _card.icone;
             }
         }
     }
