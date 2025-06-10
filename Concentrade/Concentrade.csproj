@@ -9,11 +9,37 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\Roboto-Italic-VariableFont_wdth,wght.ttf" />
+    <None Remove="Fonts\Roboto-VariableFont_wdth,wght.ttf" />
+    <None Remove="Images\ConcenTrade logo sans texte.png" />
+    <None Remove="Images\ConcenTrade Logo.png" />
+    <None Remove="Images\Logo fond effacé.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Remove="FlowDocument1.xaml" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Management" Version="9.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Fonts\Roboto-Italic-VariableFont_wdth,wght.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Roboto-VariableFont_wdth,wght.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\ConcenTrade logo sans texte.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\ConcenTrade Logo.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Logo fond effacé.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
