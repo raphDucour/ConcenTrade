@@ -7,8 +7,15 @@
       xmlns:collection="clr-namespace:Concentrade.Pages_principales.Collection"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="CollectionPage"
-      Background="#0D1C26">
+      Title="CollectionPage">
+
+    <Page.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#0F2027" Offset="0"/>
+            <GradientStop Color="#203A43" Offset="0.5"/>
+            <GradientStop Color="#2C5364" Offset="1"/>
+        </LinearGradientBrush>
+    </Page.Background>
 
     <Grid>
         <Grid.RowDefinitions>
