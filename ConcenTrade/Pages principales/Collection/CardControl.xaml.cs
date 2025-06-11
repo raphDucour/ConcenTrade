@@ -8,7 +8,7 @@ namespace Concentrade.Pages_principales.Collection
     {
         private Card _card;
         private const int STACK_OFFSET_VERTICAL = 8;     // Décalage vertical très réduit
-        private const int STACK_OFFSET_HORIZONTAL = 12;  // Décalage horizontal réduit
+        private const int STACK_OFFSET_HORIZONTAL = 6;   // Décalage horizontal divisé par 2 (était 12)
         private const int MAX_STACKED_CARDS = 5;         // Nombre maximum de cartes empilées
 
         public CardControl()
