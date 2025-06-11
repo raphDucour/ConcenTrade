@@ -13,9 +13,9 @@ namespace Concentrade.Pages_principales.Collection
             InitializeComponent();
         }
 
-        public void SetCard(string name)
+        public void SetCard(Card name)
         {
-            _card = new Card(name);
+            _card = name;
             UpdateCardDisplay();
         }
 
