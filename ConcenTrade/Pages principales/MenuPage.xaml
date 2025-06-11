@@ -12,8 +12,16 @@
     <Grid x:Name="MainGrid">
         <Canvas x:Name="ParticleCanvas" Background="Transparent"/>
 
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock Text="Concentrade" Foreground="{StaticResource ZenTextBrush}" FontSize="72" FontWeight="Light" HorizontalAlignment="Center" Margin="0,0,0,50"/>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,150">
+
+            <Image Source="/Images/ConcenTrade_logo_v2-removebg-preview.png"
+                   Width="400"
+                   Margin="0,0,0,50">
+                <Image.Effect>
+                    <DropShadowEffect ShadowDepth="2" Color="Black" Opacity="0.4" BlurRadius="10"/>
+                </Image.Effect>
+            </Image>
+
             <TextBlock x:Name="SliderLabel" Text="Durée de la session : 25 min" Foreground="{StaticResource ZenTextBrush}" FontSize="22" FontWeight="Normal" HorizontalAlignment="Center" Margin="0,0,0,10" Opacity="0.8"/>
             <Slider x:Name="DureeSlider" Width="350" Minimum="0" Maximum="100" ValueChanged="DureeSlider_ValueChanged" Margin="0,0,0,40"/>
             <Button Content="Démarrer la session" Width="300" Height="60" Style="{StaticResource ZenButtonStyle}" Click="StartSession_Click" FontSize="22" BorderThickness="2"/>

@@ -47,7 +47,7 @@ namespace Concentrade
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             // Lancement de la nouvelle animation de particules
-            CreateAndAnimateParticles(50);
+            CreateAndAnimateParticles(25);
         }
 
         private void CreateAndAnimateParticles(int count)
