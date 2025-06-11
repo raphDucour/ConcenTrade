@@ -30,6 +30,7 @@ namespace Concentrade.Collections_de_cartes
             color = GetRarityColor(Rarity);
         }
 
+        // Méthodes statiques pour gérer la collection de cartes
         public static List<Card> GetAllPossibleCards()
         {
             return new List<Card>
@@ -45,29 +46,17 @@ namespace Concentrade.Collections_de_cartes
                 new Card("Dragon Ancestral",CardRarity.Legendary, "🐲")
             };
         }
-
-        public static (CardRarity rarity, string icone) GetRarityAndIcone(string name)
+        public static Card FindCard(string name)
         {
-            return name switch
-            {
-                "Chat Zen" => (CardRarity.Common, "🐱"),
-                "Lapin Paisible" => (CardRarity.Common, "🐰"),
-                "Coq Matinal" => (CardRarity.Common, "🐓"),
-                "Chien Focus" => (CardRarity.Common, "🐕"),
-                "Panda Méditant" => (CardRarity.Epic, "🐼"),
-                "Renard Sage" => (CardRarity.Rare, "🦊"),
-                "Paon Majestueux" => (CardRarity.Rare, "🦚"),
-                "Loup Alpha" => (CardRarity.Epic, "🐺"),
-                "Dragon Ancestral" => (CardRarity.Legendary, "🐲"),
-                _ => (CardRarity.Common, "❓")
-            };
+            return GetAllPossibleCards().FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase)) 
+                ?? new Card(name, CardRarity.Common, "❓"); // Carte par défaut si non trouvée
         }
-
 
         public static string GetRarityColor(CardRarity rarity)
         {
             return rarity switch
             {
+
                 CardRarity.Common => "#7FB3F5",    // Bleu clair
                 CardRarity.Rare => "#CD853F",      // Orange mat/brun (Peru)
                 CardRarity.Epic => "#9B4DCA",      // Violet
@@ -75,20 +64,18 @@ namespace Concentrade.Collections_de_cartes
                 _ => "#7FB3F5"                     // Bleu clair par défaut
             };
         }
+        
 
-        // Méthodes statiques pour gérer la collection de cartes
+        
+
         public static List<Card> GetAllCards()
         {
             var cardsString = Settings.Default.Cards;
             if (string.IsNullOrEmpty(cardsString))
                 return new List<Card>();
 
-            return cardsString.Split(',')   
-                            .Select(name => {
-                                var trimmedName = name.Trim();
-                                var (rarity, icon) = GetRarityAndIcone(trimmedName);
-                                return new Card(name.Trim(), rarity, icon);
-                            })
+            return cardsString.Split(',')
+                            .Select(name => FindCard(name.Trim()))
                             .ToList();
         }
 
