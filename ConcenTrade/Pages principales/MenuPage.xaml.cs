@@ -46,35 +46,31 @@ namespace Concentrade
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            // Lancement de la nouvelle animation de particules
-            CreateAndAnimateParticles(25);
+            CreateAndAnimateParticles(10);
         }
 
         private void CreateAndAnimateParticles(int count)
         {
+            if (ActualWidth == 0 || ActualHeight == 0) return;
+
             for (int i = 0; i < count; i++)
             {
-                // 1. Créer une particule (un petit cercle)
                 Ellipse particle = new Ellipse
                 {
                     Fill = new SolidColorBrush(Colors.White),
                     Effect = new BlurEffect()
                 };
 
-                // 2. Donner des propriétés aléatoires pour un effet de profondeur
                 double size = _random.Next(5, 40);
                 particle.Width = size;
                 particle.Height = size;
-                particle.Opacity = _random.NextDouble() * 0.4 + 0.1; // Opacité entre 0.1 et 0.5
+                particle.Opacity = _random.NextDouble() * 0.4 + 0.1;
                 ((BlurEffect)particle.Effect).Radius = _random.Next(5, 15);
 
-                // 3. Positionner la particule aléatoirement
                 particle.RenderTransform = new TranslateTransform(_random.Next(0, (int)ActualWidth), _random.Next(0, (int)ActualHeight));
 
-                // 4. Ajouter la particule à la zone de dessin
                 ParticleCanvas.Children.Add(particle);
 
-                // 5. Animer la particule
                 AnimateParticle(particle);
             }
         }
@@ -83,39 +79,34 @@ namespace Concentrade
         {
             var transform = (TranslateTransform)particle.RenderTransform;
 
-            // Déterminer une destination aléatoire hors de l'écran
             double endX = _random.NextDouble() > 0.5 ? ActualWidth + 100 : -100;
             double endY = _random.Next(0, (int)ActualHeight);
 
-            // Animer la position X
             var animX = new DoubleAnimation
             {
                 To = endX,
-                Duration = TimeSpan.FromSeconds(_random.Next(20, 60)), // Durée lente et aléatoire
+                Duration = TimeSpan.FromSeconds(_random.Next(20, 60)),
             };
 
-            // Animer la position Y
             var animY = new DoubleAnimation
             {
                 To = endY,
                 Duration = TimeSpan.FromSeconds(_random.Next(20, 60)),
             };
 
-            // Quand l'animation est finie, on la relance
             animX.Completed += (s, e) =>
             {
-                // Réinitialiser la position à un bord de l'écran
-                transform.X = _random.NextDouble() > 0.5 ? -50 : ActualWidth + 50;
-                transform.Y = _random.Next(0, (int)ActualHeight);
-                AnimateParticle(particle); // Relancer l'animation en boucle
+                if (ActualWidth > 0 && ActualHeight > 0)
+                {
+                    transform.X = _random.NextDouble() > 0.5 ? -50 : ActualWidth + 50;
+                    transform.Y = _random.Next(0, (int)ActualHeight);
+                    AnimateParticle(particle);
+                }
             };
 
             transform.BeginAnimation(TranslateTransform.XProperty, animX);
             transform.BeginAnimation(TranslateTransform.YProperty, animY);
         }
-
-
-        // --- Le reste du code reste identique ---
 
         private int ConvertirPositionEnDuree(double position)
         {
