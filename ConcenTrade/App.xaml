@@ -4,14 +4,85 @@
              xmlns:local="clr-namespace:Concentrade"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <Style TargetType="{x:Type Control}">
-            <Setter Property="FontFamily" Value="/Concentrade;component/Fonts/#Roboto"/>
-        </Style>
-        <Style TargetType="{x:Type TextBlock}">
-            <Setter Property="FontFamily" Value="/Concentrade;component/Fonts/#Roboto"/>
-        </Style>
-        <Style TargetType="{x:Type Page}">
-            <Setter Property="FontFamily" Value="/Concentrade;component/Fonts/#Roboto"/>
-        </Style>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="ZenBackgroundBrush" Color="#2B3A4A"/>
+            <SolidColorBrush x:Key="ZenCircleBrush" Color="#FFFFFF" Opacity="0.12"/>
+            <SolidColorBrush x:Key="ZenWaveBrush" Color="#FFFFFF" Opacity="0.10"/>
+            <SolidColorBrush x:Key="ZenTextBrush" Color="#FFFFFF"/>
+            <SolidColorBrush x:Key="ZenButtonTextBrush" Color="#E0E0E0"/>
+            <SolidColorBrush x:Key="ZenButtonBorderBrush" Color="#FFFFFF" Opacity="0.5"/>
+            <SolidColorBrush x:Key="ZenButtonHoverBrush" Color="#FFFFFF" Opacity="0.1"/>
+            <SolidColorBrush x:Key="ZenButtonHoverTextBrush" Color="#FFFFFF"/>
+            <SolidColorBrush x:Key="ZenButtonHoverBorderBrush" Color="#FFFFFF" Opacity="0.9"/>
+
+            <Style x:Key="ZenButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{StaticResource ZenButtonTextBrush}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource ZenButtonBorderBrush}"/>
+                <Setter Property="BorderThickness" Value="1.5"/>
+                <Setter Property="FontWeight" Value="Normal"/>
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="Padding" Value="15,10"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <ControlTemplate.Resources>
+                                <Storyboard x:Key="OnMouseEnter">
+                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#FFFFFF" Duration="0:0:0.2"/>
+                                    <DoubleAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(Brush.Opacity)" To="0.1" Duration="0:0:0.2"/>
+                                    <ColorAnimation Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="contentPresenter" To="#FFFFFF" Duration="0:0:0.2"/>
+                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" To="#FFFFFF" Duration="0:0:0.2"/>
+                                    <DoubleAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.BorderBrush).(Brush.Opacity)" To="0.9" Duration="0:0:0.2"/>
+                                </Storyboard>
+                                <Storyboard x:Key="OnMouseLeave">
+                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#FFFFFF" Duration="0:0:0.3"/>
+                                    <DoubleAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(Brush.Opacity)" To="0" Duration="0:0:0.3"/>
+                                    <ColorAnimation Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="contentPresenter" To="#E0E0E0" Duration="0:0:0.3"/>
+                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" To="#FFFFFF" Duration="0:0:0.3"/>
+                                    <DoubleAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.BorderBrush).(Brush.Opacity)" To="0.5" Duration="0:0:0.3"/>
+                                </Storyboard>
+                            </ControlTemplate.Resources>
+                            <Border x:Name="border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="20">
+                                <ContentPresenter x:Name="contentPresenter" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <EventTrigger RoutedEvent="MouseEnter">
+                                    <BeginStoryboard Storyboard="{StaticResource OnMouseEnter}"/>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="MouseLeave">
+                                    <BeginStoryboard Storyboard="{StaticResource OnMouseLeave}"/>
+                                </EventTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="ZenIconButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{StaticResource ZenButtonTextBrush}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="FontSize" Value="24"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <TextBlock x:Name="text" Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" Opacity="0.7"/>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="text" Property="Opacity" Value="1.0"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

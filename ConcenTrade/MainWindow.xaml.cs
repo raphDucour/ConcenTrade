@@ -15,7 +15,7 @@ namespace Concentrade
             this.WindowStyle = WindowStyle.SingleBorderWindow;
             this.WindowState = WindowState.Maximized;
             this.ResizeMode = ResizeMode.CanResize;
-            this.Background = new SolidColorBrush(Color.FromRgb(223, 255, 232)); // Vert menthe clair
+            this.Background = (SolidColorBrush)Application.Current.Resources["ZenBackgroundBrush"];
 
             if (string.IsNullOrWhiteSpace(Properties.Settings.Default.UserEmail)) MainFrame.Navigate(new LoginPage());
             else
