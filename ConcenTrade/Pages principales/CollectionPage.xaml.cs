@@ -4,6 +4,7 @@ using Concentrade.Properties;
 using Concentrade.Pages_principales.Collection;
 using Concentrade.Collections_de_cartes;
 using System.Xml.Linq;
+using System.Linq;
 
 namespace Concentrade.Pages_principales
 {
@@ -23,11 +24,21 @@ namespace Concentrade.Pages_principales
 
         private void InitializeCards()
         {
-            foreach (Card card in cards)
+            // Grouper les cartes par nom et compter leur occurrence
+            var cardGroups = cards.GroupBy(c => c.Name)
+                                .ToDictionary(g => g.Key, g => g.Count());
+
+            foreach (Card card in cards.DistinctBy(c => c.Name)) // Ne prend qu'une carte de chaque type
             {
                 var cardControl = new CardControl();
                 cardControl.SetCard(card);
-                cardControl.Margin = new Thickness(10);
+                
+                // Ajouter l'effet d'empilement si on a plus d'une carte
+                if (cardGroups[card.Name] > 1)
+                {
+                    cardControl.AddStackedCards(cardGroups[card.Name] - 1);
+                }
+                
                 CardsPanel.Children.Add(cardControl);
             }
         }
@@ -114,12 +125,12 @@ namespace Concentrade.Pages_principales
 
         private void BuyRooster_Click(object sender, RoutedEventArgs e)
         {
-            TryBuyCard(new Card("Paon Majestueux", CardRarity.Rare, "🦚"), 550);
+            TryBuyCard(new Card("Coq Matinal", CardRarity.Common, "🐓"), 1500);
         }
 
         private void BuyPeacock_Click(object sender, RoutedEventArgs e)
         {
-            TryBuyCard(new Card("Coq Matinal", CardRarity.Common, "🐓"), 1500);
+            TryBuyCard(new Card("Paon Majestueux", CardRarity.Rare, "🦚"), 550);
         }
 
         private void BuyDragon_Click(object sender, RoutedEventArgs e)

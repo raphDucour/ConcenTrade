@@ -1,44 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <UserControl x:Class="Concentrade.Pages_principales.Collection.CardControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Width="200" Height="280">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
-    <Border x:Name="CardBorder"
-            Background="Black"
-            BorderThickness="2"
-            BorderBrush="Black"
-            CornerRadius="15">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <!-- Titre de la carte -->
-            <Border Grid.Row="0" 
-                    Background="#0A0A0A" 
-                    BorderThickness="0,0,0,2"
+    <Grid>
+        <!-- Container pour les cartes empilées -->
+        <Canvas x:Name="MainGrid" ClipToBounds="False">
+            <!-- Carte principale -->
+            <Border x:Name="CardBorder"
+                    Width="200" Height="280"
+                    Background="Black"
+                    BorderThickness="2"
                     BorderBrush="Black"
-                    CornerRadius="15,15,0,0">
-                <TextBlock x:Name="CardNameText"
-                          Text=""
-                          Foreground="White"
-                          FontSize="18"
-                          FontWeight="SemiBold"
-                          HorizontalAlignment="Center"
-                          TextAlignment="Center"
-                          TextWrapping="Wrap"
-                          Margin="10,8"/>
-            </Border>
+                    CornerRadius="15"
+                    Panel.ZIndex="999">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-            <!-- Icône au milieu -->
-            <TextBlock x:Name="IconeText"
-                      Grid.Row="1"
-                      Text=""
-                      FontSize="72"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Center"/>
-        </Grid>
-    </Border>
+                    <!-- Titre de la carte -->
+                    <Border Grid.Row="0" 
+                            Background="#0A0A0A" 
+                            BorderThickness="0,0,0,2"
+                            BorderBrush="Black"
+                            CornerRadius="15,15,0,0">
+                        <TextBlock x:Name="CardNameText"
+                                  Text=""
+                                  Foreground="White"
+                                  FontSize="18"
+                                  FontWeight="SemiBold"
+                                  HorizontalAlignment="Center"
+                                  TextAlignment="Center"
+                                  TextWrapping="Wrap"
+                                  Margin="10,8"/>
+                    </Border>
+
+                    <!-- Icône au milieu -->
+                    <TextBlock x:Name="IconeText"
+                              Grid.Row="1"
+                              Text=""
+                              FontSize="72"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+        </Canvas>
+    </Grid>
 </UserControl> 

@@ -57,7 +57,9 @@
                      HorizontalScrollBarVisibility="Disabled">
             <WrapPanel x:Name="CardsPanel" 
                       Margin="20"
-                      HorizontalAlignment="Center"/>
+                      HorizontalAlignment="Center"
+                      ItemWidth="250"
+                      ItemHeight="320"/>
         </ScrollViewer>
 
         <!-- Overlay d'achat -->
