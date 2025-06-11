@@ -9,7 +9,7 @@ namespace Concentrade.Pages_principales
 {
     public partial class CollectionPage : Page
     {
-        List<Card> cards = Card.GetAllCards();
+        List<Card> cards = Card.GetAllCardsSortedByRarity();
        
 
         private int userPoints;
@@ -67,7 +67,7 @@ namespace Concentrade.Pages_principales
                 Card.AddCard(cardName);
                 
                 // Mettre à jour le tableau avant de rafraîchir
-                cards = Card.GetAllCards();
+                cards = Card.GetAllCardsSortedByRarity();
                 
                 CardsPanel.Children.Clear();
                 InitializeCards();

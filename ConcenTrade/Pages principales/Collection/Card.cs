@@ -64,9 +64,35 @@ namespace Concentrade.Collections_de_cartes
                 _ => "#7FB3F5"                     // Bleu clair par défaut
             };
         }
-        
 
-        
+        private static int GetRarityOrder(CardRarity rarity)
+        {
+            return rarity switch
+            {
+                CardRarity.Common => 0,
+                CardRarity.Rare => 1,
+                CardRarity.Epic => 2,
+                CardRarity.Legendary => 3,
+                _ => -1
+            };
+        }
+
+        public static List<Card> GetSortedByRarity(List<Card> cards)
+        {
+            return cards.OrderBy(card => GetRarityOrder(card.Rarity))
+                       .ThenBy(card => card.Name)  // Tri secondaire par nom pour les cartes de même rareté
+                       .ToList();
+        }
+
+        public static List<Card> GetAllCardsSortedByRarity()
+        {
+            return GetSortedByRarity(GetAllCards());
+        }
+
+        public static List<Card> GetAllPossibleCardsSortedByRarity()
+        {
+            return GetSortedByRarity(GetAllPossibleCards());
+        }
 
         public static List<Card> GetAllCards()
         {
