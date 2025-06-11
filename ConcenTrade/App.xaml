@@ -5,6 +5,8 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+
+            <!-- VOS RESSOURCES DE COULEUR ORIGINALES -->
             <SolidColorBrush x:Key="ZenBackgroundBrush" Color="#2B3A4A"/>
             <SolidColorBrush x:Key="ZenCircleBrush" Color="#FFFFFF" Opacity="0.12"/>
             <SolidColorBrush x:Key="ZenWaveBrush" Color="#FFFFFF" Opacity="0.10"/>
@@ -15,6 +17,32 @@
             <SolidColorBrush x:Key="ZenButtonHoverTextBrush" Color="#FFFFFF"/>
             <SolidColorBrush x:Key="ZenButtonHoverBorderBrush" Color="#FFFFFF" Opacity="0.9"/>
 
+            <!-- STYLE AJOUTÉ POUR LES BOUTONS DE FENÊTRE PERSONNALISÉS -->
+            <Style x:Key="WindowButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Width" Value="40"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#4a6582"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- VOTRE STYLE DE BOUTON ORIGINAL -->
             <Style x:Key="ZenButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="Foreground" Value="{StaticResource ZenButtonTextBrush}"/>
@@ -63,6 +91,7 @@
                 </Setter>
             </Style>
 
+            <!-- VOS AUTRES STYLES ORIGINAUX -->
             <Style x:Key="ZenIconButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="Foreground" Value="{StaticResource ZenButtonTextBrush}"/>
