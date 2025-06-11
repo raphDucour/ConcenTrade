@@ -21,14 +21,29 @@ namespace Concentrade.Collections_de_cartes
         public string color { get; set; }
         public string icone { get; set; }
 
-        public Card(string name)
+        public Card(string name,CardRarity rarity, string icon)
         {
             Name = name;
             IsFavorite = false;
-            var (rarity, icon) = GetRarityAndIcone(Name);
             Rarity = rarity;
             icone = icon;
             color = GetRarityColor(Rarity);
+        }
+
+        public static List<Card> GetAllPossibleCards()
+        {
+            return new List<Card>
+            {
+                new Card("Chat Zen",CardRarity.Common, "🐱"),
+                new Card("Lapin Paisible",CardRarity.Common, "🐰"),
+                new Card("Coq Matinal",CardRarity.Common, "🐓"),
+                new Card("Chien Focus",CardRarity.Common, "🐕"),
+                new Card("Panda Méditant",CardRarity.Epic, "🐼"),
+                new Card("Renard Sage",CardRarity.Rare, "🦊"),
+                new Card("Paon Majestueux",CardRarity.Rare, "🦚"),
+                new Card("Loup Alpha",CardRarity.Epic, "🐺"),
+                new Card("Dragon Ancestral",CardRarity.Legendary, "🐲")
+            };
         }
 
         public static (CardRarity rarity, string icone) GetRarityAndIcone(string name)
@@ -68,8 +83,12 @@ namespace Concentrade.Collections_de_cartes
             if (string.IsNullOrEmpty(cardsString))
                 return new List<Card>();
 
-            return cardsString.Split(',')
-                            .Select(name => new Card(name.Trim()))
+            return cardsString.Split(',')   
+                            .Select(name => {
+                                var trimmedName = name.Trim();
+                                var (rarity, icon) = GetRarityAndIcone(trimmedName);
+                                return new Card(name.Trim(), rarity, icon);
+                            })
                             .ToList();
         }
 
@@ -82,13 +101,10 @@ namespace Concentrade.Collections_de_cartes
             return cardsString.Split(',');
         }
 
-        public static void AddCard(string name)
+        public static void AddCard(Card name)
         {
             var cards = GetAllCards();
-            
-            
-
-            cards.Add(new Card(name));
+            cards.Add(name);
             SaveCards(cards);
         }
 
@@ -114,6 +130,8 @@ namespace Concentrade.Collections_de_cartes
         {
             return GetAllCards().Where(c => c.IsFavorite).ToList();
         }
+
+        
 
         public static List<Card> SearchCards(string searchTerm)
         {

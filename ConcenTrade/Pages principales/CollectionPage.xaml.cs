@@ -3,12 +3,14 @@ using System.Windows.Controls;
 using Concentrade.Properties;
 using Concentrade.Pages_principales.Collection;
 using Concentrade.Collections_de_cartes;
+using System.Xml.Linq;
 
 namespace Concentrade.Pages_principales
 {
     public partial class CollectionPage : Page
     {
-        private string[] cardNames = Card.GetCardNamesArray();
+        List<Card> cards = Card.GetAllCards();
+       
 
         private int userPoints;
 
@@ -21,10 +23,10 @@ namespace Concentrade.Pages_principales
 
         private void InitializeCards()
         {
-            foreach (var cardName in cardNames)
+            foreach (Card card in cards)
             {
                 var cardControl = new CardControl();
-                cardControl.SetCard(cardName);
+                cardControl.SetCard(card);
                 cardControl.Margin = new Thickness(10);
                 CardsPanel.Children.Add(cardControl);
             }
@@ -56,7 +58,7 @@ namespace Concentrade.Pages_principales
             AchatOverlay.Visibility = Visibility.Collapsed;
         }
 
-        private bool TryBuyCard(string cardName, int cost)
+        private bool TryBuyCard(Card cardName, int cost)
         {
             if (userPoints >= cost)
             {
@@ -65,7 +67,7 @@ namespace Concentrade.Pages_principales
                 Card.AddCard(cardName);
                 
                 // Mettre à jour le tableau avant de rafraîchir
-                cardNames = Card.GetCardNamesArray();
+                cards = Card.GetAllCards();
                 
                 CardsPanel.Children.Clear();
                 InitializeCards();
@@ -82,47 +84,47 @@ namespace Concentrade.Pages_principales
 
         private void BuyCat_Click(object sender, RoutedEventArgs e)
         {
-            TryBuyCard("Chat Zen", 500);
+            TryBuyCard(new Card("Chat Zen", CardRarity.Common, "🐱"), 500);
         }
 
         private void BuyDog_Click(object sender, RoutedEventArgs e)
         {
-            TryBuyCard("Chien Focus", 1000);
+            TryBuyCard(new Card("Chien Focus", CardRarity.Common, "🐕"), 1000);
         }
 
         private void BuyPanda_Click(object sender, RoutedEventArgs e)
         {
-            TryBuyCard("Panda Méditant", 750);
+            TryBuyCard(new Card("Panda Méditant", CardRarity.Epic, "🐼"), 750);
         }
 
         private void BuyFox_Click(object sender, RoutedEventArgs e)
         {
-            TryBuyCard("Renard Sage", 2000);
+            TryBuyCard(new Card("Renard Sage", CardRarity.Rare, "🦊"), 2000);
         }
 
         private void BuyRabbit_Click(object sender, RoutedEventArgs e)
         {
-            TryBuyCard("Lapin Paisible", 600);
+            TryBuyCard(new Card("Lapin Paisible", CardRarity.Common, "🐰"), 600);
         }
 
         private void BuyWolf_Click(object sender, RoutedEventArgs e)
         {
-            TryBuyCard("Loup Alpha", 3000);
+            TryBuyCard(new Card("Loup Alpha", CardRarity.Epic, "🐺"), 3000);
         }
 
         private void BuyRooster_Click(object sender, RoutedEventArgs e)
         {
-            TryBuyCard("Coq Matinal", 550);
+            TryBuyCard(new Card("Paon Majestueux", CardRarity.Rare, "🦚"), 550);
         }
 
         private void BuyPeacock_Click(object sender, RoutedEventArgs e)
         {
-            TryBuyCard("Paon Majestueux", 1500);
+            TryBuyCard(new Card("Coq Matinal", CardRarity.Common, "🐓"), 1500);
         }
 
         private void BuyDragon_Click(object sender, RoutedEventArgs e)
         {
-            TryBuyCard("Dragon Ancestral", 2500);
+            TryBuyCard(new Card("Dragon Ancestral", CardRarity.Legendary, "🐲"), 2500);
         }
     }
 } 
