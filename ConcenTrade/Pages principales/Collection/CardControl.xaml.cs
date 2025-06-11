@@ -7,8 +7,9 @@ namespace Concentrade.Pages_principales.Collection
     public partial class CardControl : UserControl
     {
         private Card _card;
-        private const int STACK_OFFSET_VERTICAL = 40;   // Gros décalage vertical en pixels
-        private const int STACK_OFFSET_HORIZONTAL = 25;  // Gros décalage horizontal en pixels
+        private const int STACK_OFFSET_VERTICAL = 8;     // Décalage vertical très réduit
+        private const int STACK_OFFSET_HORIZONTAL = 12;  // Décalage horizontal réduit
+        private const int MAX_STACKED_CARDS = 5;         // Nombre maximum de cartes empilées
 
         public CardControl()
         {
@@ -33,6 +34,9 @@ namespace Concentrade.Pages_principales.Collection
 
         public void AddStackedCards(int count)
         {
+            // Limiter le nombre de cartes empilées à MAX_STACKED_CARDS
+            int stackCount = System.Math.Min(count, MAX_STACKED_CARDS - 1);
+
             // On supprime d'abord toutes les cartes empilées existantes sauf la principale
             for (int i = MainGrid.Children.Count - 1; i > 0; i--)
             {
@@ -42,10 +46,10 @@ namespace Concentrade.Pages_principales.Collection
             // Position de base de la carte principale (au-dessus, sans décalage)
             Canvas.SetLeft(CardBorder, 0);
             Canvas.SetTop(CardBorder, 0);
-            Panel.SetZIndex(CardBorder, count); // Met la carte principale au-dessus
+            Panel.SetZIndex(CardBorder, stackCount + 1); // Met la carte principale au-dessus
 
             // On ajoute les cartes empilées (simples, sans design)
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < stackCount; i++)
             {
                 var stackedCard = new Border
                 {
@@ -60,7 +64,7 @@ namespace Concentrade.Pages_principales.Collection
                 // Positionner la carte empilée derrière avec décalage
                 Canvas.SetLeft(stackedCard, (i + 1) * STACK_OFFSET_HORIZONTAL);
                 Canvas.SetTop(stackedCard, (i + 1) * STACK_OFFSET_VERTICAL);
-                Panel.SetZIndex(stackedCard, count - i - 1);
+                Panel.SetZIndex(stackedCard, stackCount - i);
 
                 MainGrid.Children.Add(stackedCard);
             }
