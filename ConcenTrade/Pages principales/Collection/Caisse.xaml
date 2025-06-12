@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Concentrade.Pages_principales.Collection.Caisse"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:Concentrade.Pages_principales.Collection"
+    mc:Ignorable="d"
+    Title="Caisse">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Bouton Retour en haut à gauche -->
+        <Button x:Name="BtnRetour" 
+                Content="Retour" 
+                HorizontalAlignment="Left" 
+                Margin="10,10,0,0"
+                Click="BtnRetour_Click"
+                Style="{StaticResource ZenButtonStyle}"/>
+
+        <!-- Zone d'ouverture de caisse -->
+        <Border Grid.Row="1" 
+                Background="#1E2A38" 
+                Margin="20,10,20,10" 
+                CornerRadius="15">
+            <Grid>
+                <!-- Conteneur pour la roulette -->
+                <Border x:Name="RouletteContainer"
+                        Height="320"
+                        Width="600"
+                        Background="#0F1923"
+                        CornerRadius="10"
+                        Margin="20"
+                        ClipToBounds="True">
+                    <Canvas x:Name="RoulettePanel"
+                           Height="320">
+                        <Canvas.RenderTransform>
+                            <TranslateTransform x:Name="ScrollTransform" X="0"/>
+                        </Canvas.RenderTransform>
+                    </Canvas>
+                </Border>
+                
+                <!-- Indicateur de sélection -->
+                <Border Width="4" 
+                        Background="#FFD700"
+                        HorizontalAlignment="Center"
+                        Opacity="0.8">
+                    <Border.Effect>
+                        <BlurEffect Radius="2"/>
+                    </Border.Effect>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Zone d'affichage des cartes disponibles -->
+        <ScrollViewer Grid.Row="2" 
+                      Margin="20,10,20,10"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+            <WrapPanel x:Name="CardsPanel"
+                      HorizontalAlignment="Center"
+                      ItemWidth="250"
+                      ItemHeight="320"/>
+        </ScrollViewer>
+
+        <!-- Bouton Acheter en bas au milieu -->
+        <Button x:Name="BtnAcheter" 
+                Content="Acheter" 
+                Grid.Row="3"
+                HorizontalAlignment="Center" 
+                Margin="0,0,0,20"
+                Click="BtnAcheter_Click"
+                Style="{StaticResource ZenButtonStyle}"
+                Width="200"
+                Height="60"
+                FontSize="22"/>
+    </Grid>
+</Page> 

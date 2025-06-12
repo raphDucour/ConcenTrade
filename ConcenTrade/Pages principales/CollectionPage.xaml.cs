@@ -95,47 +95,17 @@ namespace Concentrade.Pages_principales
 
         private void BuyCat_Click(object sender, RoutedEventArgs e)
         {
-            TryBuyCard(new Card("Chat Zen", CardRarity.Common, "🐱"), 500);
+            this.NavigationService?.Navigate(new Caisse(1)); // Caisse Poules
         }
 
         private void BuyDog_Click(object sender, RoutedEventArgs e)
         {
-            TryBuyCard(new Card("Chien Focus", CardRarity.Common, "🐕"), 1000);
-        }
-
-        private void BuyPanda_Click(object sender, RoutedEventArgs e)
-        {
-            TryBuyCard(new Card("Panda Méditant", CardRarity.Epic, "🐼"), 750);
-        }
-
-        private void BuyFox_Click(object sender, RoutedEventArgs e)
-        {
-            TryBuyCard(new Card("Renard Sage", CardRarity.Rare, "🦊"), 2000);
-        }
-
-        private void BuyRabbit_Click(object sender, RoutedEventArgs e)
-        {
-            TryBuyCard(new Card("Lapin Paisible", CardRarity.Common, "🐰"), 600);
-        }
-
-        private void BuyWolf_Click(object sender, RoutedEventArgs e)
-        {
-            TryBuyCard(new Card("Loup Alpha", CardRarity.Epic, "🐺"), 3000);
-        }
-
-        private void BuyRooster_Click(object sender, RoutedEventArgs e)
-        {
-            TryBuyCard(new Card("Coq Matinal", CardRarity.Common, "🐓"), 1500);
-        }
-
-        private void BuyPeacock_Click(object sender, RoutedEventArgs e)
-        {
-            TryBuyCard(new Card("Paon Majestueux", CardRarity.Rare, "🦚"), 550);
+            this.NavigationService?.Navigate(new Caisse(2)); // Caisse QoC
         }
 
         private void BuyDragon_Click(object sender, RoutedEventArgs e)
         {
-            TryBuyCard(new Card("Dragon Ancestral", CardRarity.Legendary, "🐲"), 2500);
+            this.NavigationService?.Navigate(new Caisse(3)); // Caisse Dragon
         }
     }
 } 

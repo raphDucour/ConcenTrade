@@ -89,7 +89,7 @@
 
                     <ScrollViewer Grid.Row="1">
                         <StackPanel>
-                            <!-- Chat Zen (Commun) -->
+                            <!-- Caisse Poules (Commune) -->
                             <Border Background="#2B4C8C" 
                                     CornerRadius="10" 
                                     Margin="0,0,0,10" 
@@ -100,12 +100,12 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="🐱" 
+                                    <TextBlock Text="🐓" 
                                              FontSize="30" 
                                              VerticalAlignment="Center"/>
                                     <StackPanel Grid.Column="1" 
                                               Margin="10,0">
-                                        <TextBlock Text="Chat Zen" 
+                                        <TextBlock Text="Caisse Poules" 
                                                  Foreground="White" 
                                                  FontSize="14"/>
                                         <TextBlock Text="500 points" 
@@ -122,7 +122,7 @@
                                 </Grid>
                             </Border>
 
-                            <!-- Chien Focus (Rare) -->
+                            <!-- Caisse QoC (Rare) -->
                             <Border Background="#6D28D9" 
                                     CornerRadius="10" 
                                     Margin="0,0,0,10" 
@@ -133,12 +133,12 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="🐕" 
+                                    <TextBlock Text="👑" 
                                              FontSize="30" 
                                              VerticalAlignment="Center"/>
                                     <StackPanel Grid.Column="1" 
                                               Margin="10,0">
-                                        <TextBlock Text="Chien Focus" 
+                                        <TextBlock Text="Caisse QoC" 
                                                  Foreground="White" 
                                                  FontSize="14"/>
                                         <TextBlock Text="1000 points" 
@@ -155,8 +155,8 @@
                                 </Grid>
                             </Border>
 
-                            <!-- Panda Méditant (Rare) -->
-                            <Border Background="#6D28D9" 
+                            <!-- Caisse Dragon (Légendaire) -->
+                            <Border Background="#A16207" 
                                     CornerRadius="10" 
                                     Margin="0,0,0,10" 
                                     Padding="10">
@@ -166,224 +166,15 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="🐼" 
+                                    <TextBlock Text="🐲" 
                                              FontSize="30" 
                                              VerticalAlignment="Center"/>
                                     <StackPanel Grid.Column="1" 
                                               Margin="10,0">
-                                        <TextBlock Text="Panda Méditant" 
-                                                 Foreground="White" 
-                                                 FontSize="14"/>
-                                        <TextBlock Text="750 points" 
-                                                 Foreground="#9CA3AF"
-                                                 FontSize="12"/>
-                                    </StackPanel>
-                                    <Button Grid.Column="2" 
-                                            Content="Acheter" 
-                                            Click="BuyPanda_Click"
-                                            Background="#4B5563"
-                                            Foreground="White"
-                                            BorderThickness="0"
-                                            Padding="8,4"/>
-                                </Grid>
-                            </Border>
-
-                            <!-- Renard Sage (Épique) -->
-                            <Border Background="#C2410C" 
-                                    CornerRadius="10" 
-                                    Margin="0,0,0,10" 
-                                    Padding="10">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="🦊" 
-                                             FontSize="30" 
-                                             VerticalAlignment="Center"/>
-                                    <StackPanel Grid.Column="1" 
-                                              Margin="10,0">
-                                        <TextBlock Text="Renard Sage" 
+                                        <TextBlock Text="Caisse Dragon" 
                                                  Foreground="White" 
                                                  FontSize="14"/>
                                         <TextBlock Text="2000 points" 
-                                                 Foreground="#9CA3AF"
-                                                 FontSize="12"/>
-                                    </StackPanel>
-                                    <Button Grid.Column="2" 
-                                            Content="Acheter" 
-                                            Click="BuyFox_Click"
-                                            Background="#4B5563"
-                                            Foreground="White"
-                                            BorderThickness="0"
-                                            Padding="8,4"/>
-                                </Grid>
-                            </Border>
-
-                            <!-- Lapin Paisible (Commun) -->
-                            <Border Background="#2B4C8C" 
-                                    CornerRadius="10" 
-                                    Margin="0,0,0,10" 
-                                    Padding="10">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="🐰" 
-                                             FontSize="30" 
-                                             VerticalAlignment="Center"/>
-                                    <StackPanel Grid.Column="1" 
-                                              Margin="10,0">
-                                        <TextBlock Text="Lapin Paisible" 
-                                                 Foreground="White" 
-                                                 FontSize="14"/>
-                                        <TextBlock Text="600 points" 
-                                                 Foreground="#9CA3AF"
-                                                 FontSize="12"/>
-                                    </StackPanel>
-                                    <Button Grid.Column="2" 
-                                            Content="Acheter" 
-                                            Click="BuyRabbit_Click"
-                                            Background="#4B5563"
-                                            Foreground="White"
-                                            BorderThickness="0"
-                                            Padding="8,4"/>
-                                </Grid>
-                            </Border>
-
-                            <!-- Loup Alpha (Légendaire) -->
-                            <Border Background="#A16207" 
-                                    CornerRadius="10" 
-                                    Margin="0,0,0,10" 
-                                    Padding="10">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="🐺" 
-                                             FontSize="30" 
-                                             VerticalAlignment="Center"/>
-                                    <StackPanel Grid.Column="1" 
-                                              Margin="10,0">
-                                        <TextBlock Text="Loup Alpha" 
-                                                 Foreground="White" 
-                                                 FontSize="14"/>
-                                        <TextBlock Text="3000 points" 
-                                                 Foreground="#9CA3AF"
-                                                 FontSize="12"/>
-                                    </StackPanel>
-                                    <Button Grid.Column="2" 
-                                            Content="Acheter" 
-                                            Click="BuyWolf_Click"
-                                            Background="#4B5563"
-                                            Foreground="White"
-                                            BorderThickness="0"
-                                            Padding="8,4"/>
-                                </Grid>
-                            </Border>
-
-                            <!-- Coq Matinal (Commun) -->
-                            <Border Background="#2B4C8C" 
-                                    CornerRadius="10" 
-                                    Margin="0,0,0,10" 
-                                    Padding="10">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="🐓" 
-                                             FontSize="30" 
-                                             VerticalAlignment="Center"/>
-                                    <StackPanel Grid.Column="1" 
-                                              Margin="10,0">
-                                        <TextBlock Text="Coq Matinal" 
-                                                 Foreground="White" 
-                                                 FontSize="14"/>
-                                        <TextBlock Text="550 points" 
-                                                 Foreground="#9CA3AF"
-                                                 FontSize="12"/>
-                                    </StackPanel>
-                                    <Button Grid.Column="2" 
-                                            Content="Acheter" 
-                                            Click="BuyRooster_Click"
-                                            Background="#4B5563"
-                                            Foreground="White"
-                                            BorderThickness="0"
-                                            Padding="8,4"/>
-                                </Grid>
-                            </Border>
-
-                            <!-- Paon Majestueux (Épique) -->
-                            <Border Background="#C2410C" 
-                                    CornerRadius="10" 
-                                    Margin="0,0,0,10" 
-                                    Padding="10">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="🦚" 
-                                             FontSize="30" 
-                                             VerticalAlignment="Center"/>
-                                    <StackPanel Grid.Column="1" 
-                                              Margin="10,0">
-                                        <TextBlock Text="Paon Majestueux" 
-                                                 Foreground="White" 
-                                                 FontSize="14"/>
-                                        <TextBlock Text="1500 points" 
-                                                 Foreground="#9CA3AF"
-                                                 FontSize="12"/>
-                                    </StackPanel>
-                                    <Button Grid.Column="2" 
-                                            Content="Acheter" 
-                                            Click="BuyPeacock_Click"
-                                            Background="#4B5563"
-                                            Foreground="White"
-                                            BorderThickness="0"
-                                            Padding="8,4"/>
-                                </Grid>
-                            </Border>
-
-                            <!-- Dragon Ancestral (Légendaire) -->
-                            <Border Background="#A16207" 
-                                    CornerRadius="10" 
-                                    Margin="0,0,0,10" 
-                                    Padding="10">
-                                <Border.Effect>
-                                    <DropShadowEffect Color="#FFD700" BlurRadius="10" ShadowDepth="0" Opacity="0.6"/>
-                                </Border.Effect>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="🐉" 
-                                             FontSize="30" 
-                                             VerticalAlignment="Center">
-                                        <TextBlock.Effect>
-                                            <BlurEffect Radius="0.5"/>
-                                        </TextBlock.Effect>
-                                    </TextBlock>
-                                    <StackPanel Grid.Column="1" 
-                                              Margin="10,0">
-                                        <TextBlock Text="Dragon Ancestral" 
-                                                 Foreground="#FFD700" 
-                                                 FontSize="14">
-                                            <TextBlock.Effect>
-                                                <DropShadowEffect Color="#FFD700" BlurRadius="5" ShadowDepth="0" Opacity="0.5"/>
-                                            </TextBlock.Effect>
-                                        </TextBlock>
-                                        <TextBlock Text="2500 points" 
                                                  Foreground="#9CA3AF"
                                                  FontSize="12"/>
                                     </StackPanel>

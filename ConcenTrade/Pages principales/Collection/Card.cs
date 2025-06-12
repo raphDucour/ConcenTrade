@@ -46,6 +46,37 @@ namespace Concentrade.Collections_de_cartes
                 new Card("Dragon Ancestral",CardRarity.Legendary, "🐲")
             };
         }
+        public static List<Card> GetCaisse1Cards()
+        {
+            return new List<Card>
+            {
+                new Card("Chat Zen",CardRarity.Common, "🐱"),
+                new Card("Lapin Paisible",CardRarity.Common, "🐰"),
+                new Card("Coq Matinal",CardRarity.Common, "🐓")
+            };
+        }
+        public static List<Card> GetCaisse2Cards()
+        {
+            return new List<Card>
+            {
+                new Card("Chien Focus",CardRarity.Common, "🐕"),
+                new Card("Panda Méditant",CardRarity.Epic, "🐼"),
+                new Card("Renard Sage",CardRarity.Rare, "🦊"),
+            };
+        }
+
+        public static List<Card> GetCaisse3Cards()
+        {
+            return new List<Card>
+            {
+                new Card("Paon Majestueux",CardRarity.Rare, "🦚"),
+                new Card("Loup Alpha",CardRarity.Epic, "🐺"),
+                new Card("Dragon Ancestral",CardRarity.Legendary, "🐲")
+            };
+        }
+
+
+
         public static Card FindCard(string name)
         {
             return GetAllPossibleCards().FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase)) 
@@ -94,6 +125,7 @@ namespace Concentrade.Collections_de_cartes
             return GetSortedByRarity(GetAllPossibleCards());
         }
 
+        //carte du deck
         public static List<Card> GetAllCards()
         {
             var cardsString = Settings.Default.Cards;
