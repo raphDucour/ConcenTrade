@@ -212,6 +212,17 @@
                 </Setter>
             </Style>
 
+            <!-- Style spécifique pour le bouton Quitter -->
+            <Style x:Key="QuitButtonStyle" BasedOn="{StaticResource ZenButtonStyle}" TargetType="Button">
+                <Setter Property="Background" Value="#E57373"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="Transparent"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

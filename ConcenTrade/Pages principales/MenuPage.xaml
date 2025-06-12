@@ -42,7 +42,33 @@
                     <Button Content="⚙️ Préférences" Click="Settings_Click" Style="{StaticResource ZenButtonStyle}" Margin="2"/>
                     <Button Content="🔒 Se déconnecter" Click="Logout_Click" Style="{StaticResource ZenButtonStyle}" Margin="2"/>
                     <Button Content="🗑️ Réinitialiser" Click="ResetData_Click" Style="{StaticResource ZenButtonStyle}" Margin="2"/>
-                    <Button Content="❌ Quitter" Click="Quit_Click" Style="{StaticResource ZenButtonStyle}" Background="#E57373" Foreground="White" Margin="2"/>
+                    <Button Content="❌ Quitter" Click="Quit_Click" Margin="2">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource ZenButtonStyle}">
+                                <Setter Property="Background" Value="#FF7B7B"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="border"
+                                                    Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    CornerRadius="20">
+                                                <ContentPresenter x:Name="contentPresenter" 
+                                                                HorizontalAlignment="Center" 
+                                                                VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="border" Property="Background" Value="#FFA5A5"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </StackPanel>
             </Border>
         </Popup>
