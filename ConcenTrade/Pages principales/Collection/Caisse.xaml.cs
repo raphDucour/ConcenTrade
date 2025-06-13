@@ -38,6 +38,16 @@ namespace Concentrade.Pages_principales.Collection
 
         private void InitializeCards()
         {
+            InitializeRoulletteCards();
+            foreach (Card card in Cards)
+            {
+                var cardControl = new CardControl();
+                cardControl.SetCard(card);
+                CardsPanel.Children.Add(cardControl);
+            }
+        }
+        private void InitializeRoulletteCards()
+        {
             RoulettePanel.Children.Clear();
             for (int i = 0; i < 100; i++)
             {
@@ -49,15 +59,7 @@ namespace Concentrade.Pages_principales.Collection
                 Canvas.SetLeft(cardControl, i * 230); // 150 (largeur) + 2*40 (marge)
                 RoulettePanel.Children.Add(cardControl);
             }
-            
-            foreach (Card card in Cards)
-            {
-                var cardControl = new CardControl();
-                cardControl.SetCard(card);
-                CardsPanel.Children.Add(cardControl);
-            }
         }
-
 
         private void BtnRetour_Click(object sender, RoutedEventArgs e)
         {
@@ -83,6 +85,7 @@ namespace Concentrade.Pages_principales.Collection
 
         private void StartRoulette()
         {
+            InitializeRoulletteCards();
             var animation = new DoubleAnimation
             {
                 From = 0,
@@ -99,6 +102,31 @@ namespace Concentrade.Pages_principales.Collection
             {
                 isSpinning = false;
                 BtnAcheter.IsEnabled = true;
+
+
+                int visibleIndex = 10000 / 230; // Approximation de la position finale (-10000), divisé par l'espacement
+
+                if (visibleIndex >= 0 && visibleIndex < RoulettePanel.Children.Count)
+                {
+                    // Étape 2 : Récupération du contrôle de carte
+                    var selectedCardControl = RoulettePanel.Children[visibleIndex] as CardControl;
+
+                    if (selectedCardControl != null)
+                    {
+                        // Étape 3 : Ajouter la carte à la collection du joueur
+                        var selectedCardField = typeof(CardControl)
+                            .GetField("_card", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                        var selectedCard = selectedCardField?.GetValue(selectedCardControl) as Card;
+
+                        if (selectedCard != null)
+                        {
+                            Card.AddCard(selectedCard);
+
+                            // Facultatif : Afficher un message ou feedback visuel
+                            MessageBox.Show($"Tu as gagné la carte : {selectedCard.Name} !");
+                        }
+                    }
+                }
             };
 
             ScrollTransform.BeginAnimation(TranslateTransform.XProperty, animation);
