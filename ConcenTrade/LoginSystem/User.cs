@@ -11,6 +11,7 @@ namespace Concentrade
         // Nouveaux champs personnalisés
         public string Name { get; set; } = "";
         public int Age { get; set; } = 0;
+        public DateTime UserBirthDate { get; set; } = new DateTime(1900, 1, 1);
         public string BestMoment { get; set; } = "";
         public bool Distraction { get; set; } = false;
         public bool LaunchOnStartup { get; set; } = false;
