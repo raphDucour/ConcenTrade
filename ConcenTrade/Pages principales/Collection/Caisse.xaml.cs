@@ -104,7 +104,9 @@ namespace Concentrade.Pages_principales.Collection
                 BtnAcheter.IsEnabled = true;
 
 
-                int visibleIndex = 10000 / 230; // Approximation de la position finale (-10000), divisé par l'espacement
+                double finalOffset = -15000; // valeur de "To" dans l'animation
+                double centerPosition = -finalOffset + (RouletteContainer.ActualWidth / 2);
+                int visibleIndex = (int)(centerPosition / 230);
 
                 if (visibleIndex >= 0 && visibleIndex < RoulettePanel.Children.Count)
                 {
