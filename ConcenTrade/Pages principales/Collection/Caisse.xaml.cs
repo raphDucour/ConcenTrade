@@ -66,7 +66,7 @@ namespace Concentrade.Pages_principales.Collection
             // Retour à la page précédente
             if (NavigationService?.CanGoBack == true)
             {
-                NavigationService.GoBack();
+                NavigationService.Navigate(new CollectionPage());
             }
             
         }
