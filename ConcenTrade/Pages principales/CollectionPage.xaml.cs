@@ -56,7 +56,7 @@ namespace Concentrade.Pages_principales
 
         private void RetourButton_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService?.GoBack();
+            this.NavigationService.Navigate(new MenuPage());
         }
 
         private void AcheterButton_Click(object sender, RoutedEventArgs e)
