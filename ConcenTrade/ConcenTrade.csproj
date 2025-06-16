@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\Cards\cat_zen.png" />
     <None Remove="Images\ConcenTrade logo sans texte.png" />
     <None Remove="Images\ConcenTrade Logo.png" />
     <None Remove="Images\ConcenTrade_logo_v2-removebg-preview.png" />
@@ -24,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\Cards\cat_zen.png" />
     <Resource Include="Images\ConcenTrade logo sans texte.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

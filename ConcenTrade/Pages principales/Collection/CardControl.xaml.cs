@@ -1,15 +1,25 @@
+using System;
+using System.IO;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Markup;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Xml;
 using Concentrade.Collections_de_cartes;
 
 namespace Concentrade.Pages_principales.Collection
 {
     public partial class CardControl : UserControl
     {
-        private Card _card;
-        private const int STACK_OFFSET_VERTICAL = 8;     // Décalage vertical très réduit
-        private const int STACK_OFFSET_HORIZONTAL = 6;   // Décalage horizontal divisé par 2 (était 12)
-        private const int MAX_STACKED_CARDS = 5;         // Nombre maximum de cartes empilées
+        private Card? _card;
+
+        // NOUVELLE PROPRIÉTÉ PUBLIQUE
+        public Card? CardData => _card;
+
+        private const int STACK_OFFSET_VERTICAL = 8;
+        private const int STACK_OFFSET_HORIZONTAL = 6;
+        private const int MAX_STACKED_CARDS = 5;
 
         public CardControl()
         {
@@ -28,27 +38,34 @@ namespace Concentrade.Pages_principales.Collection
             {
                 CardNameText.Text = _card.Name;
                 CardBorder.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(_card.color));
-                IconeText.Text = _card.icone;
+
+                if (!string.IsNullOrEmpty(_card.IconPath))
+                {
+                    try
+                    {
+                        CardIcon.Source = new BitmapImage(new Uri($"pack://application:,,,{_card.IconPath}", UriKind.Absolute));
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error loading image: {ex.Message}");
+                        CardIcon.Source = null;
+                    }
+                }
             }
         }
 
         public void AddStackedCards(int count)
         {
-            // Limiter le nombre de cartes empilées à MAX_STACKED_CARDS
-            int stackCount = System.Math.Min(count, MAX_STACKED_CARDS - 1);
-
-            // On supprime d'abord toutes les cartes empilées existantes sauf la principale
-            for (int i = MainGrid.Children.Count - 1; i > 0; i--)
+            if (this.Content is not Canvas mainGrid) return;
+            int stackCount = Math.Min(count, MAX_STACKED_CARDS - 1);
+            for (int i = mainGrid.Children.Count - 1; i >= 0; i--)
             {
-                MainGrid.Children.RemoveAt(i);
+                if (mainGrid.Children[i] != CardBorder)
+                {
+                    mainGrid.Children.RemoveAt(i);
+                }
             }
-
-            // Position de base de la carte principale (au-dessus, sans décalage)
-            Canvas.SetLeft(CardBorder, 0);
-            Canvas.SetTop(CardBorder, 0);
-            Panel.SetZIndex(CardBorder, stackCount + 1); // Met la carte principale au-dessus
-
-            // On ajoute les cartes empilées (simples, sans design)
+            Panel.SetZIndex(CardBorder, stackCount + 1);
             for (int i = 0; i < stackCount; i++)
             {
                 var stackedCard = new Border
@@ -57,17 +74,21 @@ namespace Concentrade.Pages_principales.Collection
                     Height = 280,
                     Background = CardBorder.Background,
                     BorderThickness = new System.Windows.Thickness(2),
-                    BorderBrush = new SolidColorBrush(Colors.Black),
+                    BorderBrush = new SolidColorBrush(System.Windows.Media.Colors.Black),
                     CornerRadius = new System.Windows.CornerRadius(15)
                 };
-
-                // Positionner la carte empilée derrière avec décalage
                 Canvas.SetLeft(stackedCard, (i + 1) * STACK_OFFSET_HORIZONTAL);
                 Canvas.SetTop(stackedCard, (i + 1) * STACK_OFFSET_VERTICAL);
                 Panel.SetZIndex(stackedCard, stackCount - i);
-
-                MainGrid.Children.Add(stackedCard);
+                mainGrid.Children.Insert(0, stackedCard);
             }
         }
+
+        public CardControl Copy()
+        {
+            string savedXaml = XamlWriter.Save(this);
+            string fixedXaml = savedXaml.Replace(" Name=\"MainGrid\"", "");
+            return (CardControl)XamlReader.Parse(fixedXaml);
+        }
     }
-} 
+}

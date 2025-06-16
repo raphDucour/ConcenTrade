@@ -19,14 +19,14 @@ namespace Concentrade.Collections_de_cartes
         public bool IsFavorite { get; set; }
         public CardRarity Rarity { get; set; }
         public string color { get; set; }
-        public string icone { get; set; }
+        public string IconPath { get; set; }
 
-        public Card(string name,CardRarity rarity, string icon)
+        public Card(string name, CardRarity rarity, string iconPath)
         {
             Name = name;
             IsFavorite = false;
             Rarity = rarity;
-            icone = icon;
+            IconPath = iconPath;
             color = GetRarityColor(Rarity);
         }
 
@@ -35,33 +35,35 @@ namespace Concentrade.Collections_de_cartes
         {
             return new List<Card>
             {
-                new Card("Chat Zen",CardRarity.Common, "🐱"),
-                new Card("Lapin Paisible",CardRarity.Common, "🐰"),
-                new Card("Coq Matinal",CardRarity.Common, "🐓"),
-                new Card("Chien Focus",CardRarity.Common, "🐕"),
-                new Card("Panda Méditant",CardRarity.Epic, "🐼"),
-                new Card("Renard Sage",CardRarity.Rare, "🦊"),
-                new Card("Paon Majestueux",CardRarity.Rare, "🦚"),
-                new Card("Loup Alpha",CardRarity.Epic, "🐺"),
-                new Card("Dragon Ancestral",CardRarity.Legendary, "🐲")
+                new Card("Chat Zen", CardRarity.Common, "/Images/Cards/cat_zen.png"),
+                new Card("Lapin Paisible", CardRarity.Common, "/Images/Cards/cat_zen.png"),
+                new Card("Coq Matinal", CardRarity.Common, "/Images/Cards/cat_zen.png"),
+                new Card("Chien Focus", CardRarity.Common, "/Images/Cards/cat_zen.png"),
+                new Card("Panda Méditant", CardRarity.Epic, "/Images/Cards/cat_zen.png"),
+                new Card("Renard Sage", CardRarity.Rare, "/Images/Cards/cat_zen.png"),
+                new Card("Paon Majestueux", CardRarity.Rare, "/Images/Cards/cat_zen.png"),
+                new Card("Loup Alpha", CardRarity.Epic, "/Images/Cards/cat_zen.png"),
+                new Card("Dragon Ancestral", CardRarity.Legendary, "/Images/Cards/cat_zen.png")
             };
         }
+
         public static List<Card> GetCaisse1Cards()
         {
             return new List<Card>
             {
-                new Card("Chat Zen",CardRarity.Common, "🐱"),
-                new Card("Lapin Paisible",CardRarity.Common, "🐰"),
-                new Card("Coq Matinal",CardRarity.Common, "🐓")
+                new Card("Chat Zen", CardRarity.Common, "/Images/Cards/cat_zen.png"),
+                new Card("Lapin Paisible", CardRarity.Common, "/Images/Cards/cat_zen.png"),
+                new Card("Coq Matinal", CardRarity.Common, "/Images/Cards/cat_zen.png")
             };
         }
+
         public static List<Card> GetCaisse2Cards()
         {
             return new List<Card>
             {
-                new Card("Chien Focus",CardRarity.Common, "🐕"),
-                new Card("Panda Méditant",CardRarity.Epic, "🐼"),
-                new Card("Renard Sage",CardRarity.Rare, "🦊"),
+                new Card("Chien Focus", CardRarity.Common, "/Images/Cards/cat_zen.png"),
+                new Card("Panda Méditant", CardRarity.Epic, "/Images/Cards/cat_zen.png"),
+                new Card("Renard Sage", CardRarity.Rare, "/Images/Cards/cat_zen.png"),
             };
         }
 
@@ -69,30 +71,27 @@ namespace Concentrade.Collections_de_cartes
         {
             return new List<Card>
             {
-                new Card("Paon Majestueux",CardRarity.Rare, "🦚"),
-                new Card("Loup Alpha",CardRarity.Epic, "🐺"),
-                new Card("Dragon Ancestral",CardRarity.Legendary, "🐲")
+                new Card("Paon Majestueux", CardRarity.Rare, "/Images/Cards/cat_zen.png"),
+                new Card("Loup Alpha", CardRarity.Epic, "/Images/Cards/cat_zen.png"),
+                new Card("Dragon Ancestral", CardRarity.Legendary, "/Images/Cards/cat_zen.png")
             };
         }
 
-
-
         public static Card FindCard(string name)
         {
-            return GetAllPossibleCards().FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase)) 
-                ?? new Card(name, CardRarity.Common, "❓"); // Carte par défaut si non trouvée
+            return GetAllPossibleCards().FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                ?? new Card(name, CardRarity.Common, "/Images/Cards/cat_zen.png");
         }
 
         public static string GetRarityColor(CardRarity rarity)
         {
             return rarity switch
             {
-
-                CardRarity.Common => "#7FB3F5",    // Bleu clair
-                CardRarity.Rare => "#CD853F",      // Orange mat/brun (Peru)
-                CardRarity.Epic => "#9B4DCA",      // Violet
-                CardRarity.Legendary => "#FFD700",  // Jaune doré/shiny
-                _ => "#7FB3F5"                     // Bleu clair par défaut
+                CardRarity.Common => "#7FB3F5",
+                CardRarity.Rare => "#CD853F",
+                CardRarity.Epic => "#9B4DCA",
+                CardRarity.Legendary => "#FFD700",
+                _ => "#7FB3F5"
             };
         }
 
@@ -111,7 +110,7 @@ namespace Concentrade.Collections_de_cartes
         public static List<Card> GetSortedByRarity(List<Card> cards)
         {
             return cards.OrderBy(card => GetRarityOrder(card.Rarity))
-                       .ThenBy(card => card.Name)  // Tri secondaire par nom pour les cartes de même rareté
+                       .ThenBy(card => card.Name)
                        .ToList();
         }
 
@@ -125,7 +124,6 @@ namespace Concentrade.Collections_de_cartes
             return GetSortedByRarity(GetAllPossibleCards());
         }
 
-        //carte du deck
         public static List<Card> GetAllCards()
         {
             var cardsString = Settings.Default.Cards;
@@ -133,17 +131,8 @@ namespace Concentrade.Collections_de_cartes
                 return new List<Card>();
 
             return cardsString.Split(',')
-                            .Select(name => FindCard(name.Trim()))
-                            .ToList();
-        }
-
-        public static string[] GetCardNamesArray()
-        {
-            string cardsString = Settings.Default.Cards;
-            if (string.IsNullOrEmpty(cardsString))
-                return new string[0];
-
-            return cardsString.Split(',');
+                             .Select(name => FindCard(name.Trim()))
+                             .ToList();
         }
 
         public static void AddCard(Card name)
@@ -153,39 +142,6 @@ namespace Concentrade.Collections_de_cartes
             SaveCards(cards);
         }
 
-        public static void RemoveCard(string name)
-        {
-            var cards = GetAllCards();
-            cards.RemoveAll(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-            SaveCards(cards);
-        }
-
-        public static void ToggleFavorite(string name)
-        {
-            var cards = GetAllCards();
-            var card = cards.FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-            if (card != null)
-            {
-                card.IsFavorite = !card.IsFavorite;
-                SaveCards(cards);
-            }
-        }
-
-        public static List<Card> GetFavoriteCards()
-        {
-            return GetAllCards().Where(c => c.IsFavorite).ToList();
-        }
-
-        
-
-        public static List<Card> SearchCards(string searchTerm)
-        {
-            return GetAllCards()
-                .Where(c => c.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-        }
-
-
         private static void SaveCards(List<Card> cards)
         {
             var cardsString = string.Join(",", cards.Select(c => c.Name));
@@ -193,4 +149,4 @@ namespace Concentrade.Collections_de_cartes
             Settings.Default.Save();
         }
     }
-} 
+}
