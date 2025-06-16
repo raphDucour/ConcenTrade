@@ -18,7 +18,7 @@
                                 CornerRadius="20"
                                 Padding="15,8">
                             <ContentPresenter HorizontalAlignment="Center" 
-                                            VerticalAlignment="Center"/>
+                                              VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -42,46 +42,67 @@
         </LinearGradientBrush>
     </Page.Background>
 
-    <!-- Animation d'entrée fluide -->
     <Page.Triggers>
         <EventTrigger RoutedEvent="Page.Loaded">
             <BeginStoryboard>
                 <Storyboard>
                     <DoubleAnimation Storyboard.TargetProperty="Opacity"
                                      From="0" To="1" Duration="0:0:1"/>
-                    <DoubleAnimation Storyboard.TargetName="TimerText"
+                    <DoubleAnimation Storyboard.TargetName="DisplayPanel"
                                      Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
-                                     From="40" To="0" Duration="0:0:1"/>
+                                     From="40" To="0" Duration="0:0:0.8">
+                        <DoubleAnimation.EasingFunction>
+                            <BackEase EasingMode="EaseOut" Amplitude="0.2"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
                 </Storyboard>
             </BeginStoryboard>
         </EventTrigger>
     </Page.Triggers>
 
     <Grid x:Name="MainGrid">
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock x:Name="TimerText"
-                     Text="00:00:00"
-                     FontSize="72"
-                     Foreground="White"
-                     HorizontalAlignment="Center"
-                     Margin="0,0,0,30"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal" 
-                      HorizontalAlignment="Center" 
-                      Margin="0,20">
-                <Button x:Name="PauseButton"
-                        Content="⏯️ Pause"
-                        Style="{StaticResource RoundedButtonStyle}"
-                        Click="PauseButton_Click"
-                        Margin="0,0,20,0"
-                        Width="150"/>
-                
-                <Button x:Name="StopButton"
-                        Content="⏹️ Arrêter"
-                        Style="{StaticResource RoundedButtonStyle}"
-                        Click="StopButton_Click"
-                        Width="150"/>
-            </StackPanel>
+        <StackPanel x:Name="DisplayPanel" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <StackPanel.RenderTransform>
+                <TranslateTransform/>
+            </StackPanel.RenderTransform>
+
+            <TextBlock x:Name="StateText"
+                       Text="Préparation..."
+                       FontSize="32"
+                       FontWeight="SemiBold"
+                       Foreground="#DDFFFFFF"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,10"/>
+
+            <TextBlock x:Name="TimerText"
+                       Text="25:00" 
+                       FontSize="96"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,30"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" 
+                    HorizontalAlignment="Center" 
+                    Margin="0,0,0,40">
+            <Button x:Name="PauseButton"
+                    Content="⏯️ Pause"
+                    Style="{StaticResource RoundedButtonStyle}"
+                    Click="PauseButton_Click"
+                    Margin="0,0,20,0"
+                    Width="150"/>
+
+            <Button x:Name="StopButton"
+                    Content="⏹️ Arrêter"
+                    Style="{StaticResource RoundedButtonStyle}"
+                    Click="StopButton_Click"
+                    Width="150"/>
         </StackPanel>
     </Grid>
 </Page>

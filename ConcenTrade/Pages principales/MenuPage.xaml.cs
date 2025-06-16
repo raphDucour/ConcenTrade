@@ -14,8 +14,8 @@ namespace Concentrade
 {
     public partial class MenuPage : Page, INotifyPropertyChanged
     {
-        private readonly int[] _dureesPossibles = new[] { 5, 15, 25, 45, 60 };
-        private readonly int[] _positionsSlider = new[] { 0, 25, 50, 75, 100 };
+        private readonly int[] _cyclesPossibles = new[] { 1, 2, 3, 4 };
+        private readonly int[] _positionsSlider = new[] { 0, 33, 67, 100 };
         private int _points;
         private Random _random = new Random();
 
@@ -41,7 +41,7 @@ namespace Concentrade
             InitializeComponent();
             DataContext = this;
             Points = Properties.Settings.Default.Points;
-            DureeSlider.Value = 50;
+            DureeSlider.Value = 50; // Valeur par défaut pour viser 2-3 cycles
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -108,28 +108,39 @@ namespace Concentrade
             transform.BeginAnimation(TranslateTransform.YProperty, animY);
         }
 
-        private int ConvertirPositionEnDuree(double position)
+        private int ConvertirPositionEnCycles(double position)
         {
             int index = _positionsSlider.Select((p, i) => new { Index = i, Distance = Math.Abs(p - position) })
                                         .OrderBy(p => p.Distance)
                                         .First().Index;
-            return _dureesPossibles[index];
+            return _cyclesPossibles[index];
         }
 
         private void DureeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (SliderLabel == null) return;
+
             double valeurActuelle = e.NewValue;
             int positionPlusProche = _positionsSlider.OrderBy(p => Math.Abs(p - valeurActuelle)).First();
-            if (Math.Abs(DureeSlider.Value - positionPlusProche) > 0.1) { DureeSlider.Value = positionPlusProche; }
-            int duree = ConvertirPositionEnDuree(positionPlusProche);
-            SliderLabel.Text = $"Durée de la session : {duree} min";
+
+            // Pour "magnétiser" le slider aux positions définies
+            if (Math.Abs(DureeSlider.Value - positionPlusProche) > 5) // Tolérance pour éviter des sauts constants
+            {
+                DureeSlider.Value = positionPlusProche;
+            }
+
+            int cycles = ConvertirPositionEnCycles(DureeSlider.Value);
+            int dureeTravail = cycles * 25;
+            int dureePause = (cycles > 1) ? (cycles - 1) * 5 : 0;
+            int dureeTotale = dureeTravail + dureePause;
+
+            SliderLabel.Text = $"Cycles : {cycles} (Total : {dureeTotale} min)";
         }
 
         private void StartSession_Click(object sender, RoutedEventArgs e)
         {
-            int duree = ConvertirPositionEnDuree(DureeSlider.Value);
-            this.NavigationService?.Navigate(new TimerPage(duree));
+            int cycles = ConvertirPositionEnCycles(DureeSlider.Value);
+            this.NavigationService?.Navigate(new TimerPage(cycles));
         }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
