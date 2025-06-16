@@ -49,6 +49,8 @@ namespace Concentrade
         }
 
 
+        // DANS UserAnswers.cs
+
         public void SauvegarderDansLaBaseDeDonnees()
         {
             string email = Properties.Settings.Default.UserEmail;
@@ -61,10 +63,12 @@ namespace Concentrade
             else
             {
                 // Appel à UserManager pour mise à jour dans le JSON
+                // On passe maintenant la date de naissance `_dateNaissance`
                 UserManager.SetUserProfile(
                     email,
                     Prenom,
                     Age,
+                    _dateNaissance, // Ligne modifiée
                     Moment,
                     Distrait.ToLower() == "oui" || Distrait.ToLower() == "un petit peu",
                     false

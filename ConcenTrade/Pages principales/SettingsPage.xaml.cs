@@ -5,6 +5,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Concentrade.Properties;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
+using System.Windows.Shapes;
 
 namespace ConcenTrade
 {
@@ -12,6 +16,7 @@ namespace ConcenTrade
     {
         private readonly Regex _dateRegex = new Regex(@"^(\d{0,2})/?\d{0,2}/?\d{0,4}$");
         private readonly AppBlocker _appBlocker;
+        private Random _random = new Random();
 
         public SettingsPage()
         {
@@ -20,18 +25,78 @@ namespace ConcenTrade
             ChargerDonneesUtilisateur();
         }
 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (this.ActualWidth > 0 && this.ActualHeight > 0)
+            {
+                CreateAndAnimateParticles(10);
+            }
+        }
+
+        private void CreateAndAnimateParticles(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Ellipse particle = new Ellipse
+                {
+                    Fill = new SolidColorBrush(Colors.White),
+                    Effect = new BlurEffect()
+                };
+
+                double size = _random.Next(5, 40);
+                particle.Width = size;
+                particle.Height = size;
+                particle.Opacity = _random.NextDouble() * 0.4 + 0.1;
+                ((BlurEffect)particle.Effect).Radius = _random.Next(5, 15);
+
+                particle.RenderTransform = new TranslateTransform(_random.Next(0, (int)this.ActualWidth), _random.Next(0, (int)this.ActualHeight));
+
+                ParticleCanvas.Children.Add(particle);
+                AnimateParticle(particle);
+            }
+        }
+
+        private void AnimateParticle(Ellipse particle)
+        {
+            var transform = (TranslateTransform)particle.RenderTransform;
+
+            double endX = _random.NextDouble() > 0.5 ? this.ActualWidth + 100 : -100;
+            double endY = _random.Next(0, (int)this.ActualHeight);
+
+            var animX = new DoubleAnimation
+            {
+                To = endX,
+                Duration = TimeSpan.FromSeconds(_random.Next(20, 60)),
+            };
+
+            var animY = new DoubleAnimation
+            {
+                To = endY,
+                Duration = TimeSpan.FromSeconds(_random.Next(20, 60)),
+            };
+
+            animX.Completed += (s, e) =>
+            {
+                if (this.ActualWidth > 0 && this.ActualHeight > 0)
+                {
+                    transform.X = _random.NextDouble() > 0.5 ? -50 : this.ActualWidth + 50;
+                    transform.Y = _random.Next(0, (int)this.ActualHeight);
+                    AnimateParticle(particle);
+                }
+            };
+
+            transform.BeginAnimation(TranslateTransform.XProperty, animX);
+            transform.BeginAnimation(TranslateTransform.YProperty, animY);
+        }
+
         private void ChargerDonneesUtilisateur()
         {
             PrenomBox.Text = Settings.Default.UserName;
-
-            // Afficher la date de naissance
             if (Settings.Default.UserBirthDate != new DateTime(1900, 1, 1))
             {
                 DateNaissanceBox.Text = Settings.Default.UserBirthDate.ToString("dd/MM/yyyy");
                 MettreAJourAgeAffiche(Settings.Default.UserBirthDate);
             }
-
-            // Moment préféré
             string moment = Settings.Default.BestMoment;
             foreach (ComboBoxItem item in MomentCombo.Items)
             {
@@ -41,8 +106,6 @@ namespace ConcenTrade
                     break;
                 }
             }
-
-            // Distraction
             string distrait = Settings.Default.Distraction switch
             {
                 true => "Oui",
@@ -68,13 +131,11 @@ namespace ConcenTrade
             var textBox = (TextBox)sender;
             var text = textBox.Text;
 
-            // Vérifier si le texte correspond au format attendu
             if (!_dateRegex.IsMatch(text))
             {
                 return;
             }
 
-            // Ajouter automatiquement les /
             if (text.Length == 2 && !text.EndsWith("/"))
             {
                 textBox.Text = text + "/";
@@ -86,7 +147,6 @@ namespace ConcenTrade
                 textBox.CaretIndex = 6;
             }
 
-            // Mettre à jour l'âge affiché si la date est complète
             if (DateTime.TryParseExact(text, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime dateNaissance))
             {
                 MettreAJourAgeAffiche(dateNaissance);
@@ -127,7 +187,6 @@ namespace ConcenTrade
                 Distrait = (DistraitCombo.SelectedItem as ComboBoxItem)?.Content.ToString() ?? ""
             };
 
-            // Sauvegarder la date de naissance dans les paramètres
             Settings.Default.UserBirthDate = dateNaissance;
 
             user.SauvegarderDansSettings();
