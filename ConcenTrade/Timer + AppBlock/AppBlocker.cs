@@ -13,6 +13,7 @@ namespace Concentrade
     public class AppBlocker
     {
         private ManagementEventWatcher? _watcher;
+        private readonly object _promptLock = new object();
         private bool _isActive = false;
 
         // Liste modifiable des applications à bloquer
@@ -118,42 +119,53 @@ namespace Concentrade
             {
                 try
                 {
-                    // Normaliser le nom du processus
-                    processName = Path.GetFileNameWithoutExtension(processName).ToLower();
+                    string originalProcessName = Path.GetFileNameWithoutExtension(processName).ToLower();
                     int processId = Convert.ToInt32(e.NewEvent.Properties["ProcessID"].Value);
 
-                    if (IsDistractingApp(processName))
+                    if (IsDistractingApp(originalProcessName))
                     {
-                        var process = Process.GetProcessById(processId);
-                        var mainProcessName = GetMainProcessName(processName);
+                        var mainProcessName = GetMainProcessName(originalProcessName);
+                        Process? process = null;
+                        try
+                        {
+                            process = Process.GetProcessById(processId);
+                        }
+                        catch
+                        {
+                            return; // Le processus a peut-être déjà été fermé
+                        }
 
-                        // Vérifier les autorisations temporaires
+
+                        // --- DÉBUT DE LA SECTION CRITIQUE ---
+                        lock (_promptLock)
+                        {
+                            // On vérifie le cooldown A L'INTÉRIEUR du verrou pour éviter les race conditions
+                            if (_lastPromptTime.TryGetValue(mainProcessName, out DateTime lastTime))
+                            {
+                                if ((DateTime.Now - lastTime) < _popupCooldown)
+                                {
+                                    return; // Un autre processus de la même app a été traité récemment, on ignore celui-ci.
+                                }
+                            }
+                            // Si on continue, on met à jour le temps immédiatement pour bloquer les suivants.
+                            _lastPromptTime[mainProcessName] = DateTime.Now;
+                        }
+                        // --- FIN DE LA SECTION CRITIQUE ---
+
+                        // Vérifier si l'autorisation temporaire est toujours active
                         if (_temporaryAllowances.TryGetValue(mainProcessName, out DateTime expirationTime))
                         {
                             if (DateTime.Now < expirationTime) return;
                             _temporaryAllowances.Remove(mainProcessName);
                         }
 
-                        // Vérifier le cooldown
-                        if (_lastPromptTime.TryGetValue(mainProcessName, out DateTime lastTime))
-                        {
-                            if ((DateTime.Now - lastTime) < _popupCooldown) return;
-                        }
-
-                        // Pour les jeux et applications sans fenêtre principale, ne pas attendre
-                        bool isGame = processName.Contains("game") || 
-                                    processName.Contains("shipping") || 
-                                    _relatedProcesses.ContainsKey(mainProcessName);
-
+                        bool isGame = mainProcessName.Contains("game") || mainProcessName.Contains("shipping") || _relatedProcesses.ContainsKey(mainProcessName);
                         bool windowReady = isGame || await WaitForMainWindow(process, TimeSpan.FromSeconds(5));
                         if (!windowReady && !isGame) return;
 
-                        _lastPromptTime[mainProcessName] = DateTime.Now;
-
-                        // Obtenir le nom d'affichage
                         string displayName = await GetDisplayName(process, mainProcessName);
 
-                        var result = await Application.Current.Dispatcher.InvokeAsync(() =>
+                        await Application.Current.Dispatcher.InvokeAsync(() =>
                         {
                             var popup = new BlocagePopup(displayName);
                             bool? dialogResult = popup.ShowDialog();
@@ -164,11 +176,11 @@ namespace Concentrade
                                 {
                                     AllowTemporarily(mainProcessName, popup.AllowedDuration);
                                 }
-                                return true;
                             }
-                            
-                            KillApplication(processName);
-                            return false;
+                            else
+                            {
+                                KillApplication(mainProcessName);
+                            }
                         });
                     }
                 }
@@ -294,19 +306,43 @@ namespace Concentrade
             return false;
         }
 
-        public void KillApplication(string processName)
+        public void KillApplication(string mainAppName)
         {
-            try
+            mainAppName = mainAppName.ToLower();
+            List<string> processesToKill = new List<string> { mainAppName };
+
+            // Si l'application a des processus liés connus, on les ajoute à la liste
+            if (_relatedProcesses.ContainsKey(mainAppName))
             {
-                var processes = Process.GetProcessesByName(processName);
-                foreach (var process in processes)
-                {
-                    process.Kill(true);
-                }
+                processesToKill.AddRange(_relatedProcesses[mainAppName]);
             }
-            catch (Exception ex)
+
+            // On parcourt tous les noms de processus à tuer
+            foreach (var processName in processesToKill.Distinct())
             {
-                Debug.WriteLine($"Erreur lors de la fermeture de {processName}: {ex.Message}");
+                try
+                {
+                    // GetProcessesByName attend le nom sans l'extension .exe
+                    var exeName = processName.Replace(".exe", "");
+                    var processes = Process.GetProcessesByName(exeName);
+                    foreach (var process in processes)
+                    {
+                        try
+                        {
+                            // On tue le processus et tous ses sous-processus
+                            process.Kill(true);
+                            Debug.WriteLine($"Processus {process.ProcessName} (ID: {process.Id}) tué.");
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine($"Impossible de tuer le processus {process.ProcessName} (ID: {process.Id}): {ex.Message}");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Erreur lors de la recherche du processus {processName}: {ex.Message}");
+                }
             }
         }
 

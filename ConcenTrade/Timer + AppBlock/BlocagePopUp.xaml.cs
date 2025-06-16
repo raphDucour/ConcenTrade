@@ -23,6 +23,7 @@ namespace Concentrade
         // Constructeur avec le nom de l'application
         public BlocagePopup(string appName) : this()
         {
+            this.Topmost = true; // <--- AJOUTEZ CETTE LIGNE
             if (MessageText != null)
             {
                 MessageText.Text = appName != null
