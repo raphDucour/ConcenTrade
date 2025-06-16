@@ -30,30 +30,56 @@ namespace Concentrade.Collections_de_cartes
             color = GetRarityColor(Rarity);
         }
 
-        // Méthodes statiques pour gérer la collection de cartes
+        // La liste principale contient maintenant toutes les cartes possibles
         public static List<Card> GetAllPossibleCards()
         {
             return new List<Card>
             {
-                new Card("Chat Zen", CardRarity.Common, "/Images/Cards/cat_zen.png"),
-                new Card("Lapin Paisible", CardRarity.Common, "/Images/Cards/cat_zen.png"),
-                new Card("Coq Matinal", CardRarity.Common, "/Images/Cards/cat_zen.png"),
-                new Card("Chien Focus", CardRarity.Common, "/Images/Cards/cat_zen.png"),
-                new Card("Panda Méditant", CardRarity.Epic, "/Images/Cards/cat_zen.png"),
-                new Card("Renard Sage", CardRarity.Rare, "/Images/Cards/cat_zen.png"),
-                new Card("Paon Majestueux", CardRarity.Rare, "/Images/Cards/cat_zen.png"),
-                new Card("Loup Alpha", CardRarity.Epic, "/Images/Cards/cat_zen.png"),
-                new Card("Dragon Ancestral", CardRarity.Legendary, "/Images/Cards/cat_zen.png")
+                // Cartes originales mises à jour
+                new Card("Chat Zen", CardRarity.Common, "/Images/Cards/Chat.png"),
+                new Card("Chien Focus", CardRarity.Common, "/Images/Cards/Chien.png"),
+                new Card("Coq Matinal", CardRarity.Common, "/Images/Cards/Poule.png"),
+                new Card("Renard Sage", CardRarity.Rare, "/Images/Cards/renard.png"),
+
+                // Nouvelles cartes ajoutées depuis votre image
+                new Card("Cochon Calme", CardRarity.Common, "/Images/Cards/cochon.png"),
+                new Card("Dauphin Agile", CardRarity.Rare, "/Images/Cards/Dophin.png"),
+                new Card("Fourmi Ouvrière", CardRarity.Common, "/Images/Cards/fourmi.png"),
+                new Card("Girafe Sereine", CardRarity.Rare, "/Images/Cards/Giraffe.png"),
+                new Card("Hippopotame Épique", CardRarity.Epic, "/Images/Cards/hipo epic.png"),
+                new Card("Phoque Paisible", CardRarity.Common, "/Images/Cards/phoc.png"),
+                new Card("Rat Rusé", CardRarity.Common, "/Images/Cards/rat.png"),
+                new Card("Singe Joueur", CardRarity.Common, "/Images/Cards/singe.png"),
+                new Card("Taupe Travailleuse", CardRarity.Common, "/Images/Cards/taupe.png"),
+                new Card("Têtard Évolutif", CardRarity.Common, "/Images/Cards/Tetard.png"),
+                new Card("Tortue Sage", CardRarity.Rare, "/Images/Cards/Tortue.png"),
+                new Card("Vache Tranquille", CardRarity.Common, "/Images/Cards/vache.png"),
+
+                // Cartes originales sans image correspondante (à remplacer)
+                //new Card("Lapin Paisible", CardRarity.Common, "/Images/Cards/lapin_paisible.png"), // Image à ajouter
+                //new Card("Panda Méditant", CardRarity.Epic, "/Images/Cards/panda_meditant.png"), // Image à ajouter
+                //new Card("Paon Majestueux", CardRarity.Rare, "/Images/Cards/paon_majestueux.png"), // Image à ajouter
+                //new Card("Loup Alpha", CardRarity.Epic, "/Images/Cards/loup_alpha.png"), // Image à ajouter
+                //new Card("Dragon Ancestral", CardRarity.Legendary, "/Images/Cards/dragon_ancestral.png") // Image à ajouter
             };
         }
+
+        // NOTE : Les nouvelles cartes ne sont pas encore dans les caisses.
+        // Vous devrez les ajouter manuellement dans les méthodes GetCaisse ci-dessous.
 
         public static List<Card> GetCaisse1Cards()
         {
             return new List<Card>
             {
-                new Card("Chat Zen", CardRarity.Common, "/Images/Cards/cat_zen.png"),
-                new Card("Lapin Paisible", CardRarity.Common, "/Images/Cards/cat_zen.png"),
-                new Card("Coq Matinal", CardRarity.Common, "/Images/Cards/cat_zen.png")
+                new Card("Chat Zen", CardRarity.Common, "/Images/Cards/Chat.png"),
+                new Card("Coq Matinal", CardRarity.Common, "/Images/Cards/Poule.png"),
+                new Card("Cochon Calme", CardRarity.Common, "/Images/Cards/cochon.png"),
+                new Card("Cochon Calme", CardRarity.Common, "/Images/Cards/cochon.png"),
+                new Card("Dauphin Agile", CardRarity.Rare, "/Images/Cards/Dophin.png"),
+                new Card("Fourmi Ouvrière", CardRarity.Common, "/Images/Cards/fourmi.png"),
+                new Card("Girafe Sereine", CardRarity.Rare, "/Images/Cards/Giraffe.png"),
+                new Card("Hippopotame Épique", CardRarity.Epic, "/Images/Cards/hipo epic.png"),
+                new Card("Phoque Paisible", CardRarity.Common, "/Images/Cards/phoc.png"),
             };
         }
 
@@ -61,9 +87,16 @@ namespace Concentrade.Collections_de_cartes
         {
             return new List<Card>
             {
-                new Card("Chien Focus", CardRarity.Common, "/Images/Cards/cat_zen.png"),
-                new Card("Panda Méditant", CardRarity.Epic, "/Images/Cards/cat_zen.png"),
-                new Card("Renard Sage", CardRarity.Rare, "/Images/Cards/cat_zen.png"),
+                new Card("Chien Focus", CardRarity.Common, "/Images/Cards/Chien.png"),
+                new Card("Renard Sage", CardRarity.Rare, "/Images/Cards/renard.png"),
+                new Card("Tortue Sage", CardRarity.Rare, "/Images/Cards/Tortue.png"),
+                new Card("Rat Rusé", CardRarity.Common, "/Images/Cards/rat.png"),
+                new Card("Singe Joueur", CardRarity.Common, "/Images/Cards/singe.png"),
+                new Card("Taupe Travailleuse", CardRarity.Common, "/Images/Cards/taupe.png"),
+                new Card("Têtard Évolutif", CardRarity.Common, "/Images/Cards/Tetard.png"),
+                new Card("Tortue Sage", CardRarity.Rare, "/Images/Cards/Tortue.png"),
+                new Card("Vache Tranquille", CardRarity.Common, "/Images/Cards/vache.png"),
+
             };
         }
 
@@ -71,16 +104,21 @@ namespace Concentrade.Collections_de_cartes
         {
             return new List<Card>
             {
-                new Card("Paon Majestueux", CardRarity.Rare, "/Images/Cards/cat_zen.png"),
-                new Card("Loup Alpha", CardRarity.Epic, "/Images/Cards/cat_zen.png"),
-                new Card("Dragon Ancestral", CardRarity.Legendary, "/Images/Cards/cat_zen.png")
+                new Card("Hippopotame Épique", CardRarity.Epic, "/Images/Cards/hipo epic.png"),
+
+                //deja present dans la caisse 2
+                new Card("Singe Joueur", CardRarity.Common, "/Images/Cards/singe.png"),
+                new Card("Taupe Travailleuse", CardRarity.Common, "/Images/Cards/taupe.png"),
+                new Card("Têtard Évolutif", CardRarity.Common, "/Images/Cards/Tetard.png"),
+                new Card("Tortue Sage", CardRarity.Rare, "/Images/Cards/Tortue.png"),
+                new Card("Vache Tranquille", CardRarity.Common, "/Images/Cards/vache.png"),
             };
         }
 
         public static Card FindCard(string name)
         {
             return GetAllPossibleCards().FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                ?? new Card(name, CardRarity.Common, "/Images/Cards/cat_zen.png");
+                ?? new Card(name, CardRarity.Common, "/Images/Cards/Chat.png"); // Fallback sur une image qui existe
         }
 
         public static string GetRarityColor(CardRarity rarity)
