@@ -24,20 +24,12 @@ namespace Concentrade.Pages_principales
 
         private void InitializeCards()
         {
-            // Grouper les cartes par nom et compter leur occurrence
-            var cardGroups = cards.GroupBy(c => c.Name)
-                                .ToDictionary(g => g.Key, g => g.Count());
+            
 
-            foreach (Card card in cards.DistinctBy(c => c.Name)) // Ne prend qu'une carte de chaque type
+            foreach (Card card in cards) // Ne prend qu'une carte de chaque type
             {
                 var cardControl = new CardControl();
                 cardControl.SetCard(card);
-                
-                // Ajouter l'effet d'empilement si on a plus d'une carte
-                if (cardGroups[card.Name] > 1)
-                {
-                    cardControl.AddStackedCards(cardGroups[card.Name] - 1);
-                }
                 
                 CardsPanel.Children.Add(cardControl);
             }

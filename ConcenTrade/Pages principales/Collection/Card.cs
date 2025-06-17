@@ -69,7 +69,7 @@ namespace Concentrade.Collections_de_cartes
 
         public static List<Card> GetCaisse1Cards()
         {
-            return new List<Card>
+            List < Card >  ListCaisse = new List<Card>
             {
                 new Card("Chat Zen", CardRarity.Common, "/Images/Cards/Chat.png"),
                 new Card("Coq Matinal", CardRarity.Common, "/Images/Cards/Poule.png"),
@@ -81,11 +81,12 @@ namespace Concentrade.Collections_de_cartes
                 new Card("Hippopotame Épique", CardRarity.Epic, "/Images/Cards/hipo epic.png"),
                 new Card("Phoque Paisible", CardRarity.Common, "/Images/Cards/phoc.png"),
             };
+            return filterByOptainedCards(ListCaisse);
         }
 
         public static List<Card> GetCaisse2Cards()
         {
-            return new List<Card>
+            List<Card> ListCaisse = new List<Card>
             {
                 new Card("Chien Focus", CardRarity.Common, "/Images/Cards/Chien.png"),
                 new Card("Renard Sage", CardRarity.Rare, "/Images/Cards/renard.png"),
@@ -96,13 +97,13 @@ namespace Concentrade.Collections_de_cartes
                 new Card("Têtard Évolutif", CardRarity.Common, "/Images/Cards/Tetard.png"),
                 new Card("Tortue Sage", CardRarity.Rare, "/Images/Cards/Tortue.png"),
                 new Card("Vache Tranquille", CardRarity.Common, "/Images/Cards/vache.png"),
-
             };
+            return filterByOptainedCards(ListCaisse);
         }
 
         public static List<Card> GetCaisse3Cards()
         {
-            return new List<Card>
+            List<Card> ListCaisse = new List<Card>
             {
                 new Card("Hippopotame Épique", CardRarity.Epic, "/Images/Cards/hipo epic.png"),
 
@@ -113,6 +114,19 @@ namespace Concentrade.Collections_de_cartes
                 new Card("Tortue Sage", CardRarity.Rare, "/Images/Cards/Tortue.png"),
                 new Card("Vache Tranquille", CardRarity.Common, "/Images/Cards/vache.png"),
             };
+            return filterByOptainedCards(ListCaisse);
+        }
+
+        public static List<Card> filterByOptainedCards(List<Card>  ListCaisse)
+        {
+            List<Card> cards = Card.GetAllCardsSortedByRarity();
+
+            // Supprimer les cartes déjà présentes dans `cards` (comparaison par Name uniquement)
+            var filtered = ListCaisse
+                .Where(c => !cards.Any(x => x.Name == c.Name))
+                .ToList();
+
+            return filtered;
         }
 
         public static Card FindCard(string name)

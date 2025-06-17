@@ -60,10 +60,11 @@ namespace Concentrade.Pages_principales.Collection
 
         private Card GetRandomCardFromPossible()
         {
-            double probability = _random.NextDouble();
-            if (probability < 0.5) return _possibleCards[0];
-            if (probability < 0.9) return _possibleCards.Count > 1 ? _possibleCards[1] : _possibleCards[0];
-            return _possibleCards.Count > 2 ? _possibleCards[2] : _possibleCards[0];
+            if (_possibleCards == null || _possibleCards.Count == 0)
+                throw new InvalidOperationException("La liste des cartes possibles est vide.");
+
+            int index = _random.Next(_possibleCards.Count);
+            return _possibleCards[index];
         }
 
         private void BtnAcheter_Click(object sender, RoutedEventArgs e)
@@ -76,7 +77,6 @@ namespace Concentrade.Pages_principales.Collection
 
         private void StartRoulette()
         {
-            InitializeRoulletteCards();
             var animation = new DoubleAnimation
             {
                 From = 0,
@@ -105,7 +105,10 @@ namespace Concentrade.Pages_principales.Collection
                         if (winningControl.CardData is Card wonCard)
                         {
                             Card.AddCard(wonCard); // On ajoute la carte à la collection
+                            _possibleCards.Remove(wonCard);
+                            DisplayPossibleCards();
                             MessageBox.Show($"Félicitations ! Vous avez obtenu : {wonCard.Name}", "Nouvelle Carte !");
+                            InitializeRoulletteCards();
                         }
                     }
                 }
