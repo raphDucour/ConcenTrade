@@ -23,6 +23,15 @@ namespace Concentrade
             }
             else
             {
+                // On charge les données de l'utilisateur qui est automatiquement connecté.
+                string userEmail = Properties.Settings.Default.UserEmail;
+                UserManager.LoadProperties(userEmail); // Assure que toutes les propriétés sont à jour
+
+                // On met à jour l'AppBlocker avec la liste de cet utilisateur
+                var appBlocker = ((App)Application.Current).AppBlocker;
+                var blockedApps = UserManager.LoadBlockedAppsForUser(userEmail);
+                appBlocker.UpdateBlockedApps(blockedApps);
+
                 bool questionnaireDone = Properties.Settings.Default.QuestionnaireDone;
                 if (questionnaireDone)
                 {

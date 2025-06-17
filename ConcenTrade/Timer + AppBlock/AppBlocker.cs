@@ -318,10 +318,8 @@ namespace Concentrade
 
         private readonly Dictionary<string, string> _appAliases = new()
         {
-            { "valorant", "riot" },
             { "lol", "league of legends" },
             { "battlenet", "battle.net" },
-            { "riot", "valorant" },
             { "chrome", "google chrome" },
             { "msedge", "microsoft edge" },
             { "firefox", "mozilla firefox" }

@@ -18,6 +18,17 @@ namespace Concentrade
                 { "ubisoftconnect", new List<string> { "upc", "uplay" } },
                 { "riot", new List<string> { "riotclientservices", "valorant-win64-shipping" } }
             };
+
+        // On ajoute le même dictionnaire d'alias que dans AppBlocker
+        private readonly Dictionary<string, string> _appAliases = new()
+        {
+            { "lol", "league of legends" },
+            { "battlenet", "battle.net" },
+            { "chrome", "google chrome" },
+            { "msedge", "microsoft edge" },
+            { "firefox", "mozilla firefox" }
+        };
+
         public class AppItem
         {
             public string Name { get; set; }
@@ -42,39 +53,50 @@ namespace Concentrade
 
         private void LoadBlockedApps()
         {
-            // Suggestions par défaut plus orientées PC
+            // Suggestions par défaut
             var defaultApps = new[]
             {
-        // Communication & Réseaux Sociaux
-        "Discord", "Slack", "Telegram Desktop", "WhatsApp", "Twitter",
-        // Divertissement & Média
-        "Spotify", "Netflix", "Prime Video", "DisneyPlus", "Twitch",
-        // Lanceurs de jeux
-        "Steam", "EpicGamesLauncher", "EA", "UbisoftConnect", "Battle.net",
-        // Navigateurs Web
-        "Chrome", "Firefox", "Opera", "OperaGX", "msedge"
-    };
+                "Discord", "Slack", "Telegram Desktop", "WhatsApp", "Twitter",
+                "Spotify", "Netflix", "Prime Video", "DisneyPlus", "Twitch",
+                "Steam", "EpicGamesLauncher", "EA", "UbisoftConnect", "Battle.net", "Riot",
+                "Google Chrome", "Mozilla Firefox", "Opera", "OperaGX", "Microsoft Edge"
+            };
 
-            // Laisser les lanceurs de jeux décochés par défaut
             var uncheckedByDefault = new[] {
-        "steam", "epicgameslauncher", "ea", "ubisoftconnect", "battle.net"
-    };
+                "steam", "epicgameslauncher", "ea", "ubisoftconnect", "battle.net", "riot"
+            };
 
-            // Ajouter les applications qui sont déjà bloquées par l'utilisateur (elles seront cochées)
+            // Créer un ensemble (HashSet) pour une recherche rapide et insensible à la casse de toutes les applications existantes et de leurs alias.
+            var existingAppNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            // Ajouter les applications déjà bloquées par l'utilisateur
             foreach (var app in BlockedApps)
             {
-                if (!_apps.Any(a => a.Name.Equals(app, StringComparison.OrdinalIgnoreCase)))
+                if (!existingAppNames.Contains(app))
                 {
                     _apps.Add(new AppItem(app, true));
+
+                    // Ajouter le nom de base et son alias principal au HashSet
+                    existingAppNames.Add(app);
+                    if (_appAliases.TryGetValue(app.ToLower(), out var alias))
+                    {
+                        existingAppNames.Add(alias);
+                    }
+                    // Gérer aussi le cas inverse (si l'alias est la clé)
+                    var reverseAlias = _appAliases.FirstOrDefault(kvp => kvp.Value.Equals(app, StringComparison.OrdinalIgnoreCase));
+                    if (!string.IsNullOrEmpty(reverseAlias.Key))
+                    {
+                        existingAppNames.Add(reverseAlias.Key);
+                    }
                 }
             }
 
-            // Ajouter les suggestions de la liste par défaut si elles n'ont pas déjà été ajoutées
+            // Ajouter les suggestions de la liste par défaut si elles ne sont pas déjà représentées
             foreach (var app in defaultApps)
             {
-                if (!_apps.Any(a => a.Name.Equals(app, StringComparison.OrdinalIgnoreCase)))
+                // On vérifie si l'application ou l'un de ses alias est déjà dans la liste.
+                if (!existingAppNames.Contains(app))
                 {
-                    // On coche la case sauf si l'app est dans notre liste "uncheckedByDefault"
                     bool isSelected = !uncheckedByDefault.Contains(app.ToLower());
                     _apps.Add(new AppItem(app, isSelected));
                 }
