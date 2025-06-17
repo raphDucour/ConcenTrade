@@ -6,33 +6,35 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Linq;
 using System.IO;
-using Concentrade.Properties;
+using System.Runtime.InteropServices;
 
 namespace Concentrade
 {
     public class AppBlocker
     {
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        private const int SW_MINIMIZE = 6;
+
         private ManagementEventWatcher? _watcher;
         private readonly object _promptLock = new object();
         private bool _isActive = false;
 
-        // Liste modifiable des applications à bloquer
-        private string[] _blockedApps;
+        // --- MODIFIÉ ---
+        // La liste est maintenant une List<string> et n'est plus initialisée depuis les Settings.
+        private List<string> _blockedApps = new List<string>();
 
-        // Cache des noms d'affichage des applications
         private readonly Dictionary<string, string> _displayNameCache = new();
 
-        // Cooldown par application
-        private readonly Dictionary<string, DateTime> _lastPromptTime = new();
-        private readonly TimeSpan _popupCooldown = TimeSpan.FromSeconds(10);
+        // --- MODIFIÉ ---
+        // Cooldown global pour éviter les popups multiples de différents processus.
+        private DateTime _lastGlobalPromptTime = DateTime.MinValue;
+        private readonly TimeSpan _popupCooldown = TimeSpan.FromSeconds(15); // Augmenté pour être sûr
 
-        // Autorisations temporaires
         private readonly Dictionary<string, DateTime> _temporaryAllowances = new();
-        
-        // Event pour notifier quand une application est temporairement autorisée
+
         public event EventHandler<TemporaryAllowanceEventArgs>? OnTemporaryAllowance;
 
-        // Méthode pour déclencher l'événement
         public void AllowTemporarily(string processName, TimeSpan duration)
         {
             var mainProcessName = GetMainProcessName(processName);
@@ -40,49 +42,27 @@ namespace Concentrade
             OnTemporaryAllowance?.Invoke(this, new TemporaryAllowanceEventArgs(mainProcessName, duration));
         }
 
+        // --- MODIFIÉ ---
+        // Le constructeur est maintenant vide. La liste des applications bloquées
+        // sera chargée depuis l'extérieur après la connexion de l'utilisateur.
         public AppBlocker()
         {
-            // Charger la liste depuis les paramètres ou utiliser la liste par défaut
-            var savedApps = Settings.Default.BlockedApps;
-            if (!string.IsNullOrEmpty(savedApps))
-            {
-                _blockedApps = savedApps.Split(',');
-            }
-            else
-            {
-                // Liste par défaut
-                _blockedApps = new[]
-                { 
-                    "discord",
-                    "spotify",
-                    "tiktok",
-                    "chrome",
-                    "msedge",
-                    "firefox",
-                    "opera",
-                    "steam",
-                    "epicgameslauncher",
-                    "valorant"
-                };
-                // Sauvegarder la liste par défaut
-                SaveBlockedApps();
-            }
         }
 
-        public void UpdateBlockedApps(string[] newBlockedApps)
+        // --- MODIFIÉ ---
+        // Accepte IEnumerable<string> pour plus de flexibilité et ne sauvegarde plus rien.
+        public void UpdateBlockedApps(IEnumerable<string> newBlockedApps)
         {
-            _blockedApps = newBlockedApps.Select(app => NormalizeAppName(app)).ToArray();
+            _blockedApps = new List<string>(newBlockedApps.Select(app => NormalizeAppName(app)));
             _displayNameCache.Clear(); // Vider le cache quand la liste change
-            SaveBlockedApps(); // Sauvegarder les modifications
         }
 
-        private void SaveBlockedApps()
-        {
-            Settings.Default.BlockedApps = string.Join(",", _blockedApps);
-            Settings.Default.Save();
-        }
+        // --- SUPPRIMÉ ---
+        // La méthode SaveBlockedApps() a été complètement supprimée.
 
-        public string[] GetBlockedApps()
+        // --- MODIFIÉ ---
+        // Renvoie maintenant une List<string>.
+        public List<string> GetBlockedApps()
         {
             return _blockedApps;
         }
@@ -90,8 +70,7 @@ namespace Concentrade
         private string NormalizeAppName(string appName)
         {
             appName = appName.ToLower().Trim();
-            
-            // Vérifier les alias
+
             if (_appAliases.TryGetValue(appName, out string? aliasedName))
             {
                 return aliasedName;
@@ -102,9 +81,18 @@ namespace Concentrade
 
         public void Start()
         {
-            _watcher = new ManagementEventWatcher(new WqlEventQuery("SELECT * FROM Win32_ProcessStartTrace"));
-            _watcher.EventArrived += OnProcessStarted;
-            _watcher.Start();
+            try
+            {
+                var query = new WqlEventQuery("SELECT * FROM Win32_ProcessStartTrace");
+                _watcher = new ManagementEventWatcher(query);
+                _watcher.EventArrived += OnProcessStarted;
+                _watcher.Start();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Erreur au démarrage du AppBlocker : {ex.Message}");
+                MessageBox.Show("Impossible de démarrer la surveillance des applications. Veuillez vérifier vos droits d'administrateur.", "Erreur AppBlocker");
+            }
         }
 
         private void OnProcessStarted(object sender, EventArrivedEventArgs e)
@@ -114,7 +102,6 @@ namespace Concentrade
             string? processName = e.NewEvent.Properties["ProcessName"].Value?.ToString();
             if (string.IsNullOrEmpty(processName)) return;
 
-            // Démarrer le traitement de manière asynchrone sans bloquer
             Task.Run(async () =>
             {
                 try
@@ -126,33 +113,20 @@ namespace Concentrade
                     {
                         var mainProcessName = GetMainProcessName(originalProcessName);
                         Process? process = null;
-                        try
-                        {
-                            process = Process.GetProcessById(processId);
-                        }
-                        catch
-                        {
-                            return; // Le processus a peut-être déjà été fermé
-                        }
+                        try { process = Process.GetProcessById(processId); }
+                        catch { return; }
 
-
-                        // --- DÉBUT DE LA SECTION CRITIQUE ---
+                        // --- MODIFIÉ ---
+                        // Utilise maintenant le cooldown global.
                         lock (_promptLock)
                         {
-                            // On vérifie le cooldown A L'INTÉRIEUR du verrou pour éviter les race conditions
-                            if (_lastPromptTime.TryGetValue(mainProcessName, out DateTime lastTime))
+                            if ((DateTime.Now - _lastGlobalPromptTime) < _popupCooldown)
                             {
-                                if ((DateTime.Now - lastTime) < _popupCooldown)
-                                {
-                                    return; // Un autre processus de la même app a été traité récemment, on ignore celui-ci.
-                                }
+                                return;
                             }
-                            // Si on continue, on met à jour le temps immédiatement pour bloquer les suivants.
-                            _lastPromptTime[mainProcessName] = DateTime.Now;
+                            _lastGlobalPromptTime = DateTime.Now;
                         }
-                        // --- FIN DE LA SECTION CRITIQUE ---
 
-                        // Vérifier si l'autorisation temporaire est toujours active
                         if (_temporaryAllowances.TryGetValue(mainProcessName, out DateTime expirationTime))
                         {
                             if (DateTime.Now < expirationTime) return;
@@ -163,11 +137,17 @@ namespace Concentrade
                         bool windowReady = isGame || await WaitForMainWindow(process, TimeSpan.FromSeconds(5));
                         if (!windowReady && !isGame) return;
 
+                        if (process.MainWindowHandle != IntPtr.Zero)
+                        {
+                            Application.Current.Dispatcher.Invoke(() => ShowWindow(process.MainWindowHandle, SW_MINIMIZE));
+                            await Task.Delay(100);
+                        }
+
                         string displayName = await GetDisplayName(process, mainProcessName);
 
                         await Application.Current.Dispatcher.InvokeAsync(() =>
                         {
-                            var popup = new BlocagePopup(displayName);
+                            var popup = new BlocagePopup(displayName) { Topmost = true };
                             bool? dialogResult = popup.ShowDialog();
 
                             if (dialogResult == true && popup.ContinueAnyway)
@@ -186,7 +166,7 @@ namespace Concentrade
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"Erreur dans le traitement du processus {processName}: {ex.Message}");
+                    Debug.WriteLine($"Erreur dans OnProcessStarted pour {processName}: {ex.Message}");
                 }
             });
         }
@@ -204,7 +184,9 @@ namespace Concentrade
             if (!active)
             {
                 _temporaryAllowances.Clear();
-                _lastPromptTime.Clear();
+                // --- MODIFIÉ ---
+                // Réinitialise le cooldown global.
+                _lastGlobalPromptTime = DateTime.MinValue;
             }
         }
 
@@ -220,8 +202,8 @@ namespace Concentrade
                        mainProcessName.Contains(normalizedBlockedApp) ||
                        normalizedBlockedApp.Contains(mainProcessName) ||
                        (_relatedProcesses.ContainsKey(normalizedBlockedApp) &&
-                        _relatedProcesses[normalizedBlockedApp].Any(p => 
-                            mainProcessName.Contains(p.ToLower()) || 
+                        _relatedProcesses[normalizedBlockedApp].Any(p =>
+                            mainProcessName.Contains(p.ToLower()) ||
                             p.ToLower().Contains(mainProcessName)));
             });
         }
@@ -230,60 +212,43 @@ namespace Concentrade
         {
             try
             {
-                // Vérifier d'abord le cache
                 if (_displayNameCache.TryGetValue(process.ProcessName.ToLower(), out string? cachedName))
                 {
                     return cachedName;
                 }
 
-                // Essayer d'obtenir le nom du fichier de l'application
                 string? displayName = null;
-
                 try
                 {
                     if (!string.IsNullOrEmpty(process.MainModule?.FileVersionInfo.FileDescription))
-                    {
                         displayName = process.MainModule.FileVersionInfo.FileDescription;
-                    }
                     else if (!string.IsNullOrEmpty(process.MainModule?.FileVersionInfo.ProductName))
-                    {
                         displayName = process.MainModule.FileVersionInfo.ProductName;
-                    }
                 }
-                catch { }
+                catch { /* Ignorer les erreurs d'accès */ }
 
-                // Si on n'a pas trouvé de nom, utiliser le nom du processus
                 if (string.IsNullOrEmpty(displayName))
-                {
                     displayName = char.ToUpper(fallbackName[0]) + fallbackName[1..];
-                }
 
-                // Mettre en cache
                 _displayNameCache[process.ProcessName.ToLower()] = displayName;
-
                 return displayName;
             }
-            catch
-            {
-                return char.ToUpper(fallbackName[0]) + fallbackName[1..];
-            }
+            catch { return char.ToUpper(fallbackName[0]) + fallbackName[1..]; }
         }
 
         private string GetMainProcessName(string processName)
         {
             processName = processName.ToLower();
 
-            // Vérifier les processus liés pour les applications spéciales
             foreach (var kvp in _relatedProcesses)
             {
-                if (kvp.Value.Any(p => 
-                    processName.Contains(p.Replace(".exe", "")) || 
+                if (kvp.Value.Any(p =>
+                    processName.Contains(p.Replace(".exe", "")) ||
                     p.Replace(".exe", "").Contains(processName)))
                 {
                     return kvp.Key;
                 }
             }
-
             return processName;
         }
 
@@ -296,11 +261,9 @@ namespace Concentrade
                 {
                     if (process.HasExited) return false;
                     process.Refresh();
-                    if (process.MainWindowHandle != IntPtr.Zero)
-                        return true;
+                    if (process.MainWindowHandle != IntPtr.Zero) return true;
                 }
                 catch { return false; }
-
                 await Task.Delay(100);
             }
             return false;
@@ -311,25 +274,21 @@ namespace Concentrade
             mainAppName = mainAppName.ToLower();
             List<string> processesToKill = new List<string> { mainAppName };
 
-            // Si l'application a des processus liés connus, on les ajoute à la liste
             if (_relatedProcesses.ContainsKey(mainAppName))
             {
                 processesToKill.AddRange(_relatedProcesses[mainAppName]);
             }
 
-            // On parcourt tous les noms de processus à tuer
             foreach (var processName in processesToKill.Distinct())
             {
                 try
                 {
-                    // GetProcessesByName attend le nom sans l'extension .exe
                     var exeName = processName.Replace(".exe", "");
                     var processes = Process.GetProcessesByName(exeName);
                     foreach (var process in processes)
                     {
                         try
                         {
-                            // On tue le processus et tous ses sous-processus
                             process.Kill(true);
                             Debug.WriteLine($"Processus {process.ProcessName} (ID: {process.Id}) tué.");
                         }
@@ -346,23 +305,17 @@ namespace Concentrade
             }
         }
 
-        // Liste des processus liés à bloquer (pour les applications spéciales)
         private readonly Dictionary<string, List<string>> _relatedProcesses = new()
         {
             { "steam", new List<string> { "steam", "steamwebhelper", "steamservice", "steamclient", "gameoverlayui" } },
             { "epicgameslauncher", new List<string> { "epicgameslauncher", "epicgameslauncherhelper", "epicwebhelper" } },
             { "discord", new List<string> { "discord", "discordptb", "discordcanary", "discordhelper" } },
-            { "valorant", new List<string> { 
-                "valorant", 
-                "valorant-win64-shipping", 
-                "riot client", 
-                "riotclientservices",
-                "vgc",
-                "riotclientux"
+            { "valorant", new List<string> {
+                "valorant", "valorant-win64-shipping", "riot client",
+                "riotclientservices", "vgc", "riotclientux"
             } }
         };
 
-        // Liste des alias d'applications (noms alternatifs)
         private readonly Dictionary<string, string> _appAliases = new()
         {
             { "valorant", "riot" },

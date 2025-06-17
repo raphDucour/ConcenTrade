@@ -203,10 +203,16 @@ namespace ConcenTrade
 
         private void GererAppsBloquees_Click(object sender, RoutedEventArgs e)
         {
-            var settingsWindow = new BlockedAppsSettings(_appBlocker.GetBlockedApps());
+            // La correction se trouve sur la ligne ci-dessous, en ajoutant .ToArray()
+            var settingsWindow = new BlockedAppsSettings(_appBlocker.GetBlockedApps().ToArray());
+
             if (settingsWindow.ShowDialog() == true)
             {
-                _appBlocker.UpdateBlockedApps(settingsWindow.BlockedApps);
+                var newBlockedApps = settingsWindow.BlockedApps;
+                _appBlocker.UpdateBlockedApps(newBlockedApps);
+
+                string currentUserEmail = Concentrade.Properties.Settings.Default.UserEmail;
+                UserManager.SaveBlockedAppsForUser(currentUserEmail, newBlockedApps);
             }
         }
     }

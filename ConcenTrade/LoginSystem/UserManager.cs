@@ -17,6 +17,24 @@ namespace Concentrade
             return JsonSerializer.Deserialize<List<User>>(json) ?? new List<User>();
         }
 
+        public static void SaveBlockedAppsForUser(string email, IEnumerable<string> blockedApps)
+        {
+            var users = LoadUsers();
+            var user = users.Find(u => u.Email == email);
+            if (user != null)
+            {
+                user.BlockedApps = new List<string>(blockedApps);
+                SaveUsers(users);
+            }
+        }
+
+        public static List<string> LoadBlockedAppsForUser(string email)
+        {
+            var user = FindUser(email);
+            // Retourne la liste de l'utilisateur, ou une nouvelle liste vide si l'utilisateur ou la liste n'existe pas.
+            return user?.BlockedApps ?? new List<string>();
+        }
+
         public static void SaveUsers(List<User> users)
         {
             string json = JsonSerializer.Serialize(users, new JsonSerializerOptions { WriteIndented = true });
