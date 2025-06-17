@@ -1,87 +1,78 @@
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Concentrade.Collections_de_cartes;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Media;
-using System.Windows.Threading;
 
 namespace Concentrade.Pages_principales.Collection
 {
     public partial class Caisse : Page
     {
-        private List<Card> Cards { get; set; }
-        private bool isSpinning = false;
-        private DispatcherTimer scrollTimer;
-        private double scrollPosition = 0;
-        private static readonly Random random = new Random();
+        private readonly List<Card> _possibleCards;
+        private bool _isSpinning = false;
+        private static readonly Random _random = new Random();
 
         public Caisse(int numCaisse)
         {
             InitializeComponent();
-            
-            // Sélection de la caisse appropriée
-            Cards = numCaisse switch
+
+            _possibleCards = numCaisse switch
             {
-                1 => Card.GetCaisse1Cards(), // Caisse Poules
-                2 => Card.GetCaisse2Cards(), // Caisse QoC
-                3 => Card.GetCaisse3Cards(), // Caisse Dragon
-                _ => Card.GetCaisse1Cards() // Par défaut, retourne la caisse Poules
+                1 => Card.GetCaisse1Cards(),
+                2 => Card.GetCaisse2Cards(),
+                3 => Card.GetCaisse3Cards(),
+                _ => Card.GetCaisse1Cards()
             };
-            
-            
-            InitializeCards();
+
+            DisplayPossibleCards();
+            InitializeRoulletteCards();
         }
 
-
-        private void InitializeCards()
+        private void DisplayPossibleCards()
         {
-            InitializeRoulletteCards();
-            foreach (Card card in Cards)
+            CardsPanel.Children.Clear();
+            foreach (var cardData in _possibleCards)
             {
                 var cardControl = new CardControl();
-                cardControl.SetCard(card);
+                cardControl.SetCard(cardData);
                 CardsPanel.Children.Add(cardControl);
             }
         }
+
         private void InitializeRoulletteCards()
         {
             RoulettePanel.Children.Clear();
             for (int i = 0; i < 100; i++)
             {
-                Card card = getRandomCardFromProbability(Cards);
-                var cardControl = new CardControl();
-                cardControl.Width = 150; // Largeur fixe pour chaque carte
-                cardControl.Margin = new Thickness(40); // Espacement entre les cartes
-                cardControl.SetCard(card);
-                Canvas.SetLeft(cardControl, i * 230); // 150 (largeur) + 2*40 (marge)
-                RoulettePanel.Children.Add(cardControl);
+                Card randomCardData = GetRandomCardFromPossible();
+                var newControl = new CardControl
+                {
+                    Width = 150,
+                    Margin = new Thickness(40)
+                };
+                newControl.SetCard(randomCardData);
+                Canvas.SetLeft(newControl, i * 230);
+                RoulettePanel.Children.Add(newControl);
             }
         }
 
-        private void BtnRetour_Click(object sender, RoutedEventArgs e)
+        private Card GetRandomCardFromPossible()
         {
-            // Retour à la page précédente
-            if (NavigationService?.CanGoBack == true)
-            {
-                NavigationService.Navigate(new CollectionPage());
-            }
-            
+            double probability = _random.NextDouble();
+            if (probability < 0.5) return _possibleCards[0];
+            if (probability < 0.9) return _possibleCards.Count > 1 ? _possibleCards[1] : _possibleCards[0];
+            return _possibleCards.Count > 2 ? _possibleCards[2] : _possibleCards[0];
         }
 
         private void BtnAcheter_Click(object sender, RoutedEventArgs e)
         {
-            if (isSpinning) return;
-            isSpinning = true;
+            if (_isSpinning) return;
+            _isSpinning = true;
             BtnAcheter.IsEnabled = false;
-
-            // Démarrer l'animation
             StartRoulette();
         }
-
-        
 
         private void StartRoulette()
         {
@@ -91,41 +82,30 @@ namespace Concentrade.Pages_principales.Collection
                 From = 0,
                 To = -15000,
                 Duration = TimeSpan.FromSeconds(10),
-                RepeatBehavior = new RepeatBehavior(1),
-                EasingFunction = new CubicEase
-                {
-                    EasingMode = EasingMode.EaseOut
-                }
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
             };
 
+            // Le code de gestion de la fin de l'animation est restauré et amélioré ici
             animation.Completed += (s, e) =>
             {
-                isSpinning = false;
+                _isSpinning = false;
                 BtnAcheter.IsEnabled = true;
 
-
-                double finalOffset = -15000; // valeur de "To" dans l'animation
+                // On calcule quelle carte est au milieu de l'écran à la fin de l'animation
+                double finalOffset = -15000;
                 double centerPosition = -finalOffset + (RouletteContainer.ActualWidth / 2);
-                int visibleIndex = (int)(centerPosition / 230);
+                int winningIndex = (int)(centerPosition / 230); // 230 = Largeur de la carte + Marge
 
-                if (visibleIndex >= 0 && visibleIndex < RoulettePanel.Children.Count)
+                if (winningIndex >= 0 && winningIndex < RoulettePanel.Children.Count)
                 {
-                    // Étape 2 : Récupération du contrôle de carte
-                    var selectedCardControl = RoulettePanel.Children[visibleIndex] as CardControl;
-
-                    if (selectedCardControl != null)
+                    // On récupère le contrôle graphique de la carte gagnante
+                    if (RoulettePanel.Children[winningIndex] is CardControl winningControl)
                     {
-                        // Étape 3 : Ajouter la carte à la collection du joueur
-                        var selectedCardField = typeof(CardControl)
-                            .GetField("_card", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                        var selectedCard = selectedCardField?.GetValue(selectedCardControl) as Card;
-
-                        if (selectedCard != null)
+                        // On accède aux données de la carte via notre nouvelle propriété CardData
+                        if (winningControl.CardData is Card wonCard)
                         {
-                            Card.AddCard(selectedCard);
-
-                            // Facultatif : Afficher un message ou feedback visuel
-                            MessageBox.Show($"Tu as gagné la carte : {selectedCard.Name} !");
+                            Card.AddCard(wonCard); // On ajoute la carte à la collection
+                            MessageBox.Show($"Félicitations ! Vous avez obtenu : {wonCard.Name}", "Nouvelle Carte !");
                         }
                     }
                 }
@@ -134,17 +114,12 @@ namespace Concentrade.Pages_principales.Collection
             ScrollTransform.BeginAnimation(TranslateTransform.XProperty, animation);
         }
 
-        private Card getRandomCardFromProbability(List<Card> cards)
+        private void BtnRetour_Click(object sender, RoutedEventArgs e)
         {
-            double probability = random.NextDouble();
-            return probability switch
+            if (NavigationService?.CanGoBack == true)
             {
-                < 0.5 => cards[0],
-                < 0.9 => cards[1],
-                _     => cards[2]
-            };
+                NavigationService.Navigate(new CollectionPage());
+            }
         }
-
-
     }
-} 
+}

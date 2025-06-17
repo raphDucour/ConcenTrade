@@ -9,6 +9,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\Cards\cat_zen.png" />
+    <None Remove="Images\Cards\Chat.png" />
+    <None Remove="Images\Cards\Chien.png" />
+    <None Remove="Images\Cards\cochon.png" />
+    <None Remove="Images\Cards\Dophin.png" />
+    <None Remove="Images\Cards\fourmi.png" />
+    <None Remove="Images\Cards\Giraffe.png" />
+    <None Remove="Images\Cards\hipo epic.png" />
+    <None Remove="Images\Cards\phoc.png" />
+    <None Remove="Images\Cards\Poule.png" />
+    <None Remove="Images\Cards\rat.png" />
+    <None Remove="Images\Cards\renard.png" />
+    <None Remove="Images\Cards\singe.png" />
+    <None Remove="Images\Cards\taupe.png" />
+    <None Remove="Images\Cards\Tetard.png" />
+    <None Remove="Images\Cards\Tortue.png" />
+    <None Remove="Images\Cards\vache.png" />
     <None Remove="Images\ConcenTrade logo sans texte.png" />
     <None Remove="Images\ConcenTrade Logo.png" />
     <None Remove="Images\ConcenTrade_logo_v2-removebg-preview.png" />
@@ -24,6 +41,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\Cards\Chat.png" />
+    <Resource Include="Images\Cards\Chien.png" />
+    <Resource Include="Images\Cards\cochon.png" />
+    <Resource Include="Images\Cards\Dophin.png" />
+    <Resource Include="Images\Cards\fourmi.png" />
+    <Resource Include="Images\Cards\Giraffe.png" />
+    <Resource Include="Images\Cards\hipo epic.png" />
+    <Resource Include="Images\Cards\phoc.png" />
+    <Resource Include="Images\Cards\Poule.png" />
+    <Resource Include="Images\Cards\rat.png" />
+    <Resource Include="Images\Cards\renard.png" />
+    <Resource Include="Images\Cards\singe.png" />
+    <Resource Include="Images\Cards\taupe.png" />
+    <Resource Include="Images\Cards\Tetard.png" />
+    <Resource Include="Images\Cards\Tortue.png" />
+    <Resource Include="Images\Cards\vache.png" />
     <Resource Include="Images\ConcenTrade logo sans texte.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
