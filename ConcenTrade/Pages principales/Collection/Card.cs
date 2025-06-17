@@ -134,7 +134,7 @@ namespace Concentrade.Collections_de_cartes
         public static Card FindCard(string name)
         {
             return GetAllPossibleCards().FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                ?? new Card(name, CardRarity.Common, "/Images/Cards/Chat.png"); // Fallback sur une image qui existe
+                ?? new Card(name, CardRarity.Common, "/Images/Cards/Chat.png",""); // Fallback sur une image qui existe
         }
 
         public static string GetRarityColor(CardRarity rarity)
