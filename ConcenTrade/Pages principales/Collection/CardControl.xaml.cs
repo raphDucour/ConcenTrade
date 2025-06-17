@@ -54,36 +54,6 @@ namespace Concentrade.Pages_principales.Collection
             }
         }
 
-        public void AddStackedCards(int count)
-        {
-            if (this.Content is not Canvas mainGrid) return;
-            int stackCount = Math.Min(count, MAX_STACKED_CARDS - 1);
-            for (int i = mainGrid.Children.Count - 1; i >= 0; i--)
-            {
-                if (mainGrid.Children[i] != CardBorder)
-                {
-                    mainGrid.Children.RemoveAt(i);
-                }
-            }
-            Panel.SetZIndex(CardBorder, stackCount + 1);
-            for (int i = 0; i < stackCount; i++)
-            {
-                var stackedCard = new Border
-                {
-                    Width = 200,
-                    Height = 280,
-                    Background = CardBorder.Background,
-                    BorderThickness = new System.Windows.Thickness(2),
-                    BorderBrush = new SolidColorBrush(System.Windows.Media.Colors.Black),
-                    CornerRadius = new System.Windows.CornerRadius(15)
-                };
-                Canvas.SetLeft(stackedCard, (i + 1) * STACK_OFFSET_HORIZONTAL);
-                Canvas.SetTop(stackedCard, (i + 1) * STACK_OFFSET_VERTICAL);
-                Panel.SetZIndex(stackedCard, stackCount - i);
-                mainGrid.Children.Insert(0, stackedCard);
-            }
-        }
-
         public CardControl Copy()
         {
             string savedXaml = XamlWriter.Save(this);
