@@ -7,11 +7,15 @@ using System.Windows;
 using System.Linq;
 using System.IO;
 using Concentrade.Properties;
+using System.Runtime.InteropServices;
 
 namespace Concentrade
 {
     public class AppBlocker
     {
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        private const int SW_MINIMIZE = 6;
         private ManagementEventWatcher? _watcher;
         private readonly object _promptLock = new object();
         private bool _isActive = false;
@@ -114,7 +118,6 @@ namespace Concentrade
             string? processName = e.NewEvent.Properties["ProcessName"].Value?.ToString();
             if (string.IsNullOrEmpty(processName)) return;
 
-            // Démarrer le traitement de manière asynchrone sans bloquer
             Task.Run(async () =>
             {
                 try
@@ -132,27 +135,21 @@ namespace Concentrade
                         }
                         catch
                         {
-                            return; // Le processus a peut-être déjà été fermé
+                            return;
                         }
 
-
-                        // --- DÉBUT DE LA SECTION CRITIQUE ---
                         lock (_promptLock)
                         {
-                            // On vérifie le cooldown A L'INTÉRIEUR du verrou pour éviter les race conditions
                             if (_lastPromptTime.TryGetValue(mainProcessName, out DateTime lastTime))
                             {
                                 if ((DateTime.Now - lastTime) < _popupCooldown)
                                 {
-                                    return; // Un autre processus de la même app a été traité récemment, on ignore celui-ci.
+                                    return;
                                 }
                             }
-                            // Si on continue, on met à jour le temps immédiatement pour bloquer les suivants.
                             _lastPromptTime[mainProcessName] = DateTime.Now;
                         }
-                        // --- FIN DE LA SECTION CRITIQUE ---
 
-                        // Vérifier si l'autorisation temporaire est toujours active
                         if (_temporaryAllowances.TryGetValue(mainProcessName, out DateTime expirationTime))
                         {
                             if (DateTime.Now < expirationTime) return;
@@ -165,9 +162,24 @@ namespace Concentrade
 
                         string displayName = await GetDisplayName(process, mainProcessName);
 
+                        // >>> DÉBUT DE LA MODIFICATION <<<
+                        // On minimise la fenêtre de l'application si elle existe
+                        // pour s'assurer que notre popup soit visible.
+                        if (process.MainWindowHandle != IntPtr.Zero)
+                        {
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                ShowWindow(process.MainWindowHandle, SW_MINIMIZE);
+                            });
+                            // Petite pause pour laisser le temps à la fenêtre de se minimiser
+                            await Task.Delay(100);
+                        }
+                        // >>> FIN DE LA MODIFICATION <<<
+
                         await Application.Current.Dispatcher.InvokeAsync(() =>
                         {
                             var popup = new BlocagePopup(displayName);
+                            popup.Topmost = true; // Assurez-vous que le popup reste au-dessus
                             bool? dialogResult = popup.ShowDialog();
 
                             if (dialogResult == true && popup.ContinueAnyway)
