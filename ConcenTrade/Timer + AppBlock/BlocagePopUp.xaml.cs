@@ -1,36 +1,85 @@
 using System;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace Concentrade
 {
-    /// <summary>
-    /// Logique d'interaction pour BlocagePopup.xaml
-    /// </summary>
     public partial class BlocagePopup : Window
     {
+        // Import d'une fonction Windows pour minimiser une fenêtre
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        private const int SW_MINIMIZE = 6;
+
         public bool ContinueAnyway { get; private set; }
         public bool TemporarilyAllowed { get; private set; }
         public TimeSpan AllowedDuration { get; private set; }
 
-        // Constructeur par défaut requis par XAML
+        // Variable pour garder en mémoire le processus du jeu à bloquer
+        private readonly Process? _processToBlock;
+        // Le minuteur qui va se battre pour garder le focus
+        private readonly DispatcherTimer _focusTimer;
+
+        // Constructeur par défaut (nécessaire pour XAML)
         public BlocagePopup()
         {
             InitializeComponent();
             SetupWindow();
         }
 
-        // Constructeur avec le nom de l'application
-        public BlocagePopup(string appName) : this()
+        // Nouveau constructeur que nous utilisons depuis AppBlocker
+        public BlocagePopup(string appName, Process processToBlock)
         {
-            this.Topmost = true; // <--- AJOUTEZ CETTE LIGNE
-            if (MessageText != null)
+            InitializeComponent();
+            SetupWindow();
+
+            this.Topmost = true; // S'assure que la fenêtre reste au-dessus
+            _processToBlock = processToBlock; // On stocke le processus du jeu
+
+            // Configuration du minuteur qui s'exécutera 4 fois par seconde
+            _focusTimer = new DispatcherTimer
             {
-                MessageText.Text = appName != null
-                    ? $"{appName} est bloqué pendant ta session.\nSouhaites-tu vraiment l'ouvrir ?"
-                    : "Cette application est bloquée pendant ta session.\nSouhaites-tu vraiment l'ouvrir ?";
+                Interval = TimeSpan.FromMilliseconds(250)
+            };
+            _focusTimer.Tick += FocusTimer_Tick;
+
+            MessageText.Text = $"{appName} est bloqué pendant ta session.\nSouhaites-tu vraiment l'ouvrir ?";
+
+            // On démarre et arrête le minuteur en même temps que la fenêtre
+            this.Loaded += (s, e) => _focusTimer.Start();
+            this.Closed += (s, e) => _focusTimer.Stop();
+        }
+
+        // C'est le cœur de la solution : cette méthode est appelée 4 fois par seconde
+        private void FocusTimer_Tick(object? sender, EventArgs e)
+        {
+            if (_processToBlock == null || _processToBlock.HasExited)
+            {
+                _focusTimer.Stop(); // Arrête le minuteur si le jeu est fermé
+                this.Close(); // Ferme le popup
+                return;
+            }
+
+            try
+            {
+                // On force la réduction de la fenêtre du jeu
+                if (_processToBlock.MainWindowHandle != IntPtr.Zero)
+                {
+                    ShowWindow(_processToBlock.MainWindowHandle, SW_MINIMIZE);
+                }
+                // Et on s'assure que notre popup est bien la fenêtre active
+                this.Activate();
+            }
+            catch
+            {
+                _focusTimer.Stop(); // Sécurité en cas d'erreur
             }
         }
+
+        // --- Les méthodes ci-dessous restent inchangées ---
 
         private void SetupWindow()
         {
@@ -38,43 +87,19 @@ namespace Concentrade
             TemporarilyAllowed = false;
             AllowedDuration = TimeSpan.Zero;
 
-            // Gérer la visibilité de la sélection du temps
             if (AlwaysAllowCheckbox != null && TimeSelectionGrid != null)
             {
-                AlwaysAllowCheckbox.Checked += (s, e) =>
-                {
-                    if (TimeSelectionGrid != null)
-                    {
-                        TimeSelectionGrid.Visibility = Visibility.Visible;
-                    }
-                };
-
-                AlwaysAllowCheckbox.Unchecked += (s, e) =>
-                {
-                    if (TimeSelectionGrid != null)
-                    {
-                        TimeSelectionGrid.Visibility = Visibility.Collapsed;
-                    }
-                };
+                AlwaysAllowCheckbox.Checked += (s, e) => TimeSelectionGrid.Visibility = Visibility.Visible;
+                AlwaysAllowCheckbox.Unchecked += (s, e) => TimeSelectionGrid.Visibility = Visibility.Collapsed;
             }
-
-            // Sélectionner la première option par défaut
-            if (TimeSelection != null)
-            {
-                TimeSelection.SelectedIndex = 0;
-            }
+            if (TimeSelection != null) TimeSelection.SelectedIndex = 0;
         }
 
         private void Continue_Click(object sender, RoutedEventArgs e)
         {
             ContinueAnyway = true;
             TemporarilyAllowed = AlwaysAllowCheckbox?.IsChecked ?? false;
-
-            if (TemporarilyAllowed)
-            {
-                AllowedDuration = GetSelectedTimeSpan();
-            }
-
+            if (TemporarilyAllowed) AllowedDuration = GetSelectedTimeSpan();
             DialogResult = true;
             Close();
         }
@@ -89,26 +114,12 @@ namespace Concentrade
 
         private TimeSpan GetSelectedTimeSpan()
         {
-            if (TimeSelection?.SelectedItem is ComboBoxItem selectedItem)
+            if (TimeSelection?.SelectedItem is ComboBoxItem selectedItem && selectedItem.Content?.ToString() is string content)
             {
-                string? content = selectedItem.Content?.ToString();
-                if (!string.IsNullOrEmpty(content))
-                {
-                    if (content.Contains("heure", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return TimeSpan.FromHours(1);
-                    }
-                    else
-                    {
-                        string[] parts = content.Split(' ');
-                        if (parts.Length > 0 && int.TryParse(parts[0], out int result))
-                        {
-                            return TimeSpan.FromMinutes(result);
-                        }
-                    }
-                }
+                if (content.Contains("heure", StringComparison.OrdinalIgnoreCase)) return TimeSpan.FromHours(1);
+                if (int.TryParse(content.Split(' ')[0], out int minutes)) return TimeSpan.FromMinutes(minutes);
             }
-            return TimeSpan.FromMinutes(5); // Valeur par défaut
+            return TimeSpan.FromMinutes(5);
         }
     }
 }

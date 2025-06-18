@@ -165,7 +165,7 @@ namespace Concentrade
                                 ShowWindow(process.MainWindowHandle, SW_MINIMIZE);
                             }
 
-                            var popup = new BlocagePopup(displayName)
+                            var popup = new BlocagePopup(displayName, process)
                             {
                                 Topmost = true,
                                 WindowStartupLocation = WindowStartupLocation.CenterScreen
