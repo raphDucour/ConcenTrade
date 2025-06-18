@@ -203,16 +203,25 @@ namespace ConcenTrade
 
         private void GererAppsBloquees_Click(object sender, RoutedEventArgs e)
         {
-            // La correction se trouve sur la ligne ci-dessous, en ajoutant .ToArray()
-            var settingsWindow = new BlockedAppsSettings(_appBlocker.GetBlockedApps().ToArray());
+            string currentUserEmail = Concentrade.Properties.Settings.Default.UserEmail;
+            var currentBlockedApps = _appBlocker.GetBlockedApps().ToArray();
+
+            // CHANGEMENT : On charge aussi la liste des applications ignorées
+            var currentIgnoredApps = UserManager.LoadIgnoredAppsForUser(currentUserEmail);
+
+            // On passe les deux listes à la fenêtre de configuration
+            var settingsWindow = new BlockedAppsSettings(currentBlockedApps, currentIgnoredApps);
 
             if (settingsWindow.ShowDialog() == true)
             {
+                // La sauvegarde des applications bloquées ne change pas
                 var newBlockedApps = settingsWindow.BlockedApps;
                 _appBlocker.UpdateBlockedApps(newBlockedApps);
-
-                string currentUserEmail = Concentrade.Properties.Settings.Default.UserEmail;
                 UserManager.SaveBlockedAppsForUser(currentUserEmail, newBlockedApps);
+
+                // CHANGEMENT : On sauvegarde la nouvelle liste des applications ignorées
+                var newIgnoredApps = settingsWindow.IgnoredApps;
+                UserManager.SaveIgnoredAppsForUser(currentUserEmail, newIgnoredApps);
             }
         }
     }

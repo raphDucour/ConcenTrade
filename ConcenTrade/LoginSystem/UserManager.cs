@@ -104,6 +104,24 @@ namespace Concentrade
             }
         }
 
+        public static List<string> LoadIgnoredAppsForUser(string email)
+        {
+            var user = FindUser(email);
+            // Retourne la liste de l'utilisateur, ou une nouvelle liste vide si elle n'existe pas.
+            return user?.IgnoredDefaultApps ?? new List<string>();
+        }
+
+        public static void SaveIgnoredAppsForUser(string email, IEnumerable<string> ignoredApps)
+        {
+            var users = LoadUsers();
+            var user = users.Find(u => u.Email == email);
+            if (user != null)
+            {
+                user.IgnoredDefaultApps = new List<string>(ignoredApps);
+                SaveUsers(users);
+            }
+        }
+
         public static void SavePoints(string email, int points)
         {
             var users = LoadUsers();
