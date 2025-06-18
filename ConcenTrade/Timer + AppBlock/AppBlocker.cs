@@ -111,20 +111,19 @@ namespace Concentrade
 
                     if (IsDistractingApp(originalProcessName))
                     {
-                        var mainProcessName = GetMainProcessName(originalProcessName);
                         Process? process = null;
                         try { process = Process.GetProcessById(processId); }
                         catch { return; }
 
-                        // --- MODIFIÉ ---
-                        // Utilise maintenant le cooldown global.
+                        var mainProcessName = GetMainProcessName(originalProcessName);
+
+                        // On vérifie le cooldown une première fois pour éviter du travail inutile.
                         lock (_promptLock)
                         {
                             if ((DateTime.Now - _lastGlobalPromptTime) < _popupCooldown)
                             {
                                 return;
                             }
-                            _lastGlobalPromptTime = DateTime.Now;
                         }
 
                         if (_temporaryAllowances.TryGetValue(mainProcessName, out DateTime expirationTime))
@@ -135,6 +134,8 @@ namespace Concentrade
 
                         bool isGame = mainProcessName.Contains("game") || mainProcessName.Contains("shipping") || _relatedProcesses.ContainsKey(mainProcessName);
                         bool windowReady = isGame || await WaitForMainWindow(process, TimeSpan.FromSeconds(5));
+
+                        // Si aucune fenêtre n'est prête, on quitte SANS activer le cooldown.
                         if (!windowReady && !isGame) return;
 
                         if (process.MainWindowHandle != IntPtr.Zero)
@@ -147,7 +148,30 @@ namespace Concentrade
 
                         await Application.Current.Dispatcher.InvokeAsync(() =>
                         {
-                            var popup = new BlocagePopup(displayName) { Topmost = true };
+                            // CHANGEMENT ICI : Le verrou et la mise à jour du cooldown sont déplacés ici.
+                            lock (_promptLock)
+                            {
+                                // On revérifie le cooldown une dernière fois pour être sûr.
+                                if ((DateTime.Now - _lastGlobalPromptTime) < _popupCooldown)
+                                {
+                                    return;
+                                }
+                                // Le cooldown est activé SEULEMENT MAINTENANT, juste avant d'afficher le popup.
+                                _lastGlobalPromptTime = DateTime.Now;
+                            }
+
+                            if (process.MainWindowHandle != IntPtr.Zero)
+                            {
+                                ShowWindow(process.MainWindowHandle, SW_MINIMIZE);
+                            }
+
+                            var popup = new BlocagePopup(displayName)
+                            {
+                                Topmost = true,
+                                WindowStartupLocation = WindowStartupLocation.CenterScreen
+                            };
+
+                            popup.Activate();
                             bool? dialogResult = popup.ShowDialog();
 
                             if (dialogResult == true && popup.ContinueAnyway)
@@ -192,19 +216,29 @@ namespace Concentrade
 
         public bool IsDistractingApp(string processName)
         {
-            processName = processName.ToLower();
-            var mainProcessName = GetMainProcessName(processName);
+            string mainProcessName = GetMainProcessName(processName.ToLower());
 
             return _blockedApps.Any(blockedApp =>
             {
+                // On utilise toujours NormalizeAppName pour gérer les alias (ex: "lol" -> "league of legends")
                 var normalizedBlockedApp = NormalizeAppName(blockedApp);
-                return mainProcessName == normalizedBlockedApp ||
-                       mainProcessName.Contains(normalizedBlockedApp) ||
-                       normalizedBlockedApp.Contains(mainProcessName) ||
-                       (_relatedProcesses.ContainsKey(normalizedBlockedApp) &&
-                        _relatedProcesses[normalizedBlockedApp].Any(p =>
-                            mainProcessName.Contains(p.ToLower()) ||
-                            p.ToLower().Contains(mainProcessName)));
+
+                // On utilise notre nouvelle logique de comparaison plus intelligente
+                if (AreNamesAlike(mainProcessName, normalizedBlockedApp))
+                {
+                    return true;
+                }
+
+                // On conserve la logique pour les processus liés (ex: pour Discord, Steam, etc.)
+                if (_relatedProcesses.ContainsKey(normalizedBlockedApp))
+                {
+                    if (_relatedProcesses[normalizedBlockedApp].Any(relatedProc => AreNamesAlike(mainProcessName, relatedProc)))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
             });
         }
 
@@ -267,6 +301,26 @@ namespace Concentrade
                 await Task.Delay(100);
             }
             return false;
+        }
+
+        private bool AreNamesAlike(string name1, string name2)
+        {
+            // Fonction interne pour normaliser une chaîne de caractères :
+            // - Met tout en minuscules.
+            // - Ne garde que les lettres et les chiffres.
+            // Par exemple, "My Super Game" devient "mysupergame" et "my_super_game" devient aussi "mysupergame".
+            string Normalize(string s) => new string(s.ToLower().Where(char.IsLetterOrDigit).ToArray());
+
+            string normalizedName1 = Normalize(name1);
+            string normalizedName2 = Normalize(name2);
+
+            if (string.IsNullOrEmpty(normalizedName1) || string.IsNullOrEmpty(normalizedName2))
+            {
+                return false;
+            }
+
+            // Vérifie si l'un des noms normalisés contient l'autre.
+            return normalizedName1.Contains(normalizedName2) || normalizedName2.Contains(normalizedName1);
         }
 
         public void KillApplication(string mainAppName)
@@ -336,5 +390,6 @@ namespace Concentrade
             ProcessName = processName;
             Duration = duration;
         }
+
     }
 }

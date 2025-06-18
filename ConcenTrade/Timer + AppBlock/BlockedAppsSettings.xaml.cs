@@ -53,55 +53,43 @@ namespace Concentrade
 
         private void LoadBlockedApps()
         {
-            // Suggestions par défaut
+            // Liste des applications suggérées par défaut.
             var defaultApps = new[]
             {
-                "Discord", "Slack", "Telegram Desktop", "WhatsApp", "Twitter",
-                "Spotify", "Netflix", "Prime Video", "DisneyPlus", "Twitch",
-                "Steam", "EpicGamesLauncher", "EA", "UbisoftConnect", "Battle.net", "Riot",
-                "Google Chrome", "Mozilla Firefox", "Opera", "OperaGX", "Microsoft Edge"
-            };
+        "Discord", "Slack", "Telegram Desktop", "WhatsApp", "Twitter",
+        "Spotify", "Netflix", "Prime Video", "DisneyPlus", "Twitch",
+        "Steam", "EpicGamesLauncher", "EA", "UbisoftConnect", "Battle.net", "Riot",
+        "Google Chrome", "Mozilla Firefox", "Opera", "OperaGX", "Microsoft Edge"
+    };
 
-            var uncheckedByDefault = new[] {
-                "steam", "epicgameslauncher", "ea", "ubisoftconnect", "battle.net", "riot"
-            };
+            // On utilise un HashSet pour une recherche rapide et insensible à la casse
+            // de ce que l'utilisateur a VRAIMENT sauvegardé comme bloqué.
+            // La propriété 'BlockedApps' contient cette liste, passée au constructeur.
+            var userBlockedAppsSet = new HashSet<string>(BlockedApps, StringComparer.OrdinalIgnoreCase);
 
-            // Créer un ensemble (HashSet) pour une recherche rapide et insensible à la casse de toutes les applications existantes et de leurs alias.
-            var existingAppNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            // Ce second HashSet nous aide à ne pas ajouter deux fois la même application à l'interface.
+            var allAppsInUi = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-            // Ajouter les applications déjà bloquées par l'utilisateur
-            foreach (var app in BlockedApps)
+            // --- ÉTAPE 1: Parcourir les applications par défaut ---
+            // Une application ne sera cochée que si elle est dans la liste sauvegardée de l'utilisateur.
+            foreach (var appName in defaultApps)
             {
-                if (!existingAppNames.Contains(app))
-                {
-                    _apps.Add(new AppItem(app, true));
+                _apps.Add(new AppItem(appName, userBlockedAppsSet.Contains(appName)));
+                allAppsInUi.Add(appName);
+            }
 
-                    // Ajouter le nom de base et son alias principal au HashSet
-                    existingAppNames.Add(app);
-                    if (_appAliases.TryGetValue(app.ToLower(), out var alias))
-                    {
-                        existingAppNames.Add(alias);
-                    }
-                    // Gérer aussi le cas inverse (si l'alias est la clé)
-                    var reverseAlias = _appAliases.FirstOrDefault(kvp => kvp.Value.Equals(app, StringComparison.OrdinalIgnoreCase));
-                    if (!string.IsNullOrEmpty(reverseAlias.Key))
-                    {
-                        existingAppNames.Add(reverseAlias.Key);
-                    }
+            // --- ÉTAPE 2: Ajouter les applications personnalisées ---
+            // Si l'utilisateur a ajouté une application qui n'est pas dans la liste par défaut,
+            // on s'assure qu'elle soit bien présente et cochée.
+            foreach (var userApp in userBlockedAppsSet)
+            {
+                if (!allAppsInUi.Contains(userApp))
+                {
+                    _apps.Add(new AppItem(userApp, true));
                 }
             }
 
-            // Ajouter les suggestions de la liste par défaut si elles ne sont pas déjà représentées
-            foreach (var app in defaultApps)
-            {
-                // On vérifie si l'application ou l'un de ses alias est déjà dans la liste.
-                if (!existingAppNames.Contains(app))
-                {
-                    bool isSelected = !uncheckedByDefault.Contains(app.ToLower());
-                    _apps.Add(new AppItem(app, isSelected));
-                }
-            }
-
+            // On lie la liste finale à l'interface utilisateur.
             SuggestedAppsList.ItemsSource = _apps;
         }
 
