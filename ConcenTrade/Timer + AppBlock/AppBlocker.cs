@@ -117,7 +117,6 @@ namespace Concentrade
 
                         var mainProcessName = GetMainProcessName(originalProcessName);
 
-                        // On vérifie le cooldown une première fois pour éviter du travail inutile.
                         lock (_promptLock)
                         {
                             if ((DateTime.Now - _lastGlobalPromptTime) < _popupCooldown)
@@ -134,8 +133,6 @@ namespace Concentrade
 
                         bool isGame = mainProcessName.Contains("game") || mainProcessName.Contains("shipping") || _relatedProcesses.ContainsKey(mainProcessName);
                         bool windowReady = isGame || await WaitForMainWindow(process, TimeSpan.FromSeconds(5));
-
-                        // Si aucune fenêtre n'est prête, on quitte SANS activer le cooldown.
                         if (!windowReady && !isGame) return;
 
                         if (process.MainWindowHandle != IntPtr.Zero)
@@ -148,15 +145,9 @@ namespace Concentrade
 
                         await Application.Current.Dispatcher.InvokeAsync(() =>
                         {
-                            // CHANGEMENT ICI : Le verrou et la mise à jour du cooldown sont déplacés ici.
                             lock (_promptLock)
                             {
-                                // On revérifie le cooldown une dernière fois pour être sûr.
-                                if ((DateTime.Now - _lastGlobalPromptTime) < _popupCooldown)
-                                {
-                                    return;
-                                }
-                                // Le cooldown est activé SEULEMENT MAINTENANT, juste avant d'afficher le popup.
+                                if ((DateTime.Now - _lastGlobalPromptTime) < _popupCooldown) return;
                                 _lastGlobalPromptTime = DateTime.Now;
                             }
 
@@ -165,24 +156,22 @@ namespace Concentrade
                                 ShowWindow(process.MainWindowHandle, SW_MINIMIZE);
                             }
 
-                            var popup = new BlocagePopup(displayName, process)
-                            {
-                                Topmost = true,
-                                WindowStartupLocation = WindowStartupLocation.CenterScreen
-                            };
-
+                            var popup = new BlocagePopup(displayName, process);
                             popup.Activate();
+
+                            // ShowDialog renvoie maintenant 'true' si l'utilisateur clique sur "Autoriser"
+                            // et 'false' s'il clique sur "Fermer" ou ferme la fenêtre.
                             bool? dialogResult = popup.ShowDialog();
 
-                            if (dialogResult == true && popup.ContinueAnyway)
+                            // --- NOUVELLE LOGIQUE SIMPLIFIÉE ---
+                            if (dialogResult == true && popup.TemporarilyAllowed)
                             {
-                                if (popup.TemporarilyAllowed)
-                                {
-                                    AllowTemporarily(mainProcessName, popup.AllowedDuration);
-                                }
+                                // L'utilisateur a cliqué sur "Autoriser".
+                                AllowTemporarily(mainProcessName, popup.AllowedDuration);
                             }
                             else
                             {
+                                // L'utilisateur a cliqué sur "Fermer" ou a fermé la fenêtre.
                                 KillApplication(mainProcessName);
                             }
                         });

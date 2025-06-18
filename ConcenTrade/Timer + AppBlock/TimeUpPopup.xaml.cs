@@ -1,45 +1,66 @@
 using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows;
 
 namespace Concentrade
 {
     public partial class TimeUpPopup : Window
     {
-        public enum TimeUpAction
-        {
-            Prolonger,
-            Reprendre,
-            Fermer
-        }
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        private const int SW_MINIMIZE = 6;
 
+        private readonly Process? _processToBlock;
+        private readonly System.Windows.Threading.DispatcherTimer _focusTimer;
+
+        public enum TimeUpAction { Close, Extend }
         public TimeUpAction Action { get; private set; }
-        public string AppName { get; private set; }
+        public TimeSpan ExtensionDuration { get; private set; }
 
-        public TimeUpPopup(string appName)
+        public TimeUpPopup(string appName, Process processToBlock)
         {
             InitializeComponent();
-            AppName = appName;
+            this.Topmost = true;
+
+            _processToBlock = processToBlock;
+
+            _focusTimer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(250) };
+            _focusTimer.Tick += FocusTimer_Tick;
+            this.Loaded += (s, e) => _focusTimer.Start();
+            this.Closed += (s, e) => _focusTimer.Stop();
+
+            DurationComboBox.ItemsSource = Enumerable.Range(1, 5).Select(i => $"{i} minute{(i > 1 ? "s" : "")}");
+            DurationComboBox.SelectedIndex = 1;
         }
 
-        private void Prolonger_Click(object sender, RoutedEventArgs e)
+        private void FocusTimer_Tick(object? sender, EventArgs e)
         {
-            Action = TimeUpAction.Prolonger;
+            if (_processToBlock == null || _processToBlock.HasExited) { _focusTimer.Stop(); this.Close(); return; }
+            try
+            {
+                if (_processToBlock.MainWindowHandle != IntPtr.Zero) ShowWindow(_processToBlock.MainWindowHandle, SW_MINIMIZE);
+                this.Activate();
+            }
+            catch { _focusTimer.Stop(); }
+        }
+
+        private void ExtendButton_Click(object sender, RoutedEventArgs e)
+        {
+            Action = TimeUpAction.Extend;
+            string selected = DurationComboBox.SelectedItem as string ?? "2 minutes";
+            int minutes = int.Parse(selected.Split(' ')[0]);
+            ExtensionDuration = TimeSpan.FromMinutes(minutes);
             DialogResult = true;
             Close();
         }
 
-        private void Reprendre_Click(object sender, RoutedEventArgs e)
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            Action = TimeUpAction.Reprendre;
-            DialogResult = true;
-            Close();
-        }
-
-        private void Fermer_Click(object sender, RoutedEventArgs e)
-        {
-            Action = TimeUpAction.Fermer;
+            Action = TimeUpAction.Close;
             DialogResult = true;
             Close();
         }
     }
-} 
+}

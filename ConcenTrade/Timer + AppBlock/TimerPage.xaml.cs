@@ -1,5 +1,4 @@
-﻿using Concentrade;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
@@ -11,12 +10,7 @@ namespace Concentrade
 {
     public partial class TimerPage : Page
     {
-        private enum PomodoroState
-        {
-            Work,
-            ShortBreak,
-            Finished
-        }
+        private enum PomodoroState { Work, ShortBreak, Finished }
 
         private DispatcherTimer _timer;
         private TimeSpan _remaining;
@@ -26,7 +20,6 @@ namespace Concentrade
         private int _pointsAccumules = 0;
         private TextBlock _pointsText;
 
-        // Pomodoro settings
         private PomodoroState _currentState;
         private int _totalCycles;
         private int _currentCycle;
@@ -38,9 +31,8 @@ namespace Concentrade
             InitializeComponent();
             _totalCycles = cycles;
 
-            _timer = new DispatcherTimer();
+            _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             _timer.Tick += Timer_Tick;
-            _timer.Interval = TimeSpan.FromSeconds(1);
 
             _pointsText = new TextBlock
             {
@@ -74,6 +66,93 @@ namespace Concentrade
             }));
         }
 
+        private void ResumeMainTimerIfNeeded()
+        {
+            // Reprend le minuteur principal seulement si aucune autre app n'est autorisée.
+            if (_temporaryAllowanceTimers.Count == 0 && _isPaused)
+            {
+                _isPaused = false;
+                _timer.Start();
+                UpdateTimerText();
+            }
+        }
+
+        // =========================================================================
+        //  LA LOGIQUE QUI CORRIGE LA BOUCLE EST DANS CETTE MÉTHODE
+        // =========================================================================
+        private void Blocker_OnTemporaryAllowance(object? sender, TemporaryAllowanceEventArgs e)
+        {
+            if (_currentState != PomodoroState.Work) return;
+
+            if (!_isPaused)
+            {
+                _timer.Stop();
+                _isPaused = true;
+                Application.Current.Dispatcher.Invoke(UpdateTimerText);
+            }
+
+            // Création du minuteur pour la PREMIÈRE autorisation
+            var firstAllowanceTimer = new DispatcherTimer { Interval = e.Duration };
+            firstAllowanceTimer.Tick += (s, args) =>
+            {
+                firstAllowanceTimer.Stop();
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Process[] processes = Process.GetProcessesByName(e.ProcessName);
+                    if (processes.Length > 0)
+                    {
+                        Process processToBlock = processes[0];
+                        var popup = new TimeUpPopup(e.ProcessName, processToBlock);
+
+                        if (popup.ShowDialog() == true)
+                        {
+                            if (popup.Action == TimeUpPopup.TimeUpAction.Extend)
+                            {
+                                // *** LA CORRECTION EST ICI ***
+                                // On crée un minuteur final et ISOLÉ.
+                                // Il ne redéclenche PAS l'événement OnTemporaryAllowance.
+                                var finalAllowanceTimer = new DispatcherTimer { Interval = popup.ExtensionDuration };
+                                finalAllowanceTimer.Tick += (s2, args2) =>
+                                {
+                                    finalAllowanceTimer.Stop();
+                                    // Le temps est écoulé : on ferme l'app et on tente de reprendre le timer.
+                                    try { if (!processToBlock.HasExited) processToBlock.Kill(true); } catch { }
+
+                                    _temporaryAllowanceTimers.Remove(e.ProcessName);
+                                    ResumeMainTimerIfNeeded();
+                                };
+
+                                _temporaryAllowanceTimers[e.ProcessName] = finalAllowanceTimer;
+                                finalAllowanceTimer.Start();
+                            }
+                            else // L'utilisateur a choisi "Fermer maintenant"
+                            {
+                                try { if (!processToBlock.HasExited) processToBlock.Kill(true); } catch { }
+                                _temporaryAllowanceTimers.Remove(e.ProcessName);
+                                ResumeMainTimerIfNeeded();
+                            }
+                        }
+                        else // L'utilisateur a fermé le popup sans choisir
+                        {
+                            try { if (!processToBlock.HasExited) processToBlock.Kill(true); } catch { }
+                            _temporaryAllowanceTimers.Remove(e.ProcessName);
+                            ResumeMainTimerIfNeeded();
+                        }
+                    }
+                    else
+                    {
+                        _temporaryAllowanceTimers.Remove(e.ProcessName);
+                        ResumeMainTimerIfNeeded();
+                    }
+                });
+            };
+            _temporaryAllowanceTimers[e.ProcessName] = firstAllowanceTimer;
+            firstAllowanceTimer.Start();
+        }
+
+        // --- Le reste du fichier ne change pas ---
+        #region Méthodes de gestion du minuteur principal
         private void StartPomodoro()
         {
             _currentCycle = 1;
@@ -86,9 +165,7 @@ namespace Concentrade
             _remaining = _workDuration;
             _isPaused = false;
             PauseButton.Content = "⏯️ Pause";
-
             _blocker.SetActive(true);
-
             UpdateTimerText();
             _timer.Start();
         }
@@ -99,16 +176,9 @@ namespace Concentrade
             _remaining = _breakDuration;
             _isPaused = false;
             PauseButton.Content = "⏯️ Pause";
-
-            // During breaks, the blocker is off
             _blocker.SetActive(false);
-            // Stop any temporary allowance timers
-            foreach (var timer in _temporaryAllowanceTimers.Values)
-            {
-                timer.Stop();
-            }
+            foreach (var timer in _temporaryAllowanceTimers.Values) timer.Stop();
             _temporaryAllowanceTimers.Clear();
-
             UpdateTimerText();
             _timer.Start();
         }
@@ -120,47 +190,32 @@ namespace Concentrade
             StateText.Text = "Félicitations !";
             TimerText.Text = "🎉";
             SavePoints();
-
             _blocker.SetActive(false);
-            foreach (var timer in _temporaryAllowanceTimers.Values)
-            {
-                timer.Stop();
-            }
+            foreach (var timer in _temporaryAllowanceTimers.Values) timer.Stop();
             _temporaryAllowanceTimers.Clear();
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
         {
             if (_isPaused) return;
-
             _remaining = _remaining.Subtract(TimeSpan.FromSeconds(1));
             UpdateTimerText();
-
             if (_currentState == PomodoroState.Work)
             {
                 _pointsAccumules++;
                 UpdatePointsText();
             }
-
             if (_remaining.TotalSeconds <= 0)
             {
                 _timer.Stop();
                 if (_currentState == PomodoroState.Work)
                 {
-                    if (_currentCycle >= _totalCycles)
-                    {
-                        FinishSession();
-                    }
-                    else
-                    {
-                        // Play a sound or show notification
-                        StartBreakSession();
-                    }
+                    if (_currentCycle >= _totalCycles) FinishSession();
+                    else StartBreakSession();
                 }
                 else if (_currentState == PomodoroState.ShortBreak)
                 {
                     _currentCycle++;
-                    // Play a sound or show notification
                     StartWorkSession();
                 }
             }
@@ -169,7 +224,6 @@ namespace Concentrade
         private void UpdateTimerText()
         {
             TimerText.Text = _remaining.ToString(@"mm\:ss");
-
             string stateInfo = "";
             switch (_currentState)
             {
@@ -180,78 +234,13 @@ namespace Concentrade
                     stateInfo = "Petite pause";
                     break;
             }
-
-            if (_isPaused)
-            {
-                stateInfo += " (En pause)";
-            }
+            if (_isPaused) stateInfo += " (En pause)";
             StateText.Text = stateInfo;
-        }
-
-        private void Blocker_OnTemporaryAllowance(object? sender, TemporaryAllowanceEventArgs e)
-        {
-            if (_currentState != PomodoroState.Work) return;
-
-            _timer.Stop();
-            _isPaused = true;
-            Application.Current.Dispatcher.Invoke(UpdateTimerText);
-
-            var allowanceTimer = new DispatcherTimer { Interval = e.Duration };
-            allowanceTimer.Tick += (s, args) =>
-            {
-                allowanceTimer.Stop();
-                _temporaryAllowanceTimers.Remove(e.ProcessName);
-
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    var popup = new TimeUpPopup(e.ProcessName);
-                    if (popup.ShowDialog() == true)
-                    {
-                        switch (popup.Action)
-                        {
-                            case TimeUpPopup.TimeUpAction.Prolonger:
-                                _blocker.AllowTemporarily(e.ProcessName, TimeSpan.FromMinutes(5));
-                                break;
-
-                            case TimeUpPopup.TimeUpAction.Reprendre:
-                                if (_temporaryAllowanceTimers.Count == 0 && _isPaused)
-                                {
-                                    _isPaused = false;
-                                    _timer.Start();
-                                    UpdateTimerText();
-                                }
-                                break;
-
-                            case TimeUpPopup.TimeUpAction.Fermer:
-                                try
-                                {
-                                    var processes = Process.GetProcessesByName(e.ProcessName);
-                                    foreach (var process in processes) process.Kill(true);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Debug.WriteLine($"Erreur lors de la fermeture de {e.ProcessName}: {ex.Message}");
-                                }
-                                if (_temporaryAllowanceTimers.Count == 0 && _isPaused)
-                                {
-                                    _isPaused = false;
-                                    _timer.Start();
-                                    UpdateTimerText();
-                                }
-                                break;
-                        }
-                    }
-                });
-            };
-
-            _temporaryAllowanceTimers[e.ProcessName] = allowanceTimer;
-            allowanceTimer.Start();
         }
 
         private void PauseButton_Click(object sender, RoutedEventArgs e)
         {
             if (_currentState == PomodoroState.Finished) return;
-
             _isPaused = !_isPaused;
             if (_isPaused)
             {
@@ -270,14 +259,9 @@ namespace Concentrade
         {
             _timer.Stop();
             SavePoints();
-
             _blocker.SetActive(false);
-            foreach (var timer in _temporaryAllowanceTimers.Values)
-            {
-                timer.Stop();
-            }
+            foreach (var timer in _temporaryAllowanceTimers.Values) timer.Stop();
             _temporaryAllowanceTimers.Clear();
-
             await Task.Run(() =>
             {
                 Application.Current.Dispatcher.Invoke(() =>
@@ -296,15 +280,14 @@ namespace Concentrade
         {
             Properties.Settings.Default.Points += _pointsAccumules;
             Properties.Settings.Default.Save();
-
             string email = Properties.Settings.Default.UserEmail;
             if (!string.IsNullOrWhiteSpace(email))
             {
                 UserManager.SavePoints(email, Properties.Settings.Default.Points);
             }
-
             _pointsAccumules = 0;
             UpdatePointsText();
         }
+        #endregion
     }
 }
