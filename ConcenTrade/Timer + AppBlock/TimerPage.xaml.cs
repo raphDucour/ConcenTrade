@@ -9,7 +9,9 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using System.Windows.Media;
+
+// J'ai enlevé le "using System.Windows.Media;" en double
+// namespace Concentrade ...
 
 namespace Concentrade
 {
@@ -17,6 +19,7 @@ namespace Concentrade
     {
         private enum PomodoroState { Work, ShortBreak, Finished }
 
+        // ... (Toutes vos variables privées restent les mêmes)
         private DispatcherTimer _timer;
         private TimeSpan _remaining;
         private TimeSpan _duration;
@@ -28,21 +31,47 @@ namespace Concentrade
         private StackPanel _cyclesIndicatorPanel;
         private Storyboard _pulseAnimation;
         private Grid _progressBarTemplateRoot;
-
         private PomodoroState _currentState;
         private int _totalCycles;
         private int _currentCycle;
-        private readonly TimeSpan _workDuration = TimeSpan.FromMinutes(1);
-        private readonly TimeSpan _breakDuration = TimeSpan.FromMinutes(1);
+        private TimeSpan _workDuration = TimeSpan.FromMinutes(25); // Valeur par défaut si non spécifiée
+        private TimeSpan _breakDuration = TimeSpan.FromMinutes(5); // Valeur par défaut si non spécifiée
         private Random _random = new Random();
-        private MediaPlayer _soundPlayer;
-        private List<MediaPlayer> _activeSoundPlayers = new List<MediaPlayer>(); // 
+        private List<MediaPlayer> _activeSoundPlayers = new List<MediaPlayer>();
+
+        // Constructeur existant pour le mode Pomodoro
         public TimerPage(int cycles)
         {
             InitializeComponent();
             _totalCycles = cycles;
+            // Note: _workDuration et _breakDuration utiliseront leurs valeurs par défaut de 25/5 min pour les cycles
 
-            _soundPlayer = new MediaPlayer();
+            // Le reste de ce constructeur est identique, donc je le regroupe dans une méthode partagée.
+            InitializeTimerPage();
+        }
+
+        // ✅ DÉBUT DU NOUVEAU CODE
+
+        // NOUVEAU CONSTRUCTEUR pour le mode Personnalisé
+        public TimerPage(TimeSpan workDuration, TimeSpan breakDuration, int cycles)
+        {
+            InitializeComponent();
+
+            // On assigne toutes les valeurs reçues
+            _workDuration = workDuration;
+            _breakDuration = breakDuration;
+            _totalCycles = cycles;
+
+            // S'il n'y a qu'un cycle, il n'y a logiquement pas de pause à la fin.
+            // La logique de Timer_Tick gère déjà ce cas.
+
+            // On utilise la méthode d'initialisation que nous avions créée
+            InitializeTimerPage();
+        }
+
+        // NOUVELLE MÉTHODE pour partager l'initialisation entre les deux constructeurs
+        private void InitializeTimerPage()
+        {
             _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             _timer.Tick += Timer_Tick;
 
@@ -79,6 +108,8 @@ namespace Concentrade
             }));
         }
 
+        // ✅ FIN DU NOUVEAU CODE
+
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (this.ActualWidth > 0 && this.ActualHeight > 0)
@@ -89,7 +120,7 @@ namespace Concentrade
         }
 
         #region Animation de Pulsation et Particules
-
+        // ... (Toutes les méthodes de cette région restent exactement les mêmes)
         private void InitializePulseAnimation()
         {
             CircularProgressBar.ApplyTemplate();
@@ -173,9 +204,6 @@ namespace Concentrade
             transform.BeginAnimation(TranslateTransform.YProperty, animY);
         }
 
-        /// <summary>
-        /// NOUVEAU : Déclenche l'animation de convergence et d'illumination des particules.
-        /// </summary>
         private void TriggerEndOfCycleParticleAnimation()
         {
             foreach (Ellipse particle in ParticleCanvas.Children.OfType<Ellipse>())
@@ -184,15 +212,11 @@ namespace Concentrade
             }
         }
 
-        /// <summary>
-        /// NOUVEAU : Anime une seule particule vers le centre, puis la disperse.
-        /// </summary>
         private void AnimateParticleToEndOfCycle(Ellipse particle)
         {
             var transform = particle.RenderTransform as TranslateTransform;
             if (transform == null) return;
 
-            // Arrête l'animation de dérive actuelle
             transform.BeginAnimation(TranslateTransform.XProperty, null);
             transform.BeginAnimation(TranslateTransform.YProperty, null);
 
@@ -200,7 +224,6 @@ namespace Concentrade
 
             var storyboard = new Storyboard();
 
-            // 1. Animation de convergence vers le centre
             var convergeX = new DoubleAnimation(center.X - (particle.Width / 2), TimeSpan.FromSeconds(1.5)) { EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut } };
             var convergeY = new DoubleAnimation(center.Y - (particle.Height / 2), TimeSpan.FromSeconds(1.5)) { EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut } };
 
@@ -212,13 +235,11 @@ namespace Concentrade
             Storyboard.SetTargetProperty(convergeY, new PropertyPath("RenderTransform.(TranslateTransform.Y)"));
             storyboard.Children.Add(convergeY);
 
-            // 2. Animation d'illumination (opacité)
             var illuminate = new DoubleAnimation(1.0, TimeSpan.FromSeconds(0.75)) { AutoReverse = true, EasingFunction = new QuarticEase() };
             Storyboard.SetTarget(illuminate, particle);
             Storyboard.SetTargetProperty(illuminate, new PropertyPath(UIElement.OpacityProperty));
             storyboard.Children.Add(illuminate);
 
-            // 3. À la fin, disperse la particule et redémarre l'animation normale
             storyboard.Completed += (s, e) => {
                 AnimateParticle(particle);
             };
@@ -229,7 +250,8 @@ namespace Concentrade
         #endregion
 
         #region Logique du Timer Pomodoro
-
+        // ... (Toutes les autres méthodes de cette région restent exactement les mêmes)
+        // (InitializeCycleIndicators, UpdateCycleIndicators, StartPomodoro, StartWorkSession, etc.)
         private void InitializeCycleIndicators()
         {
             _cyclesIndicatorPanel = new StackPanel
@@ -316,7 +338,7 @@ namespace Concentrade
             _timer.Stop();
             _currentState = PomodoroState.Finished;
             StateText.Text = "Félicitations !";
-            TimerText.Text = "�";
+            TimerText.Text = "🎉"; // Icône de fin
             UpdateCycleIndicators();
             SavePoints();
             _blocker.SetActive(false);
@@ -344,7 +366,6 @@ namespace Concentrade
 
                 if (_currentState == PomodoroState.Work)
                 {
-                    // ✅ MODIFICATION ICI : On utilise un chemin de fichier relatif simple
                     PlaySound("Images/mp3/fin_travail.mp3");
 
                     if (_currentCycle >= _totalCycles)
@@ -358,7 +379,6 @@ namespace Concentrade
                 }
                 else if (_currentState == PomodoroState.ShortBreak)
                 {
-                    // ✅ MODIFICATION ICI : On utilise aussi un chemin relatif
                     PlaySound("Images/mp3/debut_travail.mp3");
 
                     _currentCycle++;
@@ -372,14 +392,10 @@ namespace Concentrade
             try
             {
                 var player = new MediaPlayer();
-
-                // On garde le lecteur en vie en l'ajoutant à notre liste
                 _activeSoundPlayers.Add(player);
 
-                // On s'abonne à des événements pour savoir quand le son est fini ou a échoué
                 player.MediaEnded += (sender, e) =>
                 {
-                    // Le son est terminé, on peut le fermer et le retirer de la liste
                     if (sender is MediaPlayer mp)
                     {
                         mp.Close();
@@ -389,7 +405,6 @@ namespace Concentrade
 
                 player.MediaFailed += (sender, e) =>
                 {
-                    // Si une erreur se produit (ex: codec manquant), on l'affiche
                     MessageBox.Show($"Erreur Média : {e.ErrorException.Message}");
                     if (sender is MediaPlayer mp)
                     {
