@@ -23,16 +23,18 @@ namespace Concentrade
             var user = users.Find(u => u.Email == email);
             if (user != null)
             {
-                user.BlockedApps = new List<string>(blockedApps);
+                user.BlockedApps = string.Join(",", blockedApps); // transforme la liste en string séparée par des virgules
                 SaveUsers(users);
             }
         }
 
-        public static List<string> LoadBlockedAppsForUser(string email)
+
+        public static string LoadBlockedAppsForUser(string email)
         {
             var user = FindUser(email);
             // Retourne la liste de l'utilisateur, ou une nouvelle liste vide si l'utilisateur ou la liste n'existe pas.
-            return user?.BlockedApps ?? new List<string>();
+            string BlockedApps= user.BlockedApps;
+            return BlockedApps;
         }
 
         public static void SaveUsers(List<User> users)
@@ -100,6 +102,8 @@ namespace Concentrade
                 Properties.Settings.Default.LaunchOnStartup = user.LaunchOnStartup;
                 Properties.Settings.Default.QuestionnaireDone = user.QuestionnaireDone;
                 Properties.Settings.Default.Points = user.Points;
+                Properties.Settings.Default.BlockedApps = user.BlockedApps;
+
                 Properties.Settings.Default.Save();
             }
         }
@@ -107,8 +111,13 @@ namespace Concentrade
         public static List<string> LoadIgnoredAppsForUser(string email)
         {
             var user = FindUser(email);
-            // Retourne la liste de l'utilisateur, ou une nouvelle liste vide si elle n'existe pas.
-            return user?.IgnoredDefaultApps ?? new List<string>();
+            // On split le string séparé par des virgules en liste
+            if (user == null || string.IsNullOrWhiteSpace(user.IgnoredDefaultApps))
+                return new List<string>();
+            return user.IgnoredDefaultApps
+                       .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                       .Select(app => app.Trim())
+                       .ToList();
         }
 
         public static void SaveIgnoredAppsForUser(string email, IEnumerable<string> ignoredApps)
@@ -117,7 +126,8 @@ namespace Concentrade
             var user = users.Find(u => u.Email == email);
             if (user != null)
             {
-                user.IgnoredDefaultApps = new List<string>(ignoredApps);
+                // On join la liste en string séparé par des virgules
+                user.IgnoredDefaultApps = string.Join(",", ignoredApps.Select(app => app.Trim()));
                 SaveUsers(users);
             }
         }

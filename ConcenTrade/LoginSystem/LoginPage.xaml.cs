@@ -24,13 +24,7 @@ namespace Concentrade
                 // Sauvegarde l'email de l'utilisateur actuel pour le reste de la session
                 UserManager.LoadProperties(email);
 
-                // --- DÉBUT DE LA CORRECTION CRUCIALE ---
-                // Met à jour l'instance partagée de AppBlocker avec la liste 
-                // des applications bloquées SPÉCIFIQUE à l'utilisateur qui vient de se connecter.
-                var appBlocker = ((App)Application.Current).AppBlocker;
-                var blockedApps = UserManager.LoadBlockedAppsForUser(email);
-                appBlocker.UpdateBlockedApps(blockedApps);
-                // --- FIN DE LA CORRECTION CRUCIALE ---
+                
 
                 bool questionnaireDone = Properties.Settings.Default.QuestionnaireDone;
                 if (questionnaireDone)

@@ -17,8 +17,8 @@ namespace Concentrade
         public bool LaunchOnStartup { get; set; } = false;
         public bool QuestionnaireDone { get; set; } = false;
         public int Points { get; set; } = 0;
-        public List<string> BlockedApps { get; set; } = new List<string>();
-        public List<string> IgnoredDefaultApps { get; set; } = new List<string>();
+        public string BlockedApps { get; set; } = "";
+        public string IgnoredDefaultApps { get; set; } = "";
         public User(string email, string passwordHash)
         {
             Email = email;
@@ -45,5 +45,6 @@ namespace Concentrade
             LaunchOnStartup = launchOnStratup;
             QuestionnaireDone = true;
         }
+
     }
 }
