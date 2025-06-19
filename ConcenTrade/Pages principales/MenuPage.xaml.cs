@@ -41,7 +41,10 @@ namespace Concentrade
             InitializeComponent();
             DataContext = this;
             Points = Properties.Settings.Default.Points;
-            DureeSlider.Value = 50; // Valeur par défaut pour viser 2-3 cycles
+            DureeSlider.Value = 50;
+
+            // ✅ LIGNE MODIFIÉE : On initialise les labels des sliders personnalisés au démarrage
+            CustomTimeSlider_ValueChanged(null, null);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -111,8 +114,8 @@ namespace Concentrade
         private int ConvertirPositionEnCycles(double position)
         {
             int index = _positionsSlider.Select((p, i) => new { Index = i, Distance = Math.Abs(p - position) })
-                                        .OrderBy(p => p.Distance)
-                                        .First().Index;
+                                         .OrderBy(p => p.Distance)
+                                         .First().Index;
             return _cyclesPossibles[index];
         }
 
@@ -123,8 +126,7 @@ namespace Concentrade
             double valeurActuelle = e.NewValue;
             int positionPlusProche = _positionsSlider.OrderBy(p => Math.Abs(p - valeurActuelle)).First();
 
-            // Pour "magnétiser" le slider aux positions définies
-            if (Math.Abs(DureeSlider.Value - positionPlusProche) > 5) // Tolérance pour éviter des sauts constants
+            if (Math.Abs(DureeSlider.Value - positionPlusProche) > 5)
             {
                 DureeSlider.Value = positionPlusProche;
             }
@@ -137,10 +139,53 @@ namespace Concentrade
             SliderLabel.Text = $"Cycles : {cycles} (Total : {dureeTotale} min)";
         }
 
+        // ✅ NOUVELLE MÉTHODE
+        private void ModeButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (PomodoroPanel == null || CustomTimePanel == null) return;
+
+            if (PomodoroModeButton.IsChecked == true)
+            {
+                PomodoroPanel.Visibility = Visibility.Visible;
+                CustomTimePanel.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                PomodoroPanel.Visibility = Visibility.Collapsed;
+                CustomTimePanel.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void CustomTimeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (WorkTimeLabel == null || BreakTimeLabel == null || CycleCountLabel == null) return;
+
+            WorkTimeLabel.Text = $"Temps de travail : {(int)WorkTimeSlider.Value} minutes";
+            BreakTimeLabel.Text = $"Temps de pause : {(int)BreakTimeSlider.Value} minutes";
+            // ✅ Ligne ajoutée
+            CycleCountLabel.Text = $"Nombre de cycles : {(int)CycleCountSlider.Value}";
+        }
+
+        // ✅ MÉTHODE MODIFIÉE
         private void StartSession_Click(object sender, RoutedEventArgs e)
         {
-            int cycles = ConvertirPositionEnCycles(DureeSlider.Value);
-            this.NavigationService?.Navigate(new TimerPage(cycles));
+            if (PomodoroModeButton.IsChecked == true)
+            {
+                // Le mode Pomodoro classique ne change pas
+                int cycles = ConvertirPositionEnCycles(DureeSlider.Value);
+                // On navigue avec les durées par défaut de Pomodoro (25/5)
+                this.NavigationService?.Navigate(new TimerPage(TimeSpan.FromMinutes(25), TimeSpan.FromMinutes(5), cycles));
+            }
+            else
+            {
+                // Le mode Personnalisé envoie maintenant 3 arguments
+                TimeSpan workDuration = TimeSpan.FromMinutes((int)WorkTimeSlider.Value);
+                TimeSpan breakDuration = TimeSpan.FromMinutes((int)BreakTimeSlider.Value);
+                // ✅ On récupère le nombre de cycles du nouveau slider
+                int customCycles = (int)CycleCountSlider.Value;
+
+                this.NavigationService?.Navigate(new TimerPage(workDuration, breakDuration, customCycles));
+            }
         }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
