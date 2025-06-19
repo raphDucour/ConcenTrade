@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Windows.Media;
 
 namespace Concentrade
 {
@@ -34,12 +35,14 @@ namespace Concentrade
         private readonly TimeSpan _workDuration = TimeSpan.FromMinutes(1);
         private readonly TimeSpan _breakDuration = TimeSpan.FromMinutes(1);
         private Random _random = new Random();
-
+        private MediaPlayer _soundPlayer;
+        private List<MediaPlayer> _activeSoundPlayers = new List<MediaPlayer>(); // 
         public TimerPage(int cycles)
         {
             InitializeComponent();
             _totalCycles = cycles;
 
+            _soundPlayer = new MediaPlayer();
             _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             _timer.Tick += Timer_Tick;
 
@@ -319,7 +322,6 @@ namespace Concentrade
             _blocker.SetActive(false);
         }
 
-        // MISE À JOUR : La méthode est maintenant asynchrone pour permettre une pause
         private async void Timer_Tick(object? sender, EventArgs e)
         {
             if (_isPaused) return;
@@ -337,12 +339,14 @@ namespace Concentrade
             {
                 _timer.Stop();
 
-                // NOUVEAU : Déclenche l'animation des particules et attend un peu
                 TriggerEndOfCycleParticleAnimation();
-                await Task.Delay(1600); // Laisse le temps à l'animation de se jouer
+                await Task.Delay(1600);
 
                 if (_currentState == PomodoroState.Work)
                 {
+                    // ✅ MODIFICATION ICI : On utilise un chemin de fichier relatif simple
+                    PlaySound("Images/mp3/fin_travail.mp3");
+
                     if (_currentCycle >= _totalCycles)
                     {
                         FinishSession();
@@ -354,9 +358,51 @@ namespace Concentrade
                 }
                 else if (_currentState == PomodoroState.ShortBreak)
                 {
+                    // ✅ MODIFICATION ICI : On utilise aussi un chemin relatif
+                    PlaySound("Images/mp3/debut_travail.mp3");
+
                     _currentCycle++;
                     StartWorkSession();
                 }
+            }
+        }
+
+        private void PlaySound(string uri)
+        {
+            try
+            {
+                var player = new MediaPlayer();
+
+                // On garde le lecteur en vie en l'ajoutant à notre liste
+                _activeSoundPlayers.Add(player);
+
+                // On s'abonne à des événements pour savoir quand le son est fini ou a échoué
+                player.MediaEnded += (sender, e) =>
+                {
+                    // Le son est terminé, on peut le fermer et le retirer de la liste
+                    if (sender is MediaPlayer mp)
+                    {
+                        mp.Close();
+                        _activeSoundPlayers.Remove(mp);
+                    }
+                };
+
+                player.MediaFailed += (sender, e) =>
+                {
+                    // Si une erreur se produit (ex: codec manquant), on l'affiche
+                    MessageBox.Show($"Erreur Média : {e.ErrorException.Message}");
+                    if (sender is MediaPlayer mp)
+                    {
+                        _activeSoundPlayers.Remove(mp);
+                    }
+                };
+
+                player.Open(new Uri(uri, UriKind.Relative));
+                player.Play();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la lecture du son : {ex.Message}", "Erreur Audio");
             }
         }
 
