@@ -253,21 +253,24 @@
                 <Setter Property="TextAlignment" Value="Center"/>
             </Style>
 
-            <!-- STYLE AMÉLIORÉ POUR LA BARRE DE PROGRES CIRCULAIRE -->
             <Style x:Key="CircularProgressBarStyle" TargetType="ProgressBar">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="ProgressBar">
-                            <Grid x:Name="TemplateRoot" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5">
-                                <!-- Lueur externe -->
-                                <Ellipse>
-                                    <Ellipse.Fill>
-                                        <RadialGradientBrush>
-                                            <GradientStop Color="#3300E0FF" Offset="0.8"/>
-                                            <GradientStop Color="Transparent" Offset="1.0"/>
-                                        </RadialGradientBrush>
-                                    </Ellipse.Fill>
-                                </Ellipse>
+                            <Grid x:Name="TemplateRoot" SnapsToDevicePixels="True">
+
+                                <Grid.Resources>
+                                    <SineEase x:Key="BreathingEase" EasingMode="EaseInOut"/>
+                                    <!-- NOUVELLE ANIMATION : Cible le rayon du flou de l'effet de lueur -->
+                                    <Storyboard x:Key="PulseAnimation" RepeatBehavior="Forever">
+                                        <DoubleAnimation Storyboard.TargetName="GlowEffect"
+                                                         Storyboard.TargetProperty="BlurRadius"
+                                                         From="15" To="35" Duration="0:0:4"
+                                                         AutoReverse="True"
+                                                         EasingFunction="{StaticResource BreathingEase}"/>
+                                    </Storyboard>
+                                </Grid.Resources>
+
                                 <!-- Cercle de fond -->
                                 <Ellipse Stroke="#33FFFFFF" StrokeThickness="8" />
 
@@ -280,7 +283,8 @@
                                         </LinearGradientBrush>
                                     </Ellipse.Stroke>
                                     <Ellipse.Effect>
-                                        <DropShadowEffect ShadowDepth="0" Color="#FF00E0FF" Opacity="0.8" BlurRadius="20"/>
+                                        <!-- L'effet de lueur est maintenant nommé pour être ciblé par l'animation -->
+                                        <DropShadowEffect x:Name="GlowEffect" ShadowDepth="0" Color="#FF00E0FF" Opacity="0.8" BlurRadius="20"/>
                                     </Ellipse.Effect>
                                     <Ellipse.RenderTransform>
                                         <TransformGroup>
@@ -302,7 +306,8 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-
+            <!-- ... Le reste de vos styles ne change pas ... -->
         </ResourceDictionary>
     </Application.Resources>
 </Application>
+
