@@ -6,6 +6,9 @@
     <Application.Resources>
         <ResourceDictionary>
 
+            <!-- Référence au convertisseur pour la barre de progression -->
+            <local:ProgressToDashArrayConverter x:Key="ProgressToDashArrayConverter"/>
+
             <!-- VOS RESSOURCES DE COULEUR ORIGINALES -->
             <SolidColorBrush x:Key="ZenBackgroundBrush" Color="#2B3A4A"/>
             <SolidColorBrush x:Key="ZenCircleBrush" Color="#FFFFFF" Opacity="0.12"/>
@@ -207,6 +210,94 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type RepeatButton}">
                             <Rectangle Fill="Transparent" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- STYLES POUR LA PAGE TIMER -->
+            <Style x:Key="ControlButton" TargetType="Button">
+                <Setter Property="Background" Value="#FF4F4F4F"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="#FF6A6A6A"/>
+                <Setter Property="Padding" Value="15,8"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="8" BorderThickness="{TemplateBinding BorderBrush}" BorderBrush="{TemplateBinding BorderBrush}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#FF6A6A6A"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#FF3E3E3E"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="PageTitle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="48"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="FontWeight" Value="Light"/>
+                <Setter Property="TextAlignment" Value="Center"/>
+            </Style>
+
+            <!-- STYLE AMÉLIORÉ POUR LA BARRE DE PROGRES CIRCULAIRE -->
+            <Style x:Key="CircularProgressBarStyle" TargetType="ProgressBar">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ProgressBar">
+                            <Grid x:Name="TemplateRoot" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5">
+                                <!-- Lueur externe -->
+                                <Ellipse>
+                                    <Ellipse.Fill>
+                                        <RadialGradientBrush>
+                                            <GradientStop Color="#3300E0FF" Offset="0.8"/>
+                                            <GradientStop Color="Transparent" Offset="1.0"/>
+                                        </RadialGradientBrush>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <!-- Cercle de fond -->
+                                <Ellipse Stroke="#33FFFFFF" StrokeThickness="8" />
+
+                                <!-- Arc de progression avec dégradé et lueur interne -->
+                                <Ellipse StrokeThickness="10" RenderTransformOrigin="0.5,0.5">
+                                    <Ellipse.Stroke>
+                                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                            <GradientStop Color="#FF00E0FF" Offset="0" />
+                                            <GradientStop Color="#FF00A0CC" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Ellipse.Stroke>
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect ShadowDepth="0" Color="#FF00E0FF" Opacity="0.8" BlurRadius="20"/>
+                                    </Ellipse.Effect>
+                                    <Ellipse.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleY="-1"/>
+                                            <RotateTransform Angle="-90"/>
+                                        </TransformGroup>
+                                    </Ellipse.RenderTransform>
+                                    <Ellipse.StrokeDashArray>
+                                        <MultiBinding Converter="{StaticResource ProgressToDashArrayConverter}">
+                                            <Binding Path="Value" RelativeSource="{RelativeSource TemplatedParent}" />
+                                            <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=Grid}" />
+                                            <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType=Grid}" />
+                                            <Binding Path="StrokeThickness" RelativeSource="{RelativeSource Self}" />
+                                        </MultiBinding>
+                                    </Ellipse.StrokeDashArray>
+                                </Ellipse>
+                            </Grid>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>

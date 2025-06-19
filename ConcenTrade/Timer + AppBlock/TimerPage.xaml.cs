@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Shapes;
 using System.Windows.Threading;
-using System.Threading.Tasks;
 
 namespace Concentrade
 {
@@ -14,6 +17,7 @@ namespace Concentrade
 
         private DispatcherTimer _timer;
         private TimeSpan _remaining;
+        private TimeSpan _duration;
         private AppBlocker _blocker;
         private Dictionary<string, DispatcherTimer> _temporaryAllowanceTimers = new();
         private bool _isPaused = false;
@@ -25,6 +29,7 @@ namespace Concentrade
         private int _currentCycle;
         private readonly TimeSpan _workDuration = TimeSpan.FromMinutes(25);
         private readonly TimeSpan _breakDuration = TimeSpan.FromMinutes(5);
+        private Random _random = new Random();
 
         public TimerPage(int cycles)
         {
@@ -37,7 +42,7 @@ namespace Concentrade
             _pointsText = new TextBlock
             {
                 FontSize = 20,
-                Foreground = System.Windows.Media.Brushes.White,
+                Foreground = Brushes.White,
                 HorizontalAlignment = HorizontalAlignment.Right,
                 VerticalAlignment = VerticalAlignment.Top,
                 Margin = new Thickness(0, 20, 20, 0)
@@ -46,7 +51,6 @@ namespace Concentrade
             MainGrid.Children.Add(_pointsText);
 
             _blocker = ((App)Application.Current).AppBlocker;
-            _blocker.OnTemporaryAllowance += Blocker_OnTemporaryAllowance;
 
             Dispatcher.BeginInvoke(new Action(() =>
             {
@@ -66,93 +70,73 @@ namespace Concentrade
             }));
         }
 
-        private void ResumeMainTimerIfNeeded()
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            // Reprend le minuteur principal seulement si aucune autre app n'est autorisée.
-            if (_temporaryAllowanceTimers.Count == 0 && _isPaused)
+            if (this.ActualWidth > 0 && this.ActualHeight > 0)
             {
-                _isPaused = false;
-                _timer.Start();
-                UpdateTimerText();
+                CreateAndAnimateParticles(15);
             }
         }
 
-        // =========================================================================
-        //  LA LOGIQUE QUI CORRIGE LA BOUCLE EST DANS CETTE MÉTHODE
-        // =========================================================================
-        private void Blocker_OnTemporaryAllowance(object? sender, TemporaryAllowanceEventArgs e)
+        #region Animation des Particules
+        private void CreateAndAnimateParticles(int count)
         {
-            if (_currentState != PomodoroState.Work) return;
-
-            if (!_isPaused)
+            for (int i = 0; i < count; i++)
             {
-                _timer.Stop();
-                _isPaused = true;
-                Application.Current.Dispatcher.Invoke(UpdateTimerText);
-            }
-
-            // Création du minuteur pour la PREMIÈRE autorisation
-            var firstAllowanceTimer = new DispatcherTimer { Interval = e.Duration };
-            firstAllowanceTimer.Tick += (s, args) =>
-            {
-                firstAllowanceTimer.Stop();
-
-                Application.Current.Dispatcher.Invoke(() =>
+                Ellipse particle = new Ellipse
                 {
-                    Process[] processes = Process.GetProcessesByName(e.ProcessName);
-                    if (processes.Length > 0)
-                    {
-                        Process processToBlock = processes[0];
-                        var popup = new TimeUpPopup(e.ProcessName, processToBlock);
+                    Fill = new SolidColorBrush(Colors.White),
+                    Effect = new System.Windows.Media.Effects.BlurEffect()
+                };
 
-                        if (popup.ShowDialog() == true)
-                        {
-                            if (popup.Action == TimeUpPopup.TimeUpAction.Extend)
-                            {
-                                // *** LA CORRECTION EST ICI ***
-                                // On crée un minuteur final et ISOLÉ.
-                                // Il ne redéclenche PAS l'événement OnTemporaryAllowance.
-                                var finalAllowanceTimer = new DispatcherTimer { Interval = popup.ExtensionDuration };
-                                finalAllowanceTimer.Tick += (s2, args2) =>
-                                {
-                                    finalAllowanceTimer.Stop();
-                                    // Le temps est écoulé : on ferme l'app et on tente de reprendre le timer.
-                                    try { if (!processToBlock.HasExited) processToBlock.Kill(true); } catch { }
+                double size = _random.Next(5, 40);
+                particle.Width = size;
+                particle.Height = size;
+                particle.Opacity = _random.NextDouble() * 0.4 + 0.1;
+                ((System.Windows.Media.Effects.BlurEffect)particle.Effect).Radius = _random.Next(5, 15);
 
-                                    _temporaryAllowanceTimers.Remove(e.ProcessName);
-                                    ResumeMainTimerIfNeeded();
-                                };
+                particle.RenderTransform = new TranslateTransform(_random.Next(0, (int)this.ActualWidth), _random.Next(0, (int)this.ActualHeight));
 
-                                _temporaryAllowanceTimers[e.ProcessName] = finalAllowanceTimer;
-                                finalAllowanceTimer.Start();
-                            }
-                            else // L'utilisateur a choisi "Fermer maintenant"
-                            {
-                                try { if (!processToBlock.HasExited) processToBlock.Kill(true); } catch { }
-                                _temporaryAllowanceTimers.Remove(e.ProcessName);
-                                ResumeMainTimerIfNeeded();
-                            }
-                        }
-                        else // L'utilisateur a fermé le popup sans choisir
-                        {
-                            try { if (!processToBlock.HasExited) processToBlock.Kill(true); } catch { }
-                            _temporaryAllowanceTimers.Remove(e.ProcessName);
-                            ResumeMainTimerIfNeeded();
-                        }
-                    }
-                    else
-                    {
-                        _temporaryAllowanceTimers.Remove(e.ProcessName);
-                        ResumeMainTimerIfNeeded();
-                    }
-                });
-            };
-            _temporaryAllowanceTimers[e.ProcessName] = firstAllowanceTimer;
-            firstAllowanceTimer.Start();
+                ParticleCanvas.Children.Add(particle);
+                AnimateParticle(particle);
+            }
         }
 
-        // --- Le reste du fichier ne change pas ---
-        #region Méthodes de gestion du minuteur principal
+        private void AnimateParticle(Ellipse particle)
+        {
+            var transform = (TranslateTransform)particle.RenderTransform;
+
+            double endX = _random.NextDouble() > 0.5 ? this.ActualWidth + 100 : -100;
+            double endY = _random.Next(0, (int)this.ActualHeight);
+
+            var animX = new DoubleAnimation
+            {
+                To = endX,
+                Duration = TimeSpan.FromSeconds(_random.Next(20, 60)),
+            };
+
+            var animY = new DoubleAnimation
+            {
+                To = endY,
+                Duration = TimeSpan.FromSeconds(_random.Next(20, 60)),
+            };
+
+            animX.Completed += (s, e) =>
+            {
+                if (this.ActualWidth > 0 && this.ActualHeight > 0)
+                {
+                    transform.X = _random.NextDouble() > 0.5 ? -50 : this.ActualWidth + 50;
+                    transform.Y = _random.Next(0, (int)this.ActualHeight);
+                    AnimateParticle(particle);
+                }
+            };
+
+            transform.BeginAnimation(TranslateTransform.XProperty, animX);
+            transform.BeginAnimation(TranslateTransform.YProperty, animY);
+        }
+        #endregion
+
+        #region Logique du Timer Pomodoro
         private void StartPomodoro()
         {
             _currentCycle = 1;
@@ -162,24 +146,24 @@ namespace Concentrade
         private void StartWorkSession()
         {
             _currentState = PomodoroState.Work;
-            _remaining = _workDuration;
+            _duration = _workDuration;
+            _remaining = _duration;
             _isPaused = false;
             PauseButton.Content = "⏯️ Pause";
             _blocker.SetActive(true);
-            UpdateTimerText();
+            UpdateTimerDisplay(true); // true pour une mise à jour instantanée au début
             _timer.Start();
         }
 
         private void StartBreakSession()
         {
             _currentState = PomodoroState.ShortBreak;
-            _remaining = _breakDuration;
+            _duration = _breakDuration;
+            _remaining = _duration;
             _isPaused = false;
             PauseButton.Content = "⏯️ Pause";
             _blocker.SetActive(false);
-            foreach (var timer in _temporaryAllowanceTimers.Values) timer.Stop();
-            _temporaryAllowanceTimers.Clear();
-            UpdateTimerText();
+            UpdateTimerDisplay(true); // true pour une mise à jour instantanée au début
             _timer.Start();
         }
 
@@ -191,20 +175,21 @@ namespace Concentrade
             TimerText.Text = "🎉";
             SavePoints();
             _blocker.SetActive(false);
-            foreach (var timer in _temporaryAllowanceTimers.Values) timer.Stop();
-            _temporaryAllowanceTimers.Clear();
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
         {
             if (_isPaused) return;
+
             _remaining = _remaining.Subtract(TimeSpan.FromSeconds(1));
-            UpdateTimerText();
+            UpdateTimerDisplay(); // La mise à jour est maintenant animée
+
             if (_currentState == PomodoroState.Work)
             {
                 _pointsAccumules++;
                 UpdatePointsText();
             }
+
             if (_remaining.TotalSeconds <= 0)
             {
                 _timer.Stop();
@@ -221,9 +206,17 @@ namespace Concentrade
             }
         }
 
-        private void UpdateTimerText()
+        private void UpdateTimerDisplay(bool isInitialSet = false)
         {
             TimerText.Text = _remaining.ToString(@"mm\:ss");
+
+            if (_duration.TotalSeconds > 0)
+            {
+                double newValue = (_remaining.TotalSeconds / _duration.TotalSeconds) * 100;
+                // Animer la barre de progression au lieu de la définir directement
+                AnimateProgressBar(newValue, isInitialSet);
+            }
+
             string stateInfo = "";
             switch (_currentState)
             {
@@ -235,24 +228,48 @@ namespace Concentrade
                     break;
             }
             if (_isPaused) stateInfo += " (En pause)";
+
             StateText.Text = stateInfo;
+        }
+
+        /// <summary>
+        /// Anime la barre de progression vers une nouvelle valeur.
+        /// </summary>
+        /// <param name="newValue">La nouvelle valeur (0-100).</param>
+        /// <param name="isInitialSet">Si vrai, la valeur est définie instantanément sans animation.</param>
+        private void AnimateProgressBar(double newValue, bool isInitialSet = false)
+        {
+            if (isInitialSet)
+            {
+                CircularProgressBar.Value = newValue;
+                return;
+            }
+
+            var animation = new DoubleAnimation
+            {
+                To = newValue,
+                Duration = TimeSpan.FromMilliseconds(950), // Animation fluide sur presque une seconde
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
+            CircularProgressBar.BeginAnimation(ProgressBar.ValueProperty, animation);
         }
 
         private void PauseButton_Click(object sender, RoutedEventArgs e)
         {
             if (_currentState == PomodoroState.Finished) return;
+
             _isPaused = !_isPaused;
             if (_isPaused)
             {
                 _timer.Stop();
-                PauseButton.Content = "⏯️ Reprendre";
+                PauseButton.Content = "▶️ Reprendre";
             }
             else
             {
                 _timer.Start();
                 PauseButton.Content = "⏯️ Pause";
             }
-            UpdateTimerText();
+            UpdateTimerDisplay();
         }
 
         private async void StopButton_Click(object sender, RoutedEventArgs e)
@@ -260,8 +277,7 @@ namespace Concentrade
             _timer.Stop();
             SavePoints();
             _blocker.SetActive(false);
-            foreach (var timer in _temporaryAllowanceTimers.Values) timer.Stop();
-            _temporaryAllowanceTimers.Clear();
+
             await Task.Run(() =>
             {
                 Application.Current.Dispatcher.Invoke(() =>
