@@ -1,14 +1,16 @@
 ﻿using Concentrade;
+using Concentrade.Properties;
 using System;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Concentrade.Properties;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ConcenTrade
 {
@@ -192,6 +194,8 @@ namespace ConcenTrade
             user.SauvegarderDansSettings();
             user.SauvegarderDansLaBaseDeDonnees();
 
+            UserManager.PushIntoBDD();
+
             MessageBox.Show("Informations mises à jour avec succès !");
         }
 
@@ -203,11 +207,9 @@ namespace ConcenTrade
 
         private void GererAppsBloquees_Click(object sender, RoutedEventArgs e)
         {
-            string currentUserEmail = Concentrade.Properties.Settings.Default.UserEmail;
-            var currentBlockedApps = _appBlocker.GetBlockedApps().ToArray();
-
+            var currentBlockedApps = LoadBlockedApps().ToArray();
             // CHANGEMENT : On charge aussi la liste des applications ignorées
-            var currentIgnoredApps = UserManager.LoadIgnoredAppsForUser(currentUserEmail);
+            var currentIgnoredApps = LoadIgnoredAppsForUser();
 
             // On passe les deux listes à la fenêtre de configuration
             var settingsWindow = new BlockedAppsSettings(currentBlockedApps, currentIgnoredApps);
@@ -216,13 +218,42 @@ namespace ConcenTrade
             {
                 // La sauvegarde des applications bloquées ne change pas
                 var newBlockedApps = settingsWindow.BlockedApps;
-                _appBlocker.UpdateBlockedApps(newBlockedApps);
-                UserManager.SaveBlockedAppsForUser(currentUserEmail, newBlockedApps);
+                SaveBlockedAppsForUser(newBlockedApps);
 
                 // CHANGEMENT : On sauvegarde la nouvelle liste des applications ignorées
                 var newIgnoredApps = settingsWindow.IgnoredApps;
-                UserManager.SaveIgnoredAppsForUser(currentUserEmail, newIgnoredApps);
+                SaveIgnoredAppsForUser(newIgnoredApps);
             }
+        }
+
+
+        public static List<string> LoadBlockedApps()
+        {
+            return Settings.Default.BlockedApps
+                       .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                       .Select(app => app.Trim())
+                       .ToList();
+        }
+        // Méthodes déplacées depuis UserManager.cs pour la gestion des paramètres utilisateur
+        public static void SaveBlockedAppsForUser(IEnumerable<string> blockedApps)
+        {
+            // Enregistre la liste des apps bloquées dans les settings locaux
+            Settings.Default.BlockedApps = string.Join(",", blockedApps);
+            Settings.Default.Save();
+        }
+
+        public static List<string> LoadIgnoredAppsForUser()
+        { 
+            return Settings.Default.IgnoredApps
+                       .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                       .Select(app => app.Trim())
+                       .ToList();
+        }
+
+        public static void SaveIgnoredAppsForUser(IEnumerable<string> ignoredApps)
+        {
+            Settings.Default.IgnoredApps = string.Join(",", ignoredApps);
+            Settings.Default.Save();
         }
     }
 }

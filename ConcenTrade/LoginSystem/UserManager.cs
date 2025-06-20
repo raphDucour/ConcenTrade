@@ -108,53 +108,6 @@ namespace Concentrade
             }
         }
         
-        
-        
-        
-        
-        //fonction a deplacé
-        
-        
-        
-        //devrait etre dans settings page et doit enregistrer sur le pc
-        public static void SaveBlockedAppsForUser(string email, IEnumerable<string> blockedApps)
-        {
-            var users = LoadUsers();
-            var user = users.Find(u => u.Email == email);
-            if (user != null)
-            {
-                user.BlockedApps = string.Join(",", blockedApps); // transforme la liste en string séparée par des virgules
-                SaveUsers(users);
-            }
-        }
-
-        //devrait etre dans settings page et doit enregistrer sur le pc
-        public static List<string> LoadIgnoredAppsForUser(string email)
-        {
-            var user = FindUser(email);
-            // On split le string séparé par des virgules en liste
-            if (user == null || string.IsNullOrWhiteSpace(user.IgnoredDefaultApps))
-                return new List<string>();
-            return user.IgnoredDefaultApps
-                       .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                       .Select(app => app.Trim())
-                       .ToList();
-        }
-
-        //devrait etre dans settings page et doit enregistrer sur le pc
-        public static void SaveIgnoredAppsForUser(string email, IEnumerable<string> ignoredApps)
-        {
-            var users = LoadUsers();
-            var user = users.Find(u => u.Email == email);
-            if (user != null)
-            {
-                // On join la liste en string séparé par des virgules
-                user.IgnoredDefaultApps = string.Join(",", ignoredApps.Select(app => app.Trim()));
-                SaveUsers(users);
-            }
-        }
-
-        //devrait etre dans settings page et doit enregistrer sur le pc
         public static void SavePoints(string email, int points)
         {
             var users = LoadUsers();
