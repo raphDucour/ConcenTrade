@@ -43,15 +43,11 @@ namespace Concentrade
             OnTemporaryAllowance?.Invoke(this, new TemporaryAllowanceEventArgs(mainProcessName, duration));
         }
 
-        // --- MODIFIÉ ---
-        // Le constructeur est maintenant vide. La liste des applications bloquées
-        // sera chargée depuis l'extérieur après la connexion de l'utilisateur.
+
         public AppBlocker()
         {
         }
 
-        // --- MODIFIÉ ---
-        // Accepte IEnumerable<string> pour plus de flexibilité et ne sauvegarde plus rien.
         public void UpdateBlockedApps(IEnumerable<string> newBlockedApps)
         {
             _blockedApps = new List<string>(newBlockedApps.Select(app => NormalizeAppName(app)));
@@ -377,7 +373,78 @@ namespace Concentrade
                        .ToList();
         }
 
+        // Dans le fichier ConcenTrade/Timer + AppBlock/AppBlocker.cs
+
+        public void KillProcess(string processName)
+        {
+            try
+            {
+                // Le nom du processus peut parfois inclure ou non l'extension .exe
+                var exeName = processName.EndsWith(".exe") ? processName.Substring(0, processName.Length - 4) : processName;
+                var processes = Process.GetProcessesByName(exeName);
+
+                foreach (var process in processes)
+                {
+                    try
+                    {
+                        process.Kill();
+                        process.WaitForExit(); // Attendre que le processus soit bien terminé
+                    }
+                    catch (Exception ex)
+                    {
+                        // Gérer les cas où l'on n'a pas les droits, etc.
+                        Console.WriteLine($"Impossible de fermer le processus {process.ProcessName}: {ex.Message}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erreur en cherchant le processus {processName}: {ex.Message}");
+            }
+        }
+
+        public void MinimizeProcess(string mainAppName)
+        {
+            mainAppName = mainAppName.ToLower();
+            List<string> processesToMinimize = new List<string> { mainAppName };
+
+            if (_relatedProcesses.ContainsKey(mainAppName))
+            {
+                processesToMinimize.AddRange(_relatedProcesses[mainAppName]);
+            }
+
+            foreach (var processName in processesToMinimize.Distinct())
+            {
+                try
+                {
+                    var exeName = processName.Replace(".exe", "");
+                    var processes = Process.GetProcessesByName(exeName);
+                    foreach (var process in processes)
+                    {
+                        if (process.MainWindowHandle != IntPtr.Zero)
+                        {
+                            try
+                            {
+                                ShowWindow(process.MainWindowHandle, SW_MINIMIZE);
+                                Debug.WriteLine($"Processus {process.ProcessName} (ID: {process.Id}) minimisé.");
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.WriteLine($"Impossible de minimiser le processus {process.ProcessName} (ID: {process.Id}): {ex.Message}");
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Erreur lors de la recherche du processus {processName} pour minimisation: {ex.Message}");
+                }
+            }
+        }
+
     }
+
+
 
 
     public class TemporaryAllowanceEventArgs : EventArgs
@@ -392,6 +459,7 @@ namespace Concentrade
         }
 
     }
+
 
 
 }

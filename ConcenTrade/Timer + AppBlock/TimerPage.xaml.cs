@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConcenTrade;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -17,7 +18,6 @@ namespace Concentrade
 {
     public partial class TimerPage : Page
     {
-        private enum PomodoroState { Work, ShortBreak, Finished }
 
         // ... (Toutes vos variables privées restent les mêmes)
         private DispatcherTimer _timer;
@@ -38,6 +38,9 @@ namespace Concentrade
         private TimeSpan _breakDuration = TimeSpan.FromMinutes(5); // Valeur par défaut si non spécifiée
         private Random _random = new Random();
         private List<MediaPlayer> _activeSoundPlayers = new List<MediaPlayer>();
+        private DispatcherTimer _distractionPauseTimer;
+        private bool _isExtensionPopupShown = false;
+        private enum PomodoroState { Work, ShortBreak, Finished, Idle }
 
         // Constructeur existant pour le mode Pomodoro.
         public TimerPage(int cycles)
@@ -87,6 +90,7 @@ namespace Concentrade
             InitializeCycleIndicators();
 
             _blocker = ((App)Application.Current).AppBlocker;
+            _blocker.OnTemporaryAllowance += Blocker_OnTemporaryAllowance;
 
             Dispatcher.BeginInvoke(new Action(() =>
             {
@@ -486,20 +490,20 @@ namespace Concentrade
             UpdateTimerDisplay();
         }
 
-        private async void StopButton_Click(object sender, RoutedEventArgs e)
+        private void StopButton_Click(object sender, RoutedEventArgs e)
         {
             StopPulsing();
             _timer.Stop();
+            _distractionPauseTimer?.Stop();
             SavePoints();
-            _blocker.SetActive(false);
+            _blocker.SetActive(false); // L'erreur CS4008 est corrigée ici (await supprimé)
 
-            await Task.Run(() =>
+            // Les erreurs CS0103 sont corrigées ici.
+            // On navigue simplement vers une nouvelle page de menu.
+            if (this.NavigationService != null)
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    NavigationService?.Navigate(new MenuPage());
-                });
-            });
+                this.NavigationService.Navigate(new MenuPage());
+            }
         }
 
         private void UpdatePointsText()
@@ -518,6 +522,112 @@ namespace Concentrade
             }
             _pointsAccumules = 0;
             UpdatePointsText();
+        }
+
+        // Dans le fichier ConcenTrade/Timer + AppBlock/TimerPage.xaml.cs, ajoutez cette nouvelle méthode
+
+        // 1. REMPLACEZ votre méthode existante par celle-ci
+        private void Blocker_OnTemporaryAllowance(object? sender, TemporaryAllowanceEventArgs e)
+        {
+            // On s'assure que cette logique ne s'exécute que pendant une session de travail active
+            if (_currentState != PomodoroState.Work || _isPaused) return;
+
+            // Met en pause le minuteur principal
+            _timer.Stop();
+            _isPaused = true;
+            PauseButton.Content = "▶️ Reprendre";
+            StateText.Text = $"En pause - {e.ProcessName} autorisé";
+
+            // Lance le minuteur de distraction
+            StartDistractionTimer(e.ProcessName, e.Duration, isExtension: false);
+        }
+
+        private void StartDistractionTimer(string processName, TimeSpan duration, bool isExtension)
+        {
+            // Arrête tout minuteur précédent pour éviter les conflits
+            _distractionPauseTimer?.Stop();
+
+            _distractionPauseTimer = new DispatcherTimer { Interval = duration };
+            _distractionPauseTimer.Tag = new Tuple<string, bool>(processName, isExtension);
+
+            _distractionPauseTimer.Tick += DistractionTimer_Finished;
+            _distractionPauseTimer.Start();
+        }
+
+        // Dans le fichier TimerPage.xaml.cs
+
+        private async void DistractionTimer_Finished(object? sender, EventArgs e)
+        {
+            _distractionPauseTimer?.Stop();
+
+            if (sender is not DispatcherTimer timer || timer.Tag is not Tuple<string, bool> tag)
+            {
+                ResumeWorkTimer();
+                return;
+            }
+
+            var processName = tag.Item1;
+            var wasAnExtension = tag.Item2;
+
+            if (wasAnExtension)
+            {
+                _blocker.KillApplication(processName);
+                ResumeWorkTimer();
+            }
+            else
+            {
+                // --- DÉBUT DE LA CORRECTION ---
+
+                // Si un pop-up est déjà affiché pour un autre processus du même jeu, on ignore cet appel.
+                if (_isExtensionPopupShown)
+                {
+                    return;
+                }
+
+                // On utilise un bloc try...finally pour garantir que le verrou sera toujours retiré.
+                try
+                {
+                    // On pose le verrou pour bloquer les autres pop-ups.
+                    _isExtensionPopupShown = true;
+
+                    await Task.Yield();
+                    _blocker.MinimizeProcess(processName);
+
+                    var extensionWindow = new ExtensionChoiceWindow(processName);
+                    extensionWindow.Activate();
+                    bool? dialogResult = extensionWindow.ShowDialog();
+
+                    if (dialogResult == true)
+                    {
+                        StateText.Text = $"Pause prolongée pour {processName}";
+                        StartDistractionTimer(processName, extensionWindow.ExtensionDuration, isExtension: true);
+                    }
+                    else
+                    {
+                        _blocker.KillApplication(processName);
+                        ResumeWorkTimer();
+                    }
+                }
+                finally
+                {
+                    // Très important : on retire le verrou pour permettre aux futurs pop-ups de s'afficher.
+                    _isExtensionPopupShown = false;
+                }
+                // --- FIN DE LA CORRECTION ---
+            }
+        }
+
+
+        // 4. AJOUTEZ cette méthode utilitaire pour ne pas répéter de code
+        private void ResumeWorkTimer()
+        {
+            if (_currentState == PomodoroState.Work)
+            {
+                _timer.Start(); // Reprend le minuteur principal
+                _isPaused = false;
+                PauseButton.Content = "⏯️ Pause";
+                UpdateTimerDisplay();
+            }
         }
         #endregion
     }
