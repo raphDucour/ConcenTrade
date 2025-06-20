@@ -5,6 +5,11 @@ using Concentrade.Pages_principales.Collection;
 using Concentrade.Collections_de_cartes;
 using System.Xml.Linq;
 using System.Linq;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Shapes;
+using System;
+using System.Windows.Media.Effects;
 
 namespace Concentrade.Pages_principales
 {
@@ -99,5 +104,72 @@ namespace Concentrade.Pages_principales
         {
             this.NavigationService?.Navigate(new Caisse(3)); // Caisse Dragon
         }
+        private Random _random = new Random();
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (this.ActualWidth > 0 && this.ActualHeight > 0)
+            {
+                CreateAndAnimateParticles(10);
+            }
+        }
+
+        private void CreateAndAnimateParticles(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Ellipse particle = new Ellipse
+                {
+                    Fill = new SolidColorBrush(Colors.White),
+                    Effect = new BlurEffect()
+                };
+
+                double size = _random.Next(5, 40);
+                particle.Width = size;
+                particle.Height = size;
+                particle.Opacity = _random.NextDouble() * 0.4 + 0.1;
+                ((BlurEffect)particle.Effect).Radius = _random.Next(5, 15);
+
+                particle.RenderTransform = new TranslateTransform(_random.Next(0, (int)this.ActualWidth), _random.Next(0, (int)this.ActualHeight));
+
+                ParticleCanvas.Children.Add(particle);
+                AnimateParticle(particle);
+            }
+        }
+
+        private void AnimateParticle(Ellipse particle)
+        {
+            var transform = (TranslateTransform)particle.RenderTransform;
+            if (this.ActualWidth == 0 || this.ActualHeight == 0) return;
+
+            double endX = _random.NextDouble() > 0.5 ? this.ActualWidth + 100 : -100;
+            double endY = _random.Next(0, (int)this.ActualHeight);
+
+            var animX = new DoubleAnimation
+            {
+                To = endX,
+                Duration = TimeSpan.FromSeconds(_random.Next(20, 60)),
+            };
+
+            var animY = new DoubleAnimation
+            {
+                To = endY,
+                Duration = TimeSpan.FromSeconds(_random.Next(20, 60)),
+            };
+
+            animX.Completed += (s, e) =>
+            {
+                if (this.ActualWidth > 0 && this.ActualHeight > 0)
+                {
+                    transform.X = _random.NextDouble() > 0.5 ? -50 : this.ActualWidth + 50;
+                    transform.Y = _random.Next(0, (int)this.ActualHeight);
+                    AnimateParticle(particle);
+                }
+            };
+
+            transform.BeginAnimation(TranslateTransform.XProperty, animX);
+            transform.BeginAnimation(TranslateTransform.YProperty, animY);
+        }
+
     }
 } 

@@ -6,200 +6,76 @@
       xmlns:local="clr-namespace:Concentrade.Pages_principales"
       xmlns:collection="clr-namespace:Concentrade.Pages_principales.Collection"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="CollectionPage"
-      Background="#0D1C26">
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="CollectionPage" Loaded="Page_Loaded">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <Grid Background="{StaticResource ZenBackgroundBrush}">
+        <!-- Fond sombre et Canvas pour les particules animées -->
+        <Canvas x:Name="ParticleCanvas" />
 
-        <!-- En-tête -->
-        <Grid Grid.Row="0" Background="#1E3A8A">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <Button x:Name="RetourButton" 
-                    Content="Retour" 
-                    Click="RetourButton_Click"
-                    Background="#2B4C8C"
-                    Foreground="White"
-                    BorderThickness="0"
-                    Padding="15,8"
-                    Margin="10"/>
+            <!-- Bouton Retour en haut à gauche -->
+            <Button x:Name="RetourButton" Content="&lt; Retour" Style="{StaticResource ZenButtonStyle}"
+                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20"
+                    Click="RetourButton_Click"/>
 
-            <TextBlock Text="Collection" 
-                     Foreground="White" 
-                     FontSize="24" 
-                     VerticalAlignment="Center"
-                     HorizontalAlignment="Center"
-                     Grid.Column="1"/>
+            <TextBlock Text="Ma Collection" Style="{StaticResource PageTitle}" Grid.Row="0" Margin="0,40,0,20"/>
 
-            <Button x:Name="AcheterButton" 
-                    Content="Acheter" 
-                    Click="AcheterButton_Click"
-                    Background="#2B4C8C"
-                    Foreground="White"
-                    BorderThickness="0"
-                    Padding="15,8"
-                    Margin="10"
-                    Grid.Column="2"/>
+            <!-- Bouton pour acheter des caisses -->
+            <Button x:Name="AcheterButton" Content="Ouvrir une Caisse" Style="{StaticResource ZenButtonStyle}"
+                    Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,20"
+                    Click="AcheterButton_Click"/>
+
+            <!-- Panel des cartes avec une barre de défilement -->
+            <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Margin="40,0,40,20">
+                <WrapPanel x:Name="CardsPanel" HorizontalAlignment="Center"/>
+            </ScrollViewer>
         </Grid>
 
-        <!-- Contenu principal -->
-        <ScrollViewer Grid.Row="1" 
-                     VerticalScrollBarVisibility="Visible"
-                     HorizontalScrollBarVisibility="Disabled">
-            <WrapPanel x:Name="CardsPanel" 
-                      Margin="20"
-                      HorizontalAlignment="Center"
-                      ItemWidth="250"
-                      ItemHeight="320"/>
-        </ScrollViewer>
-
-        <!-- Overlay d'achat -->
-        <Grid x:Name="AchatOverlay" 
-              Grid.Row="0" 
-              Grid.RowSpan="2" 
-              Background="#80000000" 
-              Visibility="Collapsed">
-            <Border Background="#1E3A8A" 
-                    CornerRadius="15" 
-                    Width="350" 
-                    Height="450" 
-                    VerticalAlignment="Center" 
-                    HorizontalAlignment="Center">
-                <Grid Margin="20">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Text="Boutique" 
-                             Foreground="White" 
-                             FontSize="20" 
-                             HorizontalAlignment="Center"
-                             Margin="0,0,0,20"/>
-
-                    <ScrollViewer Grid.Row="1">
-                        <StackPanel>
-                            <!-- Caisse Poules (Commune) -->
-                            <Border Background="#2B4C8C" 
-                                    CornerRadius="10" 
-                                    Margin="0,0,0,10" 
-                                    Padding="10">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="🐓" 
-                                             FontSize="30" 
-                                             VerticalAlignment="Center"/>
-                                    <StackPanel Grid.Column="1" 
-                                              Margin="10,0">
-                                        <TextBlock Text="Caisse Poules" 
-                                                 Foreground="White" 
-                                                 FontSize="14"/>
-                                        <TextBlock Text="500 points" 
-                                                 Foreground="#9CA3AF"
-                                                 FontSize="12"/>
-                                    </StackPanel>
-                                    <Button Grid.Column="2" 
-                                            Content="Acheter" 
-                                            Click="BuyCat_Click"
-                                            Background="#4B5563"
-                                            Foreground="White"
-                                            BorderThickness="0"
-                                            Padding="8,4"/>
-                                </Grid>
-                            </Border>
-
-                            <!-- Caisse QoC (Rare) -->
-                            <Border Background="#6D28D9" 
-                                    CornerRadius="10" 
-                                    Margin="0,0,0,10" 
-                                    Padding="10">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="👑" 
-                                             FontSize="30" 
-                                             VerticalAlignment="Center"/>
-                                    <StackPanel Grid.Column="1" 
-                                              Margin="10,0">
-                                        <TextBlock Text="Caisse QoC" 
-                                                 Foreground="White" 
-                                                 FontSize="14"/>
-                                        <TextBlock Text="1000 points" 
-                                                 Foreground="#9CA3AF"
-                                                 FontSize="12"/>
-                                    </StackPanel>
-                                    <Button Grid.Column="2" 
-                                            Content="Acheter" 
-                                            Click="BuyDog_Click"
-                                            Background="#4B5563"
-                                            Foreground="White"
-                                            BorderThickness="0"
-                                            Padding="8,4"/>
-                                </Grid>
-                            </Border>
-
-                            <!-- Caisse Dragon (Légendaire) -->
-                            <Border Background="#A16207" 
-                                    CornerRadius="10" 
-                                    Margin="0,0,0,10" 
-                                    Padding="10">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="🐲" 
-                                             FontSize="30" 
-                                             VerticalAlignment="Center"/>
-                                    <StackPanel Grid.Column="1" 
-                                              Margin="10,0">
-                                        <TextBlock Text="Caisse Dragon" 
-                                                 Foreground="White" 
-                                                 FontSize="14"/>
-                                        <TextBlock Text="2000 points" 
-                                                 Foreground="#9CA3AF"
-                                                 FontSize="12"/>
-                                    </StackPanel>
-                                    <Button Grid.Column="2" 
-                                            Content="Acheter" 
-                                            Click="BuyDragon_Click"
-                                            Background="#4B5563"
-                                            Foreground="White"
-                                            BorderThickness="0"
-                                            Padding="8,4"/>
-                                </Grid>
-                            </Border>
-                        </StackPanel>
-                    </ScrollViewer>
-
-                    <Button Grid.Row="2" 
-                            Content="Fermer" 
-                            Click="CloseAchatOverlay_Click"
-                            Background="#4B5563"
-                            Foreground="White"
-                            BorderThickness="0"
-                            Padding="15,8"
-                            Margin="0,20,0,0"/>
-                </Grid>
+        <!-- Overlay pour l'achat, maintenant plus stylisé -->
+        <Grid x:Name="AchatOverlay" Background="#DD000000" Visibility="Collapsed">
+            <Border Background="#2B3A4A" CornerRadius="20" Padding="40"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    BorderBrush="{StaticResource ZenButtonBorderBrush}" BorderThickness="1"
+                    MaxWidth="800">
+                <StackPanel>
+                    <TextBlock Text="Boutique des Caisses" Style="{StaticResource PageTitle}" FontSize="36" Margin="0,0,0,30"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <!-- Caisse 1 -->
+                        <Button Click="BuyCat_Click" Style="{StaticResource ZenButtonStyle}" Margin="10" Padding="20" Width="200">
+                            <StackPanel>
+                                <TextBlock Text="Caisse du Débutant" FontWeight="Bold" Foreground="White" TextAlignment="Center"/>
+                                <TextBlock Text="Contient les animaux de base" TextWrapping="Wrap" Foreground="#CCCCCC" TextAlignment="Center" Margin="0,5,0,0"/>
+                                <TextBlock Text="Coût: 100 Points" FontStyle="Italic" Foreground="#AAAAAA" TextAlignment="Center" Margin="0,10,0,0"/>
+                            </StackPanel>
+                        </Button>
+                        <!-- Caisse 2 -->
+                        <Button Click="BuyDog_Click" Style="{StaticResource ZenButtonStyle}" Margin="10" Padding="20" Width="200">
+                            <StackPanel>
+                                <TextBlock Text="Caisse de l'Explorateur" FontWeight="Bold" Foreground="White" TextAlignment="Center"/>
+                                <TextBlock Text="Débloque des compagnons rares" TextWrapping="Wrap" Foreground="#CCCCCC" TextAlignment="Center" Margin="0,5,0,0"/>
+                                <TextBlock Text="Coût: 300 Points" FontStyle="Italic" Foreground="#AAAAAA" TextAlignment="Center" Margin="0,10,0,0"/>
+                            </StackPanel>
+                        </Button>
+                        <!-- Caisse 3 -->
+                        <Button Click="BuyDragon_Click" Style="{StaticResource ZenButtonStyle}" Margin="10" Padding="20" Width="200">
+                            <StackPanel>
+                                <TextBlock Text="Caisse du Maître Zen" FontWeight="Bold" Foreground="White" TextAlignment="Center"/>
+                                <TextBlock Text="Des créatures épiques vous attendent" TextWrapping="Wrap" Foreground="#CCCCCC" TextAlignment="Center" Margin="0,5,0,0"/>
+                                <TextBlock Text="Coût: 800 Points" FontStyle="Italic" Foreground="#AAAAAA" TextAlignment="Center" Margin="0,10,0,0"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <Button Content="Fermer" Style="{StaticResource ZenButtonStyle}" Click="CloseAchatOverlay_Click"
+                            Margin="0,30,0,0" Width="150" Height="40" HorizontalAlignment="Center"/>
+                </StackPanel>
             </Border>
         </Grid>
     </Grid>
-</Page> 
+</Page>
