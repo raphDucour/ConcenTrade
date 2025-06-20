@@ -1,0 +1,20 @@
+﻿<Window x:Class="ConcenTrade.ExtensionChoiceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Prolonger l'autorisation ?" Height="200" Width="450"
+        WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock x:Name="MessageTextBlock" TextWrapping="Wrap" TextAlignment="Center" Margin="10" FontSize="14"/>
+            <TextBlock Text="L'application sera fermée à la fin de ce nouveau délai." TextAlignment="Center" Margin="0,0,0,10" FontStyle="Italic"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                <Button Content="1 min" Click="Extend_Click" Tag="1" Margin="5" Padding="10,5"/>
+                <Button Content="2 min" Click="Extend_Click" Tag="2" Margin="5" Padding="10,5"/>
+                <Button Content="3 min" Click="Extend_Click" Tag="3" Margin="5" Padding="10,5"/>
+                <Button Content="4 min" Click="Extend_Click" Tag="4" Margin="5" Padding="10,5"/>
+                <Button Content="5 min" Click="Extend_Click" Tag="5" Margin="5" Padding="10,5"/>
+            </StackPanel>
+            <Button Content="Non, retourner au travail" Click="Decline_Click" Margin="10" Padding="10,5"/>
+        </StackPanel>
+    </Grid>
+</Window>
