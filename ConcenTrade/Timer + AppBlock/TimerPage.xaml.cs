@@ -39,7 +39,7 @@ namespace Concentrade
         private Random _random = new Random();
         private List<MediaPlayer> _activeSoundPlayers = new List<MediaPlayer>();
 
-        // Constructeur existant pour le mode Pomodoro
+        // Constructeur existant pour le mode Pomodoro.
         public TimerPage(int cycles)
         {
             InitializeComponent();
@@ -49,8 +49,6 @@ namespace Concentrade
             // Le reste de ce constructeur est identique, donc je le regroupe dans une méthode partagée.
             InitializeTimerPage();
         }
-
-        // ✅ DÉBUT DU NOUVEAU CODE
 
         // NOUVEAU CONSTRUCTEUR pour le mode Personnalisé
         public TimerPage(TimeSpan workDuration, TimeSpan breakDuration, int cycles)
@@ -108,7 +106,6 @@ namespace Concentrade
             }));
         }
 
-        // ✅ FIN DU NOUVEAU CODE
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -423,7 +420,7 @@ namespace Concentrade
 
         private void UpdateTimerDisplay(bool isInitialSet = false)
         {
-            TimerText.Text = _remaining.ToString(@"mm\:ss");
+            TimerText.Text = string.Format("{0:00}:{1:00}", (int)_remaining.TotalMinutes, _remaining.Seconds);
 
             if (_duration.TotalSeconds > 0)
             {
