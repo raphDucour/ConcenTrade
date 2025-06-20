@@ -16,26 +16,7 @@ namespace Concentrade
             string json = File.ReadAllText(filePath);
             return JsonSerializer.Deserialize<List<User>>(json) ?? new List<User>();
         }
-
-        public static void SaveBlockedAppsForUser(string email, IEnumerable<string> blockedApps)
-        {
-            var users = LoadUsers();
-            var user = users.Find(u => u.Email == email);
-            if (user != null)
-            {
-                user.BlockedApps = string.Join(",", blockedApps); // transforme la liste en string séparée par des virgules
-                SaveUsers(users);
-            }
-        }
-
-
-        public static string LoadBlockedAppsForUser(string email)
-        {
-            var user = FindUser(email);
-            // Retourne la liste de l'utilisateur, ou une nouvelle liste vide si l'utilisateur ou la liste n'existe pas.
-            string BlockedApps= user.BlockedApps;
-            return BlockedApps;
-        }
+        
 
         public static void SaveUsers(List<User> users)
         {
@@ -52,8 +33,27 @@ namespace Concentrade
             SaveUsers(users);
             return true;
         }
+        public static void PushIntoBDD()
+        {
+            var users = LoadUsers();
+            var user = users.Find(u => u.Email == Properties.Settings.Default.UserEmail);
 
-        // Méthode pour définir le profil
+            if (user != null)
+            {
+                user.Name = Properties.Settings.Default.UserName;
+                user.Age = Properties.Settings.Default.UserAge;
+                user.UserBirthDate = Properties.Settings.Default.UserBirthDate; // Ligne ajoutée
+                user.BestMoment = Properties.Settings.Default.BestMoment;
+                user.Distraction = Properties.Settings.Default.Distraction;
+                user.LaunchOnStartup = Properties.Settings.Default.LaunchOnStartup;
+                user.QuestionnaireDone = Properties.Settings.Default.QuestionnaireDone;
+                user.Points= Properties.Settings.Default.Points;
+                user.BlockedApps= Properties.Settings.Default.BlockedApps ;
+                SaveUsers(users);
+            }
+        }
+
+        // On pourrait faire en sorte que y'ai une fonction similaire qui enregistre tout sur le pc dans le propriété on la deplacerait dans UserAnswers.cs, et utilisé pushIntoBDD pour enregistrer ensuite
         public static void SetUserProfile(string email, string name, int age, DateTime birthDate, string bestMoment, bool distraction, bool launchOnStartup = false)
         {
             var users = LoadUsers();
@@ -107,7 +107,28 @@ namespace Concentrade
                 Properties.Settings.Default.Save();
             }
         }
+        
+        
+        
+        
+        
+        //fonction a deplacé
+        
+        
+        
+        //devrait etre dans settings page et doit enregistrer sur le pc
+        public static void SaveBlockedAppsForUser(string email, IEnumerable<string> blockedApps)
+        {
+            var users = LoadUsers();
+            var user = users.Find(u => u.Email == email);
+            if (user != null)
+            {
+                user.BlockedApps = string.Join(",", blockedApps); // transforme la liste en string séparée par des virgules
+                SaveUsers(users);
+            }
+        }
 
+        //devrait etre dans settings page et doit enregistrer sur le pc
         public static List<string> LoadIgnoredAppsForUser(string email)
         {
             var user = FindUser(email);
@@ -120,6 +141,7 @@ namespace Concentrade
                        .ToList();
         }
 
+        //devrait etre dans settings page et doit enregistrer sur le pc
         public static void SaveIgnoredAppsForUser(string email, IEnumerable<string> ignoredApps)
         {
             var users = LoadUsers();
@@ -132,6 +154,7 @@ namespace Concentrade
             }
         }
 
+        //devrait etre dans settings page et doit enregistrer sur le pc
         public static void SavePoints(string email, int points)
         {
             var users = LoadUsers();
