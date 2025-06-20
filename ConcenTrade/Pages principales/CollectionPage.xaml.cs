@@ -31,7 +31,7 @@ namespace Concentrade.Pages_principales
         {
             
 
-            foreach (Card card in cards) // Ne prend qu'une carte de chaque type
+            foreach (Card card in cards) // Ne prend qu'une carte de chaque type;
             {
                 var cardControl = new CardControl();
                 cardControl.SetCard(card);
