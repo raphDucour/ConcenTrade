@@ -39,7 +39,7 @@ namespace Concentrade
         private Random _random = new Random();
         private List<MediaPlayer> _activeSoundPlayers = new List<MediaPlayer>();
 
-        // Constructeur existant pour le mode Pomodoro
+        // Constructeur existant pour le mode Pomodoro.
         public TimerPage(int cycles)
         {
             InitializeComponent();
