@@ -51,6 +51,8 @@ namespace Concentrade.Pages_principales.Collection
                         CardIcon.Source = null;
                     }
                 }
+
+                CardDescriptionText.Text = _card.Description ?? string.Empty;
             }
         }
 
