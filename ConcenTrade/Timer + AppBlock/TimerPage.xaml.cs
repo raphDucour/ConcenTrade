@@ -50,8 +50,6 @@ namespace Concentrade
             InitializeTimerPage();
         }
 
-        // ✅ DÉBUT DU NOUVEAU CODE
-
         // NOUVEAU CONSTRUCTEUR pour le mode Personnalisé
         public TimerPage(TimeSpan workDuration, TimeSpan breakDuration, int cycles)
         {
@@ -108,7 +106,6 @@ namespace Concentrade
             }));
         }
 
-        // ✅ FIN DU NOUVEAU CODE
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -423,7 +420,7 @@ namespace Concentrade
 
         private void UpdateTimerDisplay(bool isInitialSet = false)
         {
-            TimerText.Text = _remaining.ToString(@"mm\:ss");
+            TimerText.Text = string.Format("{0:00}:{1:00}", (int)_remaining.TotalMinutes, _remaining.Seconds);
 
             if (_duration.TotalSeconds > 0)
             {
