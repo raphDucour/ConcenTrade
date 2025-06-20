@@ -192,8 +192,6 @@ namespace ConcenTrade
             Settings.Default.UserBirthDate = dateNaissance;
 
             user.SauvegarderDansSettings();
-            user.SauvegarderDansLaBaseDeDonnees();
-
             UserManager.PushIntoBDD();
 
             MessageBox.Show("Informations mises à jour avec succès !");
@@ -219,6 +217,8 @@ namespace ConcenTrade
                 // La sauvegarde des applications bloquées ne change pas
                 var newBlockedApps = settingsWindow.BlockedApps;
                 SaveBlockedAppsForUser(newBlockedApps);
+                // Synchronise l'instance globale d'AppBlocker avec la nouvelle liste
+                ((App)Application.Current).AppBlocker.UpdateBlockedApps(LoadBlockedApps());
 
                 // CHANGEMENT : On sauvegarde la nouvelle liste des applications ignorées
                 var newIgnoredApps = settingsWindow.IgnoredApps;

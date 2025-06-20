@@ -47,33 +47,5 @@ namespace Concentrade
             Properties.Settings.Default.QuestionnaireDone = true;
             Properties.Settings.Default.Save();
         }
-
-
-        // DANS UserAnswers.cs
-
-        public void SauvegarderDansLaBaseDeDonnees()
-        {
-            string email = Properties.Settings.Default.UserEmail;
-
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                MessageBox.Show("Erreur : aucun email enregistré dans les paramètres.");
-                return;
-            }
-            else
-            {
-                // Appel à UserManager pour mise à jour dans le JSON
-                // On passe maintenant la date de naissance `_dateNaissance`
-                UserManager.SetUserProfile(
-                    email,
-                    Prenom,
-                    Age,
-                    _dateNaissance, // Ligne modifiée
-                    Moment,
-                    Distrait.ToLower() == "oui" || Distrait.ToLower() == "un petit peu",
-                    false
-                );
-            }
-        }
     }
 }

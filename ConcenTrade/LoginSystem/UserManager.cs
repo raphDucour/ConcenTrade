@@ -53,24 +53,7 @@ namespace Concentrade
             }
         }
 
-        // On pourrait faire en sorte que y'ai une fonction similaire qui enregistre tout sur le pc dans le propriété on la deplacerait dans UserAnswers.cs, et utilisé pushIntoBDD pour enregistrer ensuite
-        public static void SetUserProfile(string email, string name, int age, DateTime birthDate, string bestMoment, bool distraction, bool launchOnStartup = false)
-        {
-            var users = LoadUsers();
-            var user = users.Find(u => u.Email == email);
-
-            if (user != null)
-            {
-                user.Name = name;
-                user.Age = age;
-                user.UserBirthDate = birthDate; // Ligne ajoutée
-                user.BestMoment = bestMoment;
-                user.Distraction = distraction;
-                user.LaunchOnStartup = launchOnStartup;
-                user.QuestionnaireDone = true;
-                SaveUsers(users);
-            }
-        }
+        
 
         public static User? FindUser(string email)
         {
