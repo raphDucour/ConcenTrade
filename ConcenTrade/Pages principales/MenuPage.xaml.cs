@@ -174,7 +174,7 @@ namespace Concentrade
                 // Le mode Pomodoro classique ne change pas
                 int cycles = ConvertirPositionEnCycles(DureeSlider.Value);
                 // On navigue avec les durées par défaut de Pomodoro (25/5)
-                this.NavigationService?.Navigate(new TimerPage(TimeSpan.FromMinutes(25), TimeSpan.FromMinutes(5), cycles));
+                this.NavigationService?.Navigate(new TimerPage(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1), cycles));
             }
             else
             {
