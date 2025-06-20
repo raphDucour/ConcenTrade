@@ -7,6 +7,7 @@ using System.Windows;
 using System.Linq;
 using System.IO;
 using System.Runtime.InteropServices;
+using Concentrade.Properties;
 
 namespace Concentrade
 {
@@ -22,7 +23,7 @@ namespace Concentrade
 
         // --- MODIFIÉ ---
         // La liste est maintenant une List<string> et n'est plus initialisée depuis les Settings.
-        private List<string> _blockedApps = new List<string>();
+        private List<string> _blockedApps = LoadBlockedApps();
 
         private readonly Dictionary<string, string> _displayNameCache = new();
 
@@ -367,7 +368,17 @@ namespace Concentrade
             { "msedge", "microsoft edge" },
             { "firefox", "mozilla firefox" }
         };
+        
+        public static List<string> LoadBlockedApps()
+        {
+            return Settings.Default.BlockedApps
+                       .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                       .Select(app => app.Trim())
+                       .ToList();
+        }
+
     }
+
 
     public class TemporaryAllowanceEventArgs : EventArgs
     {
@@ -381,4 +392,6 @@ namespace Concentrade
         }
 
     }
+
+
 }

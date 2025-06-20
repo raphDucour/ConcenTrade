@@ -154,5 +154,17 @@ namespace Concentrade.Properties {
                 this["Cards"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string IgnoredApps {
+            get {
+                return ((string)(this["IgnoredApps"]));
+            }
+            set {
+                this["IgnoredApps"] = value;
+            }
+        }
     }
 }
