@@ -74,24 +74,13 @@ namespace Concentrade.Collections_de_cartes
                 new Card("Chat Zen", CardRarity.Common, "/Images/Cards/Chat.png","?"),
                 new Card("Coq Matinal", CardRarity.Common, "/Images/Cards/Poule.png","?"),
                 new Card("Cochon Calme", CardRarity.Common, "/Images/Cards/cochon.png","?"),
-                new Card("Cochon Calme", CardRarity.Common, "/Images/Cards/cochon.png","?"),
-                new Card("Dauphin Agile", CardRarity.Rare, "/Images/Cards/Dophin.png","?"),
+                new Card("Dauphin Agile", CardRarity.Common, "/Images/Cards/Dophin.png","?"),
                 new Card("Fourmi Ouvrière", CardRarity.Common, "/Images/Cards/fourmi.png","?"),
-                new Card("Girafe Sereine", CardRarity.Rare, "/Images/Cards/Giraffe.png","?"),
-                new Card("Hippopotame Épique", CardRarity.Epic, "/Images/Cards/hipo epic.png","?"),
+                new Card("Girafe Sereine", CardRarity.Common, "/Images/Cards/Giraffe.png","?"),
                 new Card("Phoque Paisible", CardRarity.Common, "/Images/Cards/phoc.png","?"),
-            };
-            ListCaisse = GetSortedByRarity(ListCaisse);
-            return filterByOptainedCards(ListCaisse);
-        }
-
-        public static List<Card> GetCaisse2Cards()
-        {
-            List<Card> ListCaisse = new List<Card>
-            {
                 new Card("Chien Focus", CardRarity.Common, "/Images/Cards/Chien.png","?"),
-                new Card("Renard Sage", CardRarity.Rare, "/Images/Cards/renard.png","?"),
-                new Card("Tortue Sage", CardRarity.Rare, "/Images/Cards/Tortue.png","?"),
+                new Card("Renard Sage", CardRarity.Common, "/Images/Cards/renard.png","?"),
+                new Card("Tortue Sage", CardRarity.Common, "/Images/Cards/Tortue.png","?"),
                 new Card("Rat Rusé", CardRarity.Common, "/Images/Cards/rat.png","?"),
                 new Card("Singe Joueur", CardRarity.Common, "/Images/Cards/singe.png","?"),
                 new Card("Taupe Travailleuse", CardRarity.Common, "/Images/Cards/taupe.png","?"),
@@ -102,18 +91,23 @@ namespace Concentrade.Collections_de_cartes
             return filterByOptainedCards(ListCaisse);
         }
 
+        public static List<Card> GetCaisse2Cards()
+        {
+            List<Card> ListCaisse = new List<Card>
+            {
+                
+                
+                new Card("Hippopotame Épique", CardRarity.Epic, "/Images/Cards/hipo epic.png","?"),
+            };
+            ListCaisse = GetSortedByRarity(ListCaisse);
+            return filterByOptainedCards(ListCaisse);
+        }
+
         public static List<Card> GetCaisse3Cards()
         {
             List<Card> ListCaisse = new List<Card>
             {
-                new Card("Hippopotame Épique", CardRarity.Epic, "/Images/Cards/hipo epic.png","?"),
-
-                //deja present dans la caisse 2
-                new Card("Singe Joueur", CardRarity.Common, "/Images/Cards/singe.png","?"),
-                new Card("Taupe Travailleuse", CardRarity.Common, "/Images/Cards/taupe.png","?"),
-                new Card("Têtard Évolutif", CardRarity.Common, "/Images/Cards/Tetard.png","?"),
-                new Card("Tortue Sage", CardRarity.Rare, "/Images/Cards/Tortue.png","?"),
-                new Card("Vache Tranquille", CardRarity.Common, "/Images/Cards/vache.png","?"),
+                
             };
             ListCaisse=GetSortedByRarity(ListCaisse);
             return filterByOptainedCards(ListCaisse);
