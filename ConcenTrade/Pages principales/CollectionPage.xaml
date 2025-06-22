@@ -12,30 +12,30 @@
     <Grid Background="{StaticResource ZenBackgroundBrush}">
         <!-- Fond sombre et Canvas pour les particules animées -->
         <Canvas x:Name="ParticleCanvas" />
-
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>   <!-- Titre et retour -->
+                <RowDefinition Height="*"/>      <!-- ScrollViewer -->
+                <RowDefinition Height="Auto"/>   <!-- Bouton -->
             </Grid.RowDefinitions>
 
             <!-- Bouton Retour en haut à gauche -->
             <Button x:Name="RetourButton" Content="&lt; Retour" Style="{StaticResource ZenButtonStyle}"
-                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20"
-                    Click="RetourButton_Click"/>
+                    Width="100" Height="40" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20"
+                    Click="RetourButton_Click" Grid.Row="0"/>
 
-            <TextBlock Text="Ma Collection" Style="{StaticResource PageTitle}" Grid.Row="0" Margin="0,40,0,20"/>
+            <TextBlock Text="Ma Collection" Style="{StaticResource PageTitle}" Grid.Row="0" Margin="0,40,0,20" HorizontalAlignment="Center"/>
+
+            <!-- Panel des cartes avec une barre de défilement -->
+            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Margin="40,0,40,20">
+                <WrapPanel x:Name="CardsPanel" HorizontalAlignment="Center"/>
+            </ScrollViewer>
 
             <!-- Bouton pour acheter des caisses -->
             <Button x:Name="AcheterButton" Content="Ouvrir une Caisse" Style="{StaticResource ZenButtonStyle}"
-                    Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,20"
+                    Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,20"
+                    Width="300" Height="50" Padding="0,20" FontSize="22" FontWeight="Bold"
                     Click="AcheterButton_Click"/>
-
-            <!-- Panel des cartes avec une barre de défilement -->
-            <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Margin="40,0,40,20">
-                <WrapPanel x:Name="CardsPanel" HorizontalAlignment="Center"/>
-            </ScrollViewer>
         </Grid>
 
         <!-- Overlay pour l'achat, maintenant plus stylisé -->
