@@ -14,18 +14,11 @@ namespace Concentrade.Pages_principales.Collection
         private bool _isSpinning = false;
         private static readonly Random _random = new Random();
 
-        public Caisse(int numCaisse)
+        public Caisse(List<Card> numCaisse)
         {
             InitializeComponent();
 
-            _possibleCards = numCaisse switch
-            {
-                1 => Card.GetCaisse1Cards(),
-                2 => Card.GetCaisse2Cards(),
-                3 => Card.GetCaisse3Cards(),
-                _ => Card.GetCaisse1Cards()
-            };
-
+            _possibleCards = numCaisse;
             DisplayPossibleCards();
             InitializeRoulletteCards();
         }
@@ -107,8 +100,7 @@ namespace Concentrade.Pages_principales.Collection
                             Card.AddCard(wonCard); // On ajoute la carte à la collection
                             _possibleCards.Remove(wonCard);
                             DisplayPossibleCards();
-                            MessageBox.Show($"Félicitations ! Vous avez obtenu : {wonCard.Name}", "Nouvelle Carte !");
-                            InitializeRoulletteCards();
+                            this.NavigationService?.Navigate(new WonCardPage(wonCard));
                         }
                     }
                 }
@@ -116,6 +108,7 @@ namespace Concentrade.Pages_principales.Collection
 
             ScrollTransform.BeginAnimation(TranslateTransform.XProperty, animation);
         }
+        
 
         private void BtnRetour_Click(object sender, RoutedEventArgs e)
         {

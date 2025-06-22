@@ -48,7 +48,7 @@ namespace Concentrade.Pages_principales
         {
             int nbCommunes = cards.Count(c => c.Rarity == CardRarity.Common);
             int nbRares = cards.Count(c => c.Rarity == CardRarity.Rare);
-            Caisse2Openable = nbCommunes >= 10;
+            Caisse2Openable = nbCommunes >= 1;
             Caisse3Openable = nbCommunes >= 20 && nbRares >= 2;
         }
         private void UpdateCaisseLocks()
@@ -109,33 +109,59 @@ namespace Concentrade.Pages_principales
             AchatOverlay.Visibility = Visibility.Collapsed;
         }
 
-
+        //boutique
         private void BuyCat_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService?.Navigate(new Caisse(1)); // Caisse Poules
+            List<Card> CaisseCards = Card.GetCaisse1Cards();
+            if (HasAllCards(CaisseCards))
+            {
+                MessageBox.Show("Tu possèdes déjà toutes les cartes de cette caisse !");
+                return;
+            }
+            this.NavigationService?.Navigate(new Caisse(CaisseCards)); // Caisse Poules
         }
 
         private void BuyDog_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService?.Navigate(new Caisse(2)); // Caisse QoC
+            List<Card> CaisseCards = Card.GetCaisse2Cards();
+            if (HasAllCards(CaisseCards))
+            {
+                MessageBox.Show("Tu possèdes déjà toutes les cartes de cette caisse !");
+                return;
+            }
+            this.NavigationService?.Navigate(new Caisse(CaisseCards));
         }
 
         private void BuyDragon_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService?.Navigate(new Caisse(3)); // Caisse Dragon
+            List<Card> CaisseCards = Card.GetCaisse3Cards();
+            if (HasAllCards(CaisseCards))
+            {
+                MessageBox.Show("Tu possèdes déjà toutes les cartes de cette caisse !");
+                return;
+            }
+            this.NavigationService?.Navigate(new Caisse(CaisseCards));
         }
-        private Random _random = new Random();
 
+        
+
+        private bool HasAllCards(List<Card> caisseCards)
+        {
+            return caisseCards.All(c => cards.Any(u => u.Name == c.Name));
+        }
+
+
+        //particules
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (this.ActualWidth > 0 && this.ActualHeight > 0)
             {
                 CreateAndAnimateParticles(10);
             }
-        }
+        }        
         
-
-
+        
+        private Random _random = new Random();
         private void CreateAndAnimateParticles(int count)
         {
             for (int i = 0; i < count; i++)
@@ -158,8 +184,6 @@ namespace Concentrade.Pages_principales
                 AnimateParticle(particle);
             }
         }
-
-
 
         private void AnimateParticle(Ellipse particle)
         {

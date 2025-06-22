@@ -1,0 +1,17 @@
+<Page x:Class="Concentrade.Pages_principales.Collection.WonCardPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="clr-namespace:Concentrade.Pages_principales.Collection"
+      xmlns:collection="clr-namespace:Concentrade.Pages_principales.Collection"
+      Background="#223344">
+    <Grid Width="1283">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Viewbox Grid.Row="0" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,40,0,20">
+            <collection:CardControl x:Name="CardControlFull" Width="200" Height="286"/>
+        </Viewbox>
+        <Button Grid.Row="1" Content="Voir ma collection" Width="220" Height="50" Margin="0,10,0,40" FontSize="18" Click="VoirCollection_Click" HorizontalAlignment="Center"/>
+    </Grid>
+</Page> 
