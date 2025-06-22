@@ -4,14 +4,48 @@
       xmlns:local="clr-namespace:Concentrade.Pages_principales.Collection"
       xmlns:collection="clr-namespace:Concentrade.Pages_principales.Collection"
       Background="#223344">
-    <Grid Width="1283">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <!-- Titre -->
+            <RowDefinition Height="*"/>
+            <!-- Carte -->
+            <RowDefinition Height="Auto"/>
+            <!-- Bouton -->
         </Grid.RowDefinitions>
-        <Viewbox Grid.Row="0" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,40,0,20">
+
+        <TextBlock x:Name="RewardText"
+               Text="Nouvelle carte obtenue !"
+               Grid.Row="0"
+               HorizontalAlignment="Center"
+               Margin="0,20,0,10"
+               Foreground="#B38728"
+               FontSize="60"
+               FontWeight="Bold"
+               TextWrapping="Wrap"/>
+
+        <Viewbox Grid.Row="1"
+             Stretch="Uniform"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center"
+             Margin="0,40,0,20">
             <collection:CardControl x:Name="CardControlFull" Width="200" Height="286"/>
         </Viewbox>
-        <Button Grid.Row="1" Content="Voir ma collection" Width="220" Height="50" Margin="0,10,0,40" FontSize="18" Click="VoirCollection_Click" HorizontalAlignment="Center"/>
+
+        <Button Grid.Row="2"
+            Content="Voir ma collection"
+            Width="300"
+            Height="60"
+            Margin="0,30,0,40"
+            FontSize="22"
+            FontWeight="Bold"
+            Foreground="#B38728"
+            Background="Black"
+            BorderBrush="#B38728"
+            BorderThickness="2"
+            Cursor="Hand"
+            Click="VoirCollection_Click"
+            HorizontalAlignment="Center"
+            Effect="{DynamicResource DropShadowEffect}"/>
     </Grid>
-</Page> 
+</Page>
