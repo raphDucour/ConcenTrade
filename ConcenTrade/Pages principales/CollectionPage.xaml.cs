@@ -16,6 +16,8 @@ namespace Concentrade.Pages_principales
     public partial class CollectionPage : Page
     {
         List<Card> cards = Card.GetAllCardsSortedByRarity();
+        public bool Caisse2Openable;
+        public bool Caisse3Openable;
        
 
         private int userPoints;
@@ -24,8 +26,11 @@ namespace Concentrade.Pages_principales
         {
             InitializeComponent();
             LoadUserPoints();
+            InitializeCaisseOpenable();
+            UpdateCaisseLocks();
             InitializeCards();
         }
+        
 
         private void InitializeCards()
         {
@@ -37,6 +42,44 @@ namespace Concentrade.Pages_principales
                 cardControl.SetCard(card);
                 
                 CardsPanel.Children.Add(cardControl);
+            }
+        }
+        private void InitializeCaisseOpenable()
+        {
+            int nbCommunes = cards.Count(c => c.Rarity == CardRarity.Common);
+            int nbRares = cards.Count(c => c.Rarity == CardRarity.Rare);
+            Caisse2Openable = nbCommunes >= 10;
+            Caisse3Openable = nbCommunes >= 20 && nbRares >= 2;
+        }
+        private void UpdateCaisseLocks()
+        {
+            if (!Caisse2Openable)
+            {
+                Caisse2Cost.Text = "🔒";
+                Caisse2Cost.FontSize = 36;
+                Caisse2Cost.Foreground = new SolidColorBrush(Color.FromRgb(0xFF, 0xD7, 0x00)); // Doré
+                Caisse2Button.IsEnabled = false;
+            }
+            else
+            {
+                Caisse2Cost.Text = "Coût: 300 Points";
+                Caisse2Cost.FontSize = 14;
+                Caisse2Cost.Foreground = new SolidColorBrush(Color.FromRgb(0xAA, 0xAA, 0xAA));
+                Caisse2Button.IsEnabled = true;
+            }
+            if (!Caisse3Openable)
+            {
+                Caisse3Cost.Text = "🔒";
+                Caisse3Cost.FontSize = 36;
+                Caisse3Cost.Foreground = new SolidColorBrush(Color.FromRgb(0xFF, 0xD7, 0x00));
+                Caisse3Button.IsEnabled = false;
+            }
+            else
+            {
+                Caisse3Cost.Text = "Coût: 800 Points";
+                Caisse3Cost.FontSize = 14;
+                Caisse3Cost.Foreground = new SolidColorBrush(Color.FromRgb(0xAA, 0xAA, 0xAA));
+                Caisse3Button.IsEnabled = true;
             }
         }
 
@@ -66,29 +109,6 @@ namespace Concentrade.Pages_principales
             AchatOverlay.Visibility = Visibility.Collapsed;
         }
 
-        private bool TryBuyCard(Card cardName, int cost)
-        {
-            if (userPoints >= cost)
-            {
-                userPoints -= cost;
-                SaveUserPoints();
-                Card.AddCard(cardName);
-                
-                // Mettre à jour le tableau avant de rafraîchir
-                cards = Card.GetAllCardsSortedByRarity();
-                
-                CardsPanel.Children.Clear();
-                InitializeCards();
-                
-                MessageBox.Show($"{cardName} acheté !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
-                return true;
-            }
-            else
-            {
-                MessageBox.Show("Points insuffisants !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
-            }
-        }
 
         private void BuyCat_Click(object sender, RoutedEventArgs e)
         {
@@ -113,6 +133,8 @@ namespace Concentrade.Pages_principales
                 CreateAndAnimateParticles(10);
             }
         }
+        
+
 
         private void CreateAndAnimateParticles(int count)
         {
@@ -136,6 +158,8 @@ namespace Concentrade.Pages_principales
                 AnimateParticle(particle);
             }
         }
+
+
 
         private void AnimateParticle(Ellipse particle)
         {
@@ -169,7 +193,6 @@ namespace Concentrade.Pages_principales
 
             transform.BeginAnimation(TranslateTransform.XProperty, animX);
             transform.BeginAnimation(TranslateTransform.YProperty, animY);
-        }
-
+        }     
     }
 } 
