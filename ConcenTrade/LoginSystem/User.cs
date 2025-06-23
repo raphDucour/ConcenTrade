@@ -13,10 +13,7 @@ namespace Concentrade
         [Column("email")]
         public string? email { get; set; }
 
-        // Mappe PasswordHash à la colonne "Password" de la DB
-        [Column("Password")]
-        public string? PasswordHash { get; set; }
-
+        
         [Column("Name")]
         public string Name { get; set; } = "";
 
@@ -48,15 +45,8 @@ namespace Concentrade
         [Column("Points")]
         public long Points { get; set; } = 0; // Utilisation de long pour correspondre à bigint dans PostgreSQL
 
-        // Le constructeur doit être ajusté car l'Id est généré par la DB
-        public User(string Email, string passwordHash)
-        {
-            email = Email;
-            PasswordHash = passwordHash;
-            // Id ne doit pas être défini ici car il est généré par la DB
-        }
 
-        // Requis par le désérialiseur JSON / Supabase
+        // Requis par le désérialiseur Supabase
         public User() { }
 
         public static string HashPassword(string password)
