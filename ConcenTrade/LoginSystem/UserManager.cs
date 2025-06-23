@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System;
 using System.Linq;
 using Supabase.Gotrue; // <--- ASSUREZ-VOUS QUE CETTE LIGNE EST TOUJOURS PRÉSENTE !
+using System.Windows;
 
 namespace Concentrade
 {
@@ -39,7 +40,7 @@ namespace Concentrade
                     // CORRECTION : Accéder directement à authResponse.Error
                     string errorMessage = "Une erreur inconnue est survenue lors de l'inscription.";
                     
-                    Console.WriteLine(errorMessage);
+                    MessageBox.Show(errorMessage);
 
                 }
 
@@ -56,7 +57,7 @@ namespace Concentrade
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erreur lors de l'enregistrement ou de la création du profil utilisateur: {ex.Message}");
+                MessageBox.Show($"Erreur lors de l'enregistrement ou de la création du profil utilisateur: {ex.Message}");
                 return false;
             }
         }
@@ -88,7 +89,7 @@ namespace Concentrade
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erreur lors de la mise à jour des propriétés de l'utilisateur : {ex.Message}");
+                MessageBox.Show($"Erreur lors de la mise à jour des propriétés de l'utilisateur : {ex.Message}");
             }
         }
 
@@ -101,7 +102,7 @@ namespace Concentrade
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erreur lors de la recherche de l'utilisateur : {ex.Message}");
+                MessageBox.Show($"Erreur lors de la recherche de l'utilisateur : {ex.Message}");
                 return null;
             }
         }
@@ -153,7 +154,7 @@ namespace Concentrade
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erreur lors du chargement des propriétés : {ex.Message}");
+                MessageBox.Show($"Erreur lors du chargement des propriétés : {ex.Message}");
             }
         }
 
@@ -172,7 +173,7 @@ namespace Concentrade
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erreur lors de la sauvegarde des points : {ex.Message}");
+                MessageBox.Show($"Erreur lors de la sauvegarde des points : {ex.Message}");
             }
         }
     }

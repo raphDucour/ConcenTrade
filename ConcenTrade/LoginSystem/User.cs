@@ -13,7 +13,7 @@ namespace Concentrade
         [PrimaryKey("Id", false)] // "Id" est la clé primaire, "false" indique qu'elle n'est pas générée par le client
         public Guid Id { get; set; }
 
-        [Column("Email")]
+        [Column("email")]
         public string? email { get; set; }
 
         // Mappe PasswordHash à la colonne "Password" de la DB
