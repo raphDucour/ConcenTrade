@@ -12,7 +12,15 @@ namespace Concentrade
         {
             InitializeComponent();
             _answers = answers;
+            TerminerButton.IsEnabled = false;
+            DistraitInput.SelectionChanged += DistraitInput_SelectionChanged;
         }
+
+        private void DistraitInput_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TerminerButton.IsEnabled = DistraitInput.SelectedIndex != -1;
+        }
+
         private void Page_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
