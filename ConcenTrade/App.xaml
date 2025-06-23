@@ -94,6 +94,17 @@
                 </Setter>
             </Style>
 
+            <Style x:Key="DestructiveButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="Background" Value="#C70039"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderBrush" Value="#900C3F"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#FF5733"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
             <!-- VOS AUTRES STYLES ORIGINAUX -->
             <Style x:Key="ZenIconButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="Transparent"/>

@@ -16,6 +16,7 @@ namespace Concentrade
         [DllImport("user32.dll")]
         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
         private const int SW_MINIMIZE = 6;
+        private bool _isFocusModeSessionActive = false;
 
         private ManagementEventWatcher? _watcher;
         private readonly object _promptLock = new object();
@@ -140,6 +141,7 @@ namespace Concentrade
 
                         string displayName = await GetDisplayName(process, mainProcessName);
 
+                        // ▼▼▼ LE BLOC CI-DESSOUS EST LA SEULE PARTIE À REMPLACER ▼▼▼
                         await Application.Current.Dispatcher.InvokeAsync(() =>
                         {
                             lock (_promptLock)
@@ -153,25 +155,34 @@ namespace Concentrade
                                 ShowWindow(process.MainWindowHandle, SW_MINIMIZE);
                             }
 
-                            var popup = new BlocagePopup(displayName, process);
-                            popup.Activate();
-
-                            // ShowDialog renvoie maintenant 'true' si l'utilisateur clique sur "Autoriser"
-                            // et 'false' s'il clique sur "Fermer" ou ferme la fenêtre.
-                            bool? dialogResult = popup.ShowDialog();
-
-                            // --- NOUVELLE LOGIQUE SIMPLIFIÉE ---
-                            if (dialogResult == true && popup.TemporarilyAllowed)
+                            // On vérifie si la session actuelle est en "Mode Focus"
+                            if (_isFocusModeSessionActive)
                             {
-                                // L'utilisateur a cliqué sur "Autoriser".
-                                AllowTemporarily(mainProcessName, popup.AllowedDuration);
+                                // Si oui, on affiche le popup strict qui ne propose que de fermer.
+                                var focusPopup = new FocusModePopup(displayName, process);
+                                focusPopup.ShowDialog();
+                                // La logique pour fermer l'application est gérée à l'intérieur du FocusModePopup.
                             }
                             else
                             {
-                                // L'utilisateur a cliqué sur "Fermer" ou a fermé la fenêtre.
-                                KillApplication(mainProcessName);
+                                // Sinon, on affiche le popup de blocage normal avec l'option de prolonger.
+                                var popup = new BlocagePopup(displayName, process);
+                                popup.Activate();
+                                bool? dialogResult = popup.ShowDialog();
+
+                                if (dialogResult == true && popup.TemporarilyAllowed)
+                                {
+                                    // L'utilisateur a cliqué sur "Autoriser".
+                                    AllowTemporarily(mainProcessName, popup.AllowedDuration);
+                                }
+                                else
+                                {
+                                    // L'utilisateur a cliqué sur "Fermer" ou a fermé la fenêtre.
+                                    KillApplication(mainProcessName);
+                                }
                             }
                         });
+                        // ▲▲▲ FIN DU BLOC À REMPLACER ▲▲▲
                     }
                 }
                 catch (Exception ex)
@@ -188,14 +199,18 @@ namespace Concentrade
             _temporaryAllowances.Clear();
         }
 
-        public void SetActive(bool active)
+        public void SetActive(bool active, bool isFocusMode = false)
         {
             _isActive = active;
+
+            // La session en Mode Focus n'est considérée comme "active" que si 
+            // la session de travail est démarrée ET que l'utilisateur a coché la case.
+            _isFocusModeSessionActive = active && isFocusMode;
+
             if (!active)
             {
+                // Cette partie ne change pas, elle nettoie tout à la fin d'une session.
                 _temporaryAllowances.Clear();
-                // --- MODIFIÉ ---
-                // Réinitialise le cooldown global.
                 _lastGlobalPromptTime = DateTime.MinValue;
             }
         }

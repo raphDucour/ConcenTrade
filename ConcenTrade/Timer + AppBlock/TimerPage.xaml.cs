@@ -40,21 +40,28 @@ namespace Concentrade
         private List<MediaPlayer> _activeSoundPlayers = new List<MediaPlayer>();
         private DispatcherTimer _distractionPauseTimer;
         private bool _isExtensionPopupShown = false;
+        private bool _isFocusMode;
+
         private enum PomodoroState { Work, ShortBreak, Finished, Idle }
 
-        // Constructeur existant pour le mode Pomodoro.
-        public TimerPage(int cycles)
+        // --- CONSTRUCTEUR 1 MODIFIÉ ---
+        // Pour le mode Pomodoro classique. On ajoute isFocusMode.
+        public TimerPage(int cycles, bool isFocusMode = false) // isFocusMode a une valeur par défaut
         {
             InitializeComponent();
             _totalCycles = cycles;
-            // Note: _workDuration et _breakDuration utiliseront leurs valeurs par défaut de 25/5 min pour les cycles
+            _isFocusMode = isFocusMode; // On assigne la nouvelle valeur
 
-            // Le reste de ce constructeur est identique, donc je le regroupe dans une méthode partagée.
+            // Les durées standards de Pomodoro seront utilisées
+            _workDuration = TimeSpan.FromMinutes(25);
+            _breakDuration = TimeSpan.FromMinutes(5);
+
             InitializeTimerPage();
         }
 
-        // NOUVEAU CONSTRUCTEUR pour le mode Personnalisé
-        public TimerPage(TimeSpan workDuration, TimeSpan breakDuration, int cycles)
+        // --- CONSTRUCTEUR 2 MODIFIÉ ---
+        // Pour le mode Personnalisé. On ajoute aussi isFocusMode.
+        public TimerPage(TimeSpan workDuration, TimeSpan breakDuration, int cycles, bool isFocusMode)
         {
             InitializeComponent();
 
@@ -62,11 +69,8 @@ namespace Concentrade
             _workDuration = workDuration;
             _breakDuration = breakDuration;
             _totalCycles = cycles;
+            _isFocusMode = isFocusMode; // On assigne la nouvelle valeur
 
-            // S'il n'y a qu'un cycle, il n'y a logiquement pas de pause à la fin.
-            // La logique de Timer_Tick gère déjà ce cas.
-
-            // On utilise la méthode d'initialisation que nous avions créée
             InitializeTimerPage();
         }
 
@@ -313,6 +317,7 @@ namespace Concentrade
             _isPaused = false;
             PauseButton.Content = "⏯️ Pause";
             _blocker.SetActive(true);
+            _blocker.SetActive(true, _isFocusMode);
             UpdateTimerDisplay(true);
             UpdateCycleIndicators();
             _timer.Start();
@@ -496,7 +501,7 @@ namespace Concentrade
             _timer.Stop();
             _distractionPauseTimer?.Stop();
             SavePoints();
-            _blocker.SetActive(false); // L'erreur CS4008 est corrigée ici (await supprimé)
+            _blocker.SetActive(false); 
 
             // Les erreurs CS0103 sont corrigées ici.
             // On navigue simplement vers une nouvelle page de menu.

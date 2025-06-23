@@ -169,22 +169,29 @@ namespace Concentrade
         // ✅ MÉTHODE MODIFIÉE
         private void StartSession_Click(object sender, RoutedEventArgs e)
         {
+            // On récupère l'état du Mode Focus au moment du clic
+            bool isFocusMode = FocusModeCheckBox.IsChecked == true;
+
+            // On vérifie quel mode de timer est sélectionné (Pomodoro ou Personnalisé)
             if (PomodoroModeButton.IsChecked == true)
             {
-                // Le mode Pomodoro classique ne change pas
+                // Logique pour le mode Pomodoro
                 int cycles = ConvertirPositionEnCycles(DureeSlider.Value);
-                // On navigue avec les durées par défaut de Pomodoro (25/5)
-                this.NavigationService?.Navigate(new TimerPage(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1), cycles));
+
+                // On navigue vers la TimerPage en passant les durées standards de Pomodoro (25/5)
+                // et l'état du Mode Focus.
+                this.NavigationService?.Navigate(new TimerPage(TimeSpan.FromMinutes(25), TimeSpan.FromMinutes(5), cycles, isFocusMode));
             }
             else
             {
-                // Le mode Personnalisé envoie maintenant 3 arguments
+                // Logique pour le mode Personnalisé
                 TimeSpan workDuration = TimeSpan.FromMinutes((int)WorkTimeSlider.Value);
                 TimeSpan breakDuration = TimeSpan.FromMinutes((int)BreakTimeSlider.Value);
-                // ✅ On récupère le nombre de cycles du nouveau slider
                 int customCycles = (int)CycleCountSlider.Value;
 
-                this.NavigationService?.Navigate(new TimerPage(workDuration, breakDuration, customCycles));
+                // On navigue vers la TimerPage en passant les durées personnalisées
+                // et l'état du Mode Focus.
+                this.NavigationService?.Navigate(new TimerPage(workDuration, breakDuration, customCycles, isFocusMode));
             }
         }
 
