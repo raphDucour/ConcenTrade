@@ -14,14 +14,16 @@ namespace Concentrade.Pages_principales.Collection
         private readonly List<Card> _possibleCards;
         private bool _isSpinning = false;
         private static readonly Random _random = new Random();
-
-        public Caisse(List<Card> numCaisse)
+        private static int _price;
+        public Caisse(List<Card> numCaisse, int prix)
         {
             InitializeComponent();
 
             _possibleCards = numCaisse;
+            _price = prix;
             DisplayPossibleCards();
             InitializeRoulletteCards();
+            
         }
 
         private void DisplayPossibleCards()
@@ -63,10 +65,12 @@ namespace Concentrade.Pages_principales.Collection
 
         private void BtnAcheter_Click(object sender, RoutedEventArgs e)
         {
+            if (Properties.Settings.Default.Points < _price) return;
             if (_isSpinning) return;
             _isSpinning = true;
             BtnAcheter.IsEnabled = false;
             StartRoulette();
+            Properties.Settings.Default.Points -= _price; // Déduit le prix de la caisse    
         }
 
         private void StartRoulette()

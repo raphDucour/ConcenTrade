@@ -118,7 +118,7 @@ namespace Concentrade.Pages_principales
                 MessageBox.Show("Tu possèdes déjà toutes les cartes de cette caisse !");
                 return;
             }
-            this.NavigationService?.Navigate(new Caisse(CaisseCards)); // Caisse Poules
+            this.NavigationService?.Navigate(new Caisse(CaisseCards,100)); // Caisse Poules
         }
 
         private void BuyDog_Click(object sender, RoutedEventArgs e)
@@ -129,7 +129,7 @@ namespace Concentrade.Pages_principales
                 MessageBox.Show("Tu possèdes déjà toutes les cartes de cette caisse !");
                 return;
             }
-            this.NavigationService?.Navigate(new Caisse(CaisseCards));
+            this.NavigationService?.Navigate(new Caisse(CaisseCards,300));
         }
 
         private void BuyDragon_Click(object sender, RoutedEventArgs e)
@@ -140,7 +140,7 @@ namespace Concentrade.Pages_principales
                 MessageBox.Show("Tu possèdes déjà toutes les cartes de cette caisse !");
                 return;
             }
-            this.NavigationService?.Navigate(new Caisse(CaisseCards));
+            this.NavigationService?.Navigate(new Caisse(CaisseCards,800));
         }
 
         
