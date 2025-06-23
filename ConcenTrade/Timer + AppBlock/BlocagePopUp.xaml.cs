@@ -112,8 +112,6 @@ namespace Concentrade
         {
             if (_processToBlock == null || _processToBlock.HasExited)
             {
-                _focusTimer.Stop();
-                this.Close();
                 return;
             }
             try

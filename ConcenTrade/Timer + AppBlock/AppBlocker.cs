@@ -350,10 +350,6 @@ namespace Concentrade
             { "steam", new List<string> { "steam", "steamwebhelper", "steamservice", "steamclient", "gameoverlayui" } },
             { "epicgameslauncher", new List<string> { "epicgameslauncher", "epicgameslauncherhelper", "epicwebhelper" } },
             { "discord", new List<string> { "discord", "discordptb", "discordcanary", "discordhelper" } },
-            { "valorant", new List<string> {
-                "valorant", "valorant-win64-shipping", "riot client",
-                "riotclientservices", "vgc", "riotclientux"
-            } }
         };
 
         private readonly Dictionary<string, string> _appAliases = new()
