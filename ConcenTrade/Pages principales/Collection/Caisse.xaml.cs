@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -97,10 +98,29 @@ namespace Concentrade.Pages_principales.Collection
                         // On accède aux données de la carte via notre nouvelle propriété CardData
                         if (winningControl.CardData is Card wonCard)
                         {
-                            Card.AddCard(wonCard); // On ajoute la carte à la collection
-                            _possibleCards.Remove(wonCard);
-                            DisplayPossibleCards();
-                            this.NavigationService?.Navigate(new WonCardPage(wonCard));
+                            // Avant d'ajouter la carte et de naviguer, on cherche la version complète
+                            // de la carte dans GetAllPossibleCards() pour avoir la description correcte.
+                            Card completeWonCard = Card.GetAllPossibleCards().FirstOrDefault(c => c.Name == wonCard.Name);
+
+                            if (completeWonCard != null)
+                            {
+                                Card.AddCard(completeWonCard); // On ajoute la carte complète à la collection
+                                _possibleCards.Remove(wonCard); // Remove the placeholder card from _possibleCards
+                                DisplayPossibleCards();
+
+                                // Puis on navigue vers WonCardPage avec la carte complète
+                                this.NavigationService?.Navigate(new WonCardPage(completeWonCard));
+                            }
+                            else
+                            {
+                                // Fallback si la carte gagnée n'est pas trouvée dans la liste complète des cartes
+                                // Cela ne devrait normalement pas arriver si les noms sont cohérents.
+                                System.Diagnostics.Debug.WriteLine($"Erreur : La carte gagnée '{wonCard.Name}' n'a pas été trouvée dans la liste complète des cartes.");
+                                Card.AddCard(wonCard); // Add the wonCard as is if the complete one isn't found
+                                _possibleCards.Remove(wonCard);
+                                DisplayPossibleCards();
+                                this.NavigationService?.Navigate(new WonCardPage(wonCard));
+                            }
                         }
                     }
                 }
@@ -108,7 +128,7 @@ namespace Concentrade.Pages_principales.Collection
 
             ScrollTransform.BeginAnimation(TranslateTransform.XProperty, animation);
         }
-        
+
 
         private void BtnRetour_Click(object sender, RoutedEventArgs e)
         {
