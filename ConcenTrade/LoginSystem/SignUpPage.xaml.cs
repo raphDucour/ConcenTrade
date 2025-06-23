@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using System.Threading.Tasks; // Ajoutez cette ligne
 
 namespace Concentrade.LoginSystem
 {
@@ -11,7 +12,7 @@ namespace Concentrade.LoginSystem
             InitializeComponent();
         }
 
-        private void SignUpButton_Click(object sender, RoutedEventArgs e)
+        private async void SignUpButton_Click(object sender, RoutedEventArgs e) // Rendre la méthode asynchrone
         {
             string email = EmailBox.Text.Trim();
             string password = PasswordBox.Password.Trim();
@@ -22,7 +23,7 @@ namespace Concentrade.LoginSystem
                 return;
             }
 
-            bool success = UserManager.Register(email, password);
+            bool success = await UserManager.Register(email, password); // Appeler la méthode asynchrone
             if (success)
             {
                 MessageBox.Show("Compte créé avec succès !");

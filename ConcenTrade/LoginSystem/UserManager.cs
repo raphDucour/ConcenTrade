@@ -3,103 +3,187 @@ using System.IO;
 using System.Text.Json;
 using System.Windows.Controls;
 using System.Xml.Linq;
+using Supabase;
+using System.Threading.Tasks;
+using System;
+using System.Linq;
+using Supabase.Gotrue; // <--- ASSUREZ-VOUS QUE CETTE LIGNE EST TOUJOURS PRÉSENTE !
 
 namespace Concentrade
 {
     public static class UserManager
     {
-        private static string filePath = "users.json";
+        // Vos identifiants Supabase
+        private static string SupabaseUrl = "https://vmxaqzggcidruxgvctrs.supabase.co";
+        private static string SupabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZteGFxemdnY2lkcnV4Z3ZjdHJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAyNDM0NDQsImV4cCI6MjA2NTgxOTQ0NH0.z7EC8JwvcKTwr2fbGsGCRpuMqziMXStE9wkL-YTXQUk";
 
-        public static List<User> LoadUsers()
-        {
-            if (!File.Exists(filePath)) return new List<User>();
-            string json = File.ReadAllText(filePath);
-            return JsonSerializer.Deserialize<List<User>>(json) ?? new List<User>();
-        }
-        
+        private static Supabase.Client _supabase;
 
-        public static void SaveUsers(List<User> users)
+        static UserManager()
         {
-            string json = JsonSerializer.Serialize(users, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(filePath, json);
+            // Initialisation du client Supabase
+            _supabase = new Supabase.Client(SupabaseUrl, SupabaseKey);
         }
 
-        public static bool Register(string email, string password)
+        public static async Task<bool> Register(string email, string password)
         {
-            var users = LoadUsers();
-            if (users.Exists(u => u.Email == email)) return false;
-
-            users.Add(new User(email,User.HashPassword(password)));
-            SaveUsers(users);
-            return true;
-        }
-        public static void PushIntoBDD()
-        {
-            var users = LoadUsers();
-            var user = users.Find(u => u.Email == Properties.Settings.Default.UserEmail);
-
-            if (user != null)
+            try
             {
-                user.Name = Properties.Settings.Default.UserName;
-                user.Age = Properties.Settings.Default.UserAge;
-                user.UserBirthDate = Properties.Settings.Default.UserBirthDate; // Ligne ajoutée
-                user.BestMoment = Properties.Settings.Default.BestMoment;
-                user.Distraction = Properties.Settings.Default.Distraction;
-                user.LaunchOnStartup = Properties.Settings.Default.LaunchOnStartup;
-                user.QuestionnaireDone = Properties.Settings.Default.QuestionnaireDone;
-                user.Points= Properties.Settings.Default.Points;
-                user.BlockedApps= Properties.Settings.Default.BlockedApps ;
-                SaveUsers(users);
+                // Étape 1: Tenter d'inscrire l'utilisateur via le service d'authentification de Supabase
+                // _supabase.Auth.SignUp crée l'utilisateur dans la table auth.users
+                var authResponse = await _supabase.Auth.SignUp(email, password);
+
+                // Vérifier si l'inscription via Auth a échoué (User peut être null si confirmation email activée ou erreur)
+                if (authResponse.User == null)
+                {
+                    // CORRECTION : Accéder directement à authResponse.Error
+                    string errorMessage = "Une erreur inconnue est survenue lors de l'inscription.";
+                    
+                    Console.WriteLine(errorMessage);
+
+                }
+
+                // Étape 2: Si l'inscription Auth réussit, créer le profil utilisateur dans la table "User"
+                var newUserProfile = new User();
+                newUserProfile.Id = Guid.Parse(authResponse.User.Id);
+                newUserProfile.email = email; // Utilise la propriété 'email' en minuscules
+
+                await _supabase.From<User>().Insert(newUserProfile);
+
+                await UserManager.LoadProperties(email);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erreur lors de l'enregistrement ou de la création du profil utilisateur: {ex.Message}");
+                return false;
             }
         }
 
-        
-
-        public static User? FindUser(string email)
+        public static async Task PushIntoBDD()
         {
-            var users = LoadUsers();
-            return users.Find(u => u.Email == email);
-        }
-
-        public static User? Login(string email, string password)
-        {
-            var users = LoadUsers();
-            string hash = User.HashPassword(password);
-            return users.Find(u => u.Email == email && u.PasswordHash == hash);
-        }
-
-        // Méthode pour charger les propriétés
-        public static void LoadProperties(string email)
-        {
-            var users = LoadUsers();
-            var user = users.Find(u => u.Email == email);
-
-            if (user != null)
+            try
             {
-                Properties.Settings.Default.UserEmail = email;
-                Properties.Settings.Default.UserName = user.Name;
-                Properties.Settings.Default.UserAge = user.Age;
-                Properties.Settings.Default.UserBirthDate = user.UserBirthDate; // Ligne ajoutée
-                Properties.Settings.Default.BestMoment = user.BestMoment;
-                Properties.Settings.Default.Distraction = user.Distraction;
-                Properties.Settings.Default.LaunchOnStartup = user.LaunchOnStartup;
-                Properties.Settings.Default.QuestionnaireDone = user.QuestionnaireDone;
-                Properties.Settings.Default.Points = user.Points;
-                Properties.Settings.Default.BlockedApps = user.BlockedApps;
+                string userEmail = Properties.Settings.Default.UserEmail;
 
-                Properties.Settings.Default.Save();
+                var result = await _supabase.From<User>().Where(u => u.email == userEmail).Get();
+                var user = result.Models.FirstOrDefault();
+
+                if (user != null)
+                {
+                    user.Name = Properties.Settings.Default.UserName;
+                    user.BestMoment = Properties.Settings.Default.BestMoment;
+                    user.Distraction = Properties.Settings.Default.Distraction;
+                    user.LaunchOnStartup = Properties.Settings.Default.LaunchOnStartup;
+                    user.QuestionnaireDone = Properties.Settings.Default.QuestionnaireDone;
+                    user.BlockedApps = Properties.Settings.Default.BlockedApps;
+                    user.IgnoredApps = Properties.Settings.Default.IgnoredApps;
+                    user.Cards = Properties.Settings.Default.Cards;
+                    user.BirthDate = Properties.Settings.Default.UserBirthDate;
+                    user.Points = Properties.Settings.Default.Points;
+
+                    await _supabase.From<User>().Update(user);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erreur lors de la mise à jour des propriétés de l'utilisateur : {ex.Message}");
             }
         }
-        
-        public static void SavePoints(string email, int points)
-        {
-            var users = LoadUsers();
-            var user = users.Find(u => u.Email == email);
 
-            if (user != null)
+        public static async Task<User?> FindUser(string email)
+        {
+            try
             {
-                user.Points = points;
-                SaveUsers(users);
+                var result = await _supabase.From<User>().Where(u => u.email == email).Get();
+                return result.Models.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erreur lors de la recherche de l'utilisateur : {ex.Message}");
+                return null;
+            }
+        }
+
+        public static async Task<User?> Login(string email, string password)
+        {
+            try
+            {
+                var authResponse = await _supabase.Auth.SignIn(email, password);
+
+                // CORRECTION : Accéder directement à authResponse.Error
+                if (authResponse.User == null)
+                {
+                    string errorMessage = "Identifiants incorrects ou erreur de connexion.";
+                    Console.WriteLine(errorMessage);
+                    return null;
+                }
+
+                var userProfile = await FindUser(email);
+                if (userProfile != null)
+                {
+                    await LoadProperties(email);
+                    return userProfile;
+                }
+                else
+                {
+                    Console.WriteLine($"Profil public.User non trouvé pour l'utilisateur {email}");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erreur lors de la connexion : {ex.Message}");
+                return null;
+            }
+        }
+
+        public static async Task LoadProperties(string email)
+        {
+            try
+            {
+                var user = await FindUser(email);
+
+                if (user != null)
+                {
+                    Properties.Settings.Default.UserEmail = email;
+                    Properties.Settings.Default.UserName = user.Name;
+                    Properties.Settings.Default.BestMoment = user.BestMoment;
+                    Properties.Settings.Default.Distraction = user.Distraction;
+                    Properties.Settings.Default.LaunchOnStartup = user.LaunchOnStartup;
+                    Properties.Settings.Default.QuestionnaireDone = user.QuestionnaireDone;
+                    Properties.Settings.Default.BlockedApps = user.BlockedApps;
+                    Properties.Settings.Default.IgnoredApps = user.IgnoredApps;
+                    Properties.Settings.Default.Cards = user.Cards;
+                    Properties.Settings.Default.UserBirthDate = user.BirthDate ?? DateTime.MinValue;
+                    Properties.Settings.Default.Points = (int)user.Points;
+
+                    Properties.Settings.Default.Save();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erreur lors du chargement des propriétés : {ex.Message}");
+            }
+        }
+
+        public static async Task SavePoints(string email, long points)
+        {
+            try
+            {
+                var result = await _supabase.From<User>().Where(u => u.email == email).Get();
+                var user = result.Models.FirstOrDefault();
+
+                if (user != null)
+                {
+                    user.Points = points;
+                    await _supabase.From<User>().Update(user);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erreur lors de la sauvegarde des points : {ex.Message}");
             }
         }
     }

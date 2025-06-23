@@ -12,16 +12,7 @@ namespace Concentrade
             get => _dateNaissance.ToString("dd/MM/yyyy");
             set => _dateNaissance = DateTime.ParseExact(value, "dd/MM/yyyy", null);
         }
-        public int Age
-        {
-            get
-            {
-                var today = DateTime.Today;
-                var age = today.Year - _dateNaissance.Year;
-                if (_dateNaissance.Date > today.AddYears(-age)) age--;
-                return age;
-            }
-        }
+
         public string Moment { get; set; } = "";
         public string Distrait { get; set; } = "";
         public int DureeMinutes { get; set; } = 0;
@@ -31,7 +22,6 @@ namespace Concentrade
         {
             return $"Prénom : {Prenom}\n" +
                    $"Date de naissance : {DateNaissance}\n" +
-                   $"Âge : {Age} ans\n" +
                    $"Moment : {Moment}\n" +
                    $"Distrait : {Distrait}";
         }
@@ -41,7 +31,7 @@ namespace Concentrade
         public void SauvegarderDansSettings()
         {
             Properties.Settings.Default.UserName = Prenom;
-            Properties.Settings.Default.UserAge = Age;
+            Properties.Settings.Default.UserBirthDate = _dateNaissance;
             Properties.Settings.Default.BestMoment = Moment;
             Properties.Settings.Default.Distraction = Distrait.ToLower() == "oui" || Distrait.ToLower() == "un petit peu";
             Properties.Settings.Default.QuestionnaireDone = true;

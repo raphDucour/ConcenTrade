@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Concentrade.LoginSystem;
+using System.Threading.Tasks; // Ajoutez cette ligne
 
 namespace Concentrade
 {
@@ -12,19 +13,16 @@ namespace Concentrade
             InitializeComponent();
         }
 
-        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        private async void LoginButton_Click(object sender, RoutedEventArgs e) // Rendre la méthode asynchrone
         {
             string email = EmailBox.Text.Trim();
             string password = PasswordBox.Password.Trim();
 
-            var user = UserManager.Login(email, password);
+            var user = await UserManager.Login(email, password); // Appeler la méthode asynchrone
 
             if (user != null)
             {
-                // Sauvegarde l'email de l'utilisateur actuel pour le reste de la session
-                UserManager.LoadProperties(email);
-
-                
+                await UserManager.LoadProperties(email); // Appeler la méthode asynchrone
 
                 bool questionnaireDone = Properties.Settings.Default.QuestionnaireDone;
                 if (questionnaireDone)
