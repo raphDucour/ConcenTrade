@@ -31,7 +31,7 @@ namespace Concentrade.LoginSystem
             }
             else
             {
-                MessageBox.Show("Cet email est déjà utilisé.");
+                MessageBox.Show("Ca n'a pas marché");
             }
         }
 

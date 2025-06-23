@@ -9,10 +9,7 @@ namespace Concentrade
     [Table("User")]
     public class User : Supabase.Postgrest.Models.BaseModel // Héritez de BaseModel
     {
-        // Nouvelle clé primaire Id générée par la base de données (auth.uid())
-        [PrimaryKey("Id", false)] // "Id" est la clé primaire, "false" indique qu'elle n'est pas générée par le client
-        public Guid Id { get; set; }
-
+        [PrimaryKey("email", false)]
         [Column("email")]
         public string? email { get; set; }
 

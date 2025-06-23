@@ -30,34 +30,32 @@ namespace Concentrade
         {
             try
             {
-                // Étape 1: Tenter d'inscrire l'utilisateur via le service d'authentification de Supabase
-                // _supabase.Auth.SignUp crée l'utilisateur dans la table auth.users
                 var authResponse = await _supabase.Auth.SignUp(email, password);
 
-                // Vérifier si l'inscription via Auth a échoué (User peut être null si confirmation email activée ou erreur)
                 if (authResponse.User == null)
                 {
-                    // CORRECTION : Accéder directement à authResponse.Error
                     string errorMessage = "Une erreur inconnue est survenue lors de l'inscription.";
-                    
-                    MessageBox.Show(errorMessage);
-
+                    Console.WriteLine(errorMessage);
+                    return false;
                 }
 
-                // Étape 2: Si l'inscription Auth réussit, créer le profil utilisateur dans la table "User"
+                // Création du profil utilisateur dans la table User avec email comme clé primaire
                 var newUserProfile = new User();
-                newUserProfile.Id = Guid.Parse(authResponse.User.Id);
-                newUserProfile.email = email; // Utilise la propriété 'email' en minuscules
-
-                await _supabase.From<User>().Insert(newUserProfile);
+                newUserProfile.email = email;
+                newUserProfile.QuestionnaireDone = false;
+                var insertResult = await _supabase.From<User>().Insert(newUserProfile);
+                if (insertResult.Models.Count == 0)
+                {
+                    System.Windows.MessageBox.Show("Erreur lors de la création du profil utilisateur (insertion échouée).");
+                    return false;
+                }
 
                 await UserManager.LoadProperties(email);
-
                 return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erreur lors de l'enregistrement ou de la création du profil utilisateur: {ex.Message}");
+                Console.WriteLine($"Erreur lors de l'enregistrement ou de la création du profil utilisateur: {ex.Message}");
                 return false;
             }
         }
