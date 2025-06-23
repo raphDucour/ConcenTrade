@@ -18,9 +18,9 @@ namespace Concentrade
             string email = EmailBox.Text.Trim();
             string password = PasswordBox.Password.Trim();
 
-            var user = await UserManager.Login(email, password); // Appeler la méthode asynchrone
+            bool success = await UserManager.Login(email, password); // Appeler la méthode asynchrone
 
-            if (user != null)
+            if (success)
             {
                 await UserManager.LoadProperties(email); // Appeler la méthode asynchrone
 
@@ -35,10 +35,7 @@ namespace Concentrade
                     this.NavigationService?.Navigate(new QuestionPrenom());
                 }
             }
-            else
-            {
-                MessageBox.Show("Identifiants incorrects.");
-            }
+            // Si la connexion échoue, le message d'erreur est déjà affiché dans UserManager.Login
         }
 
         private void SignUp_Click(object sender, RoutedEventArgs e)

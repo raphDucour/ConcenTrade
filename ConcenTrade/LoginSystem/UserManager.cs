@@ -106,36 +106,25 @@ namespace Concentrade
             }
         }
 
-        public static async Task<User?> Login(string email, string password)
+        public static async Task<bool> Login(string email, string password)
         {
             try
             {
-                var authResponse = await _supabase.Auth.SignIn(email, password);
+                var session = await _supabase.Auth.SignIn(email, password);
 
-                // CORRECTION : Accéder directement à authResponse.Error
-                if (authResponse.User == null)
+                if (session == null || session.User == null)
                 {
-                    string errorMessage = "Identifiants incorrects ou erreur de connexion.";
-                    Console.WriteLine(errorMessage);
-                    return null;
+                    System.Windows.MessageBox.Show("Identifiants incorrects ou email non confirmé.");
+                    return false;
                 }
 
-                var userProfile = await FindUser(email);
-                if (userProfile != null)
-                {
-                    await LoadProperties(email);
-                    return userProfile;
-                }
-                else
-                {
-                    Console.WriteLine($"Profil public.User non trouvé pour l'utilisateur {email}");
-                    return null;
-                }
+                await LoadProperties(email); // Optionnel : charge les propriétés si besoin
+                return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erreur lors de la connexion : {ex.Message}");
-                return null;
+                System.Windows.MessageBox.Show("Erreur lors de la connexion : " + ex.Message);
+                return false;
             }
         }
 
