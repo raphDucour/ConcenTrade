@@ -26,12 +26,12 @@ namespace Concentrade.LoginSystem
             bool success = await UserManager.Register(email, password); // Appeler la méthode asynchrone
             if (success)
             {
-                MessageBox.Show("Compte créé avec succès !");
+                MessageBox.Show("Compte créé avec succès, veuillez verifier votre email !");
                 this.NavigationService?.Navigate(new LoginPage());
             }
             else
             {
-                MessageBox.Show("Ca n'a pas marché");
+                MessageBox.Show("il y a eu une erreur");
             }
         }
 
