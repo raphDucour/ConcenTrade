@@ -9,32 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\Cards\cat_zen.png" />
-    <None Remove="Images\Cards\Chat.png" />
-    <None Remove="Images\Cards\Chien.png" />
-    <None Remove="Images\Cards\cochon.png" />
-    <None Remove="Images\Cards\Dophin.png" />
-    <None Remove="Images\Cards\fourmi.png" />
-    <None Remove="Images\Cards\Giraffe.png" />
-    <None Remove="Images\Cards\hipo epic.png" />
-    <None Remove="Images\Cards\phoc.png" />
-    <None Remove="Images\Cards\Poule.png" />
-    <None Remove="Images\Cards\rat.png" />
-    <None Remove="Images\Cards\renard.png" />
-    <None Remove="Images\Cards\singe.png" />
-    <None Remove="Images\Cards\taupe.png" />
-    <None Remove="Images\Cards\Tetard.png" />
-    <None Remove="Images\Cards\Tortue.png" />
-    <None Remove="Images\Cards\vache.png" />
-    <None Remove="Images\ConcenTrade logo sans texte.png" />
-    <None Remove="Images\ConcenTrade Logo.png" />
-    <None Remove="Images\ConcenTrade_logo_v2-removebg-preview.png" />
-    <None Remove="Images\Logo fond effacé.png" />
-    <None Remove="Images\mp3\debut_travail.mp3" />
-    <None Remove="Images\mp3\fin_travail.mp3" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Page Remove="FlowDocument1.xaml" />
   </ItemGroup>
 
@@ -44,34 +18,61 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\Cards\Chat.png" />
-    <Resource Include="Images\Cards\Chien.png" />
-    <Resource Include="Images\Cards\cochon.png" />
-    <Resource Include="Images\Cards\Dophin.png" />
-    <Resource Include="Images\Cards\fourmi.png" />
-    <Resource Include="Images\Cards\Giraffe.png" />
-    <Resource Include="Images\Cards\hipo epic.png" />
-    <Resource Include="Images\Cards\phoc.png" />
-    <Resource Include="Images\Cards\Poule.png" />
-    <Resource Include="Images\Cards\rat.png" />
-    <Resource Include="Images\Cards\renard.png" />
-    <Resource Include="Images\Cards\singe.png" />
-    <Resource Include="Images\Cards\taupe.png" />
-    <Resource Include="Images\Cards\Tetard.png" />
-    <Resource Include="Images\Cards\Tortue.png" />
-    <Resource Include="Images\Cards\vache.png" />
-    <Resource Include="Images\ConcenTrade logo sans texte.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\ConcenTrade Logo.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\ConcenTrade_logo_v2-removebg-preview.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\Logo fond effacé.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Images\Cards\communes\Chat.png" />
+    <None Remove="Images\Cards\communes\Chien.png" />
+    <None Remove="Images\Cards\communes\cochon.png" />
+    <None Remove="Images\Cards\communes\Dophin.png" />
+    <None Remove="Images\Cards\communes\fourmi.png" />
+    <None Remove="Images\Cards\communes\Giraffe.png" />
+    <None Remove="Images\Cards\communes\phoc.png" />
+    <None Remove="Images\Cards\communes\Poule.png" />
+    <None Remove="Images\Cards\communes\rat.png" />
+    <None Remove="Images\Cards\communes\renard.png" />
+    <None Remove="Images\Cards\communes\singe.png" />
+    <None Remove="Images\Cards\communes\taupe.png" />
+    <None Remove="Images\Cards\communes\Tetard.png" />
+    <None Remove="Images\Cards\communes\Tortue.png" />
+    <None Remove="Images\Cards\communes\vache.png" />
+    <None Remove="Images\ConcenTrade logo sans texte.png" />
+    <None Remove="Images\ConcenTrade Logo.png" />
+    <None Remove="Images\ConcenTrade_logo_v2-removebg-preview.png" />
+    <None Remove="Images\Logo fond effacé.png" />
+    <None Remove="Images\mp3\debut_travail.mp3" />
+    <None Remove="Images\mp3\fin_travail.mp3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Cards\communes\Chat.png" />
+    <Resource Include="Images\Cards\communes\Chien.png" />
+    <Resource Include="Images\Cards\communes\cochon.png" />
+    <Resource Include="Images\Cards\communes\Dophin.png" />
+    <Resource Include="Images\Cards\communes\fourmi.png" />
+    <Resource Include="Images\Cards\communes\Giraffe.png" />
+    <Resource Include="Images\Cards\communes\phoc.png" />
+    <Resource Include="Images\Cards\communes\Poule.png" />
+    <Resource Include="Images\Cards\communes\rat.png" />
+    <Resource Include="Images\Cards\communes\renard.png" />
+    <Resource Include="Images\Cards\communes\singe.png" />
+    <Resource Include="Images\Cards\communes\taupe.png" />
+    <Resource Include="Images\Cards\communes\Tetard.png" />
+    <Resource Include="Images\Cards\communes\Tortue.png" />
+    <Resource Include="Images\Cards\communes\vache.png" />
+    <Resource Include="Images\ConcenTrade logo sans texte.png" />
+    <Resource Include="Images\ConcenTrade Logo.png" />
+    <Resource Include="Images\ConcenTrade_logo_v2-removebg-preview.png" />
+    <Resource Include="Images\Logo fond effacé.png" />
     <Content Include="Images\mp3\debut_travail.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -81,18 +82,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
+    <DesignDataWithDesignTimeCreatableTypes Include="Images\Cards\communes\cochon.png" />
+    <Resource Include="Images\Cards\legendaires\pinochio legendaire.png" />
+    <Resource Include="Images\Cards\epics\lezard epic.png" />
   </ItemGroup>
 
 </Project>
