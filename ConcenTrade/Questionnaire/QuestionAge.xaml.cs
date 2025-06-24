@@ -101,7 +101,7 @@ namespace Concentrade
             var textBox = (TextBox)sender;
             var text = textBox.Text;
 
-            // Vérifier si le texte correspond au format attendu
+            // Vérifier si le texte correspond au format attendu.
             if (!_dateRegex.IsMatch(text))
             {
                 ErrorMessage.Visibility = Visibility.Visible;
