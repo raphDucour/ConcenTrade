@@ -8,8 +8,10 @@
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
     <Grid>
-        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"
-               HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"
+                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        </ScrollViewer>
 
         <Grid VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,5,10,0">
             <StackPanel Orientation="Horizontal">
