@@ -26,9 +26,9 @@ namespace Concentrade
                 // On charge les données de l'utilisateur qui est automatiquement connecté.
                 string userEmail = Properties.Settings.Default.UserEmail;
 
-                //faire une methode FireAndForget, ou on verifie si tout les champs sont les memes dans la bases de donné et les propriété locale, si c'est les meme rien faire, si c'est pas les memes prendre celui ou il y a plus de cartes en priorité, puis celui ou il y a le plus de points, sinon si c'est les appbloqué qui change on prend celui ou il y a le plus d'app.
+                //faire une methode FireAndForget, ou on verifie si tout les champs sont les memes, si c'est pas les memes prendre celui ou il y a plus de cartes en priorité, puis celui ou il y a le plus de points, sinon si c'est les appbloqué qui change on prend celui ou il y a le plus d'app.
                 //autre option et de creer une propriété et colone modification date et choisir la plus recente
-                UserManager.LoadProperties(userEmail); // Assure que toutes les propriétés sont à jour
+                //voir UserManager.LoadUser();
 
                 bool questionnaireDone = Properties.Settings.Default.QuestionnaireDone;
                 if (questionnaireDone)
@@ -41,6 +41,8 @@ namespace Concentrade
                     MainFrame.Navigate(new QuestionPrenom());
                 }
             }
+
+            this.Closing += MainWindow_Closing;
         }
 
         // Permet de déplacer la fenêtre en cliquant n'importe où
@@ -81,6 +83,20 @@ namespace Concentrade
         public void NavigateTo(Page page)
         {
             MainFrame.Navigate(page);
+        }
+
+        private async void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+                // Appelle ici ta méthode de push (à adapter selon ton code)
+                await UserManager.PushIntoBDD();
+            }
+            catch (Exception ex)
+            {
+                //mettre un message du genre " vous n'etes pas connecter au wifi, etes vous sur de fermer alors vous la sauvegarde de vos donné sur votre compte n'a pas été faite?"
+                // Optionnel : log ou affiche une erreur
+            }
         }
     }
 }
