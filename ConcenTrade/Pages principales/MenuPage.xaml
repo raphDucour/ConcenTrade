@@ -94,7 +94,6 @@
                 <StackPanel>
                     <Button Content="⚙️ Préférences" Click="Settings_Click" Style="{StaticResource ZenButtonStyle}" Margin="2"/>
                     <Button Content="🔒 Se déconnecter" Click="Logout_Click" Style="{StaticResource ZenButtonStyle}" Margin="2"/>
-                    <Button Content="🗑️ Réinitialiser" Click="ResetData_Click" Style="{StaticResource ZenButtonStyle}" Margin="2"/>
                     <Button Content="❌ Quitter" Click="Quit_Click" Style="{StaticResource ZenButtonStyle}" Background="#E57373" Foreground="White" Margin="2"/>
                 </StackPanel>
             </Border>
