@@ -44,22 +44,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\Cards\Chat.png" />
-    <Resource Include="Images\Cards\Chien.png" />
-    <Resource Include="Images\Cards\cochon.png" />
-    <Resource Include="Images\Cards\Dophin.png" />
-    <Resource Include="Images\Cards\fourmi.png" />
-    <Resource Include="Images\Cards\Giraffe.png" />
-    <Resource Include="Images\Cards\hipo epic.png" />
-    <Resource Include="Images\Cards\phoc.png" />
-    <Resource Include="Images\Cards\Poule.png" />
-    <Resource Include="Images\Cards\rat.png" />
-    <Resource Include="Images\Cards\renard.png" />
-    <Resource Include="Images\Cards\singe.png" />
-    <Resource Include="Images\Cards\taupe.png" />
-    <Resource Include="Images\Cards\Tetard.png" />
-    <Resource Include="Images\Cards\Tortue.png" />
-    <Resource Include="Images\Cards\vache.png" />
     <Resource Include="Images\ConcenTrade logo sans texte.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
