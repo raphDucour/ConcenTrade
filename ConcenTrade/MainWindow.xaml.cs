@@ -25,6 +25,9 @@ namespace Concentrade
             {
                 // On charge les données de l'utilisateur qui est automatiquement connecté.
                 string userEmail = Properties.Settings.Default.UserEmail;
+
+                //faire une methode FireAndForget, ou on verifie si tout les champs sont les memes dans la bases de donné et les propriété locale, si c'est les meme rien faire, si c'est pas les memes prendre celui ou il y a plus de cartes en priorité, puis celui ou il y a le plus de points, sinon si c'est les appbloqué qui change on prend celui ou il y a le plus d'app.
+                //autre option et de creer une propriété et colone modification date et choisir la plus recente
                 UserManager.LoadProperties(userEmail); // Assure que toutes les propriétés sont à jour
 
                 bool questionnaireDone = Properties.Settings.Default.QuestionnaireDone;

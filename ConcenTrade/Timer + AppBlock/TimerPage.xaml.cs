@@ -359,8 +359,13 @@ namespace Concentrade
 
             if (_currentState == PomodoroState.Work)
             {
-                _pointsAccumules++;
-                UpdatePointsText();
+                // Award 1 point every 5 minutes (300 seconds)
+                if (_duration.TotalSeconds - _remaining.TotalSeconds > 0 && 
+                    (_duration.TotalSeconds - _remaining.TotalSeconds) % 299 == 0)//toutes les presque 5min pour pas que ca s'arrete avant d'avoir le point
+                {
+                    _pointsAccumules++;
+                    UpdatePointsText();
+                }
             }
 
             if (_remaining.TotalSeconds <= 0)
