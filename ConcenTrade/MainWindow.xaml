@@ -3,15 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Concentrade"
         MinHeight="600" MinWidth="800"
-        ResizeMode="CanResize"
+        ResizeMode="NoResize"
         Background="{StaticResource ZenBackgroundBrush}"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
     <Grid>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"
-                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        </ScrollViewer>
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"
+               HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
         <Grid VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,5,10,0">
             <StackPanel Orientation="Horizontal">
