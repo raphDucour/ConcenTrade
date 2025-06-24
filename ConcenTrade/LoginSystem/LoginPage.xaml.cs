@@ -22,8 +22,6 @@ namespace Concentrade
 
             if (success)
             {
-                await UserManager.LoadProperties(email); // Appeler la méthode asynchrone
-
                 bool questionnaireDone = Properties.Settings.Default.QuestionnaireDone;
                 if (questionnaireDone)
                 {
