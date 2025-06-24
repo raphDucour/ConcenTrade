@@ -7,7 +7,10 @@
       mc:Ignorable="d" 
       d:DesignHeight="1080" d:DesignWidth="1920"
       Title="MenuPage"
-      Loaded="Page_Loaded">
+      Loaded="Page_Loaded"
+      ShowsNavigationUI="False"
+      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
     <Page.Resources>
         <Style x:Key="ModeRadioButtonStyle" TargetType="RadioButton">
