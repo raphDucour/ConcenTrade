@@ -53,25 +53,25 @@ namespace Concentrade.Collections_de_cartes
                 new Card("Vache Tranquille", CardRarity.Common, "/Images/Cards/communes/vache.png","Prends le temps de savourer tes réussites, même les plus petites, pour renforcer ta motivation."),
                 
                 // rares
-                new Card("Anne", CardRarity.Epic, "/Images/Cards/rares/anne rare.png","Reste imperturbable face aux distractions, concentre-toi sur une tâche à la fois."),
-                new Card("Cafard", CardRarity.Epic, "/Images/Cards/rares/cafard rare.png","Reste imperturbable face aux distractions, concentre-toi sur une tâche à la fois."),
-                new Card("Cameleon", CardRarity.Epic, "/Images/Cards/rares/cameleon rare.png","Reste imperturbable face aux distractions, concentre-toi sur une tâche à la fois."),
-                new Card("Cuisinier", CardRarity.Epic, "/Images/Cards/rares/cuisinier rare.png","Reste imperturbable face aux distractions, concentre-toi sur une tâche à la fois."),
-                new Card("Ecureuil", CardRarity.Epic, "/Images/Cards/rares/ecureil rare.png","Reste imperturbable face aux distractions, concentre-toi sur une tâche à la fois."),
-                new Card("Flaman Rose", CardRarity.Epic, "/Images/Cards/rares/flaman rose rare.png","Reste imperturbable face aux distractions, concentre-toi sur une tâche à la fois."),
-                new Card("Koala", CardRarity.Epic, "/Images/Cards/rares/koala rare.png","Reste imperturbable face aux distractions, concentre-toi sur une tâche à la fois."),
-                new Card("Mouche", CardRarity.Epic, "/Images/Cards/rares/mouche rare.png","Reste imperturbable face aux distractions, concentre-toi sur une tâche à la fois."),
-                new Card("Panda", CardRarity.Epic, "/Images/Cards/rares/panda rare.png","Reste imperturbable face aux distractions, concentre-toi sur une tâche à la fois."),
-                new Card("Verre de terre", CardRarity.Epic, "/Images/Cards/rares/verre de terre rare.png","Reste imperturbable face aux distractions, concentre-toi sur une tâche à la fois."),
-                new Card("Zebre", CardRarity.Epic, "/Images/Cards/rares/zebre rare.png","Reste imperturbable face aux distractions, concentre-toi sur une tâche à la fois."),
+                new Card("Anne", CardRarity.Epic, "/Images/Cards/rares/anne rare.png","?"),
+                new Card("Cafard", CardRarity.Epic, "/Images/Cards/rares/cafard rare.png","?"),
+                new Card("Cameleon", CardRarity.Epic, "/Images/Cards/rares/cameleon rare.png","?"),
+                new Card("Cuisinier", CardRarity.Epic, "/Images/Cards/rares/cuisinier rare.png","?"),
+                new Card("Ecureuil", CardRarity.Epic, "/Images/Cards/rares/ecureil rare.png","?"),
+                new Card("Flaman Rose", CardRarity.Epic, "/Images/Cards/rares/flaman rose rare.png","?"),
+                new Card("Koala", CardRarity.Epic, "/Images/Cards/rares/koala rare.png","?"),
+                new Card("Mouche", CardRarity.Epic, "/Images/Cards/rares/mouche rare.png","?"),
+                new Card("Panda", CardRarity.Epic, "/Images/Cards/rares/panda rare.png","?"),
+                new Card("Verre de terre", CardRarity.Epic, "/Images/Cards/rares/verre de terre rare.png","?"),
+                new Card("Zebre", CardRarity.Epic, "/Images/Cards/rares/zebre rare.png","?"),
                 
                 // epics
-                new Card("Hippopotame", CardRarity.Epic, "/Images/Cards/epics/hipo epic.png","Reste imperturbable face aux distractions, concentre-toi sur une tâche à la fois."),
-                new Card("Aigle", CardRarity.Epic, "/Images/Cards/epics/aigle EPIC.png","Reste imperturbable face aux distractions, concentre-toi sur une tâche à la fois."),
-                new Card("Hibou", CardRarity.Epic, "/Images/Cards/epics/hibou EPIC.png","Reste imperturbable face aux distractions, concentre-toi sur une tâche à la fois."),
-                new Card("Elephant", CardRarity.Epic, "/Images/Cards/epics/elephant epic.png","Reste imperturbable face aux distractions, concentre-toi sur une tâche à la fois."),
-                new Card("Lezard", CardRarity.Epic, "/Images/Cards/epics/lezard epic.png","Reste imperturbable face aux distractions, concentre-toi sur une tâche à la fois."),
-                new Card("Pelican", CardRarity.Epic, "/Images/Cards/epics/pelican EPIC.png","Reste imperturbable face aux distractions, concentre-toi sur une tâche à la fois."),
+                new Card("Hippopotame", CardRarity.Epic, "/Images/Cards/epics/hipo epic.png","?"),
+                new Card("Aigle", CardRarity.Epic, "/Images/Cards/epics/aigle EPIC.png","?"),
+                new Card("Hibou", CardRarity.Epic, "/Images/Cards/epics/hibou EPIC.png","?"),
+                new Card("Elephant", CardRarity.Epic, "/Images/Cards/epics/elephant epic.png","?"),
+                new Card("Lezard", CardRarity.Epic, "/Images/Cards/epics/lezard epic.png","?"),
+                new Card("Pelican", CardRarity.Epic, "/Images/Cards/epics/pelican EPIC.png","?"),
 
                 // legendaires
 
@@ -109,8 +109,18 @@ namespace Concentrade.Collections_de_cartes
         {
             List<Card> ListCaisse = new List<Card>
             {
-                
-                
+                new Card("Anne", CardRarity.Epic, "/Images/Cards/rares/anne rare.png","?"),
+                new Card("Cafard", CardRarity.Epic, "/Images/Cards/rares/cafard rare.png","?"),
+                new Card("Cameleon", CardRarity.Epic, "/Images/Cards/rares/cameleon rare.png","?"),
+                new Card("Cuisinier", CardRarity.Epic, "/Images/Cards/rares/cuisinier rare.png","?"),
+                new Card("Ecureuil", CardRarity.Epic, "/Images/Cards/rares/ecureil rare.png","?"),
+                new Card("Flaman Rose", CardRarity.Epic, "/Images/Cards/rares/flaman rose rare.png","?"),
+                new Card("Koala", CardRarity.Epic, "/Images/Cards/rares/koala rare.png","?"),
+                new Card("Mouche", CardRarity.Epic, "/Images/Cards/rares/mouche rare.png","?"),
+                new Card("Panda", CardRarity.Epic, "/Images/Cards/rares/panda rare.png","?"),
+                new Card("Verre de terre", CardRarity.Epic, "/Images/Cards/rares/verre de terre rare.png","?"),
+                new Card("Zebre", CardRarity.Epic, "/Images/Cards/rares/zebre rare.png","?"),
+
                 new Card("Hippopotame Épique", CardRarity.Epic, "/Images/Cards/communes/hipo epic.png","?"),
             };
             ListCaisse = GetSortedByRarity(ListCaisse);
@@ -121,7 +131,12 @@ namespace Concentrade.Collections_de_cartes
         {
             List<Card> ListCaisse = new List<Card>
             {
-                
+                new Card("Hippopotame", CardRarity.Epic, "/Images/Cards/epics/hipo epic.png","?"),
+                new Card("Aigle", CardRarity.Epic, "/Images/Cards/epics/aigle EPIC.png","?"),
+                new Card("Hibou", CardRarity.Epic, "/Images/Cards/epics/hibou EPIC.png","?"),
+                new Card("Elephant", CardRarity.Epic, "/Images/Cards/epics/elephant epic.png","?"),
+                new Card("Lezard", CardRarity.Epic, "/Images/Cards/epics/lezard epic.png","?"),
+                new Card("Pelican", CardRarity.Epic, "/Images/Cards/epics/pelican EPIC.png","?"),
             };
             ListCaisse=GetSortedByRarity(ListCaisse);
             return filterByOptainedCards(ListCaisse);
