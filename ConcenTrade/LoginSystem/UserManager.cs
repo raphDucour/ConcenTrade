@@ -145,9 +145,12 @@ namespace Concentrade
             try
             {
                 var user = await FindUser(email);
-
                 if (user != null)
                 {
+                    //if (user.email == Properties.Settings.Default.UserEmail)
+                    //{
+                        //verfié si la version plus recente du compte est celle sur le pc ou celle sur la bdd
+                    //}
                     Properties.Settings.Default.UserEmail = email;
                     Properties.Settings.Default.UserName = user.Name;
                     Properties.Settings.Default.BestMoment = user.BestMoment;
