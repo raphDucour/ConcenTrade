@@ -4,16 +4,10 @@
       KeyDown="Page_KeyDown"
       FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}">
 
-    <!-- Fond dégradé doux -->
     <Page.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#0F2027" Offset="0.0"/>
-            <GradientStop Color="#203A43" Offset="0.5"/>
-            <GradientStop Color="#2C5364" Offset="1.0"/>
-        </LinearGradientBrush>
+        <SolidColorBrush Color="#2B3A4A"/>
     </Page.Background>
 
-    <!-- Animation douce : montée + fade -->
     <Page.Triggers>
         <EventTrigger RoutedEvent="Page.Loaded">
             <BeginStoryboard>
@@ -28,6 +22,9 @@
                                      From="30" To="0"
                                      Duration="0:0:1"
                                      AccelerationRatio="0.4"/>
+                    <DoubleAnimation Storyboard.TargetName="BreathPanel"
+                                     Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Opacity)"
+                                     From="0.25" To="0.45" Duration="0:0:2.5" AutoReverse="True" RepeatBehavior="Forever"/>
                 </Storyboard>
             </BeginStoryboard>
         </EventTrigger>
@@ -41,19 +38,44 @@
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="0,0,0,30"/>
         </Style>
-
         <Style TargetType="TextBox">
             <Setter Property="Width" Value="400"/>
             <Setter Property="Height" Value="55"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Background" Value="#1E2A38"/>
-            <Setter Property="BorderBrush" Value="#3A4B5C"/>
-            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="#181C20"/>
+            <Setter Property="BorderBrush" Value="#00D9A6"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
             <Setter Property="Padding" Value="10"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#33FFE6"/>
+                                <Setter TargetName="border" Property="BorderThickness" Value="2.5"/>
+                                <Setter TargetName="border" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect BlurRadius="10" ShadowDepth="0" Color="#33FFE6" Opacity="0.6"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="False">
+                                <Setter TargetName="border" Property="Effect" Value="{x:Null}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
-
         <Style TargetType="Button">
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="Width" Value="160"/>
@@ -65,48 +87,85 @@
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Margin" Value="0,40,0,0"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Background" Value="#558A8A8A"/>
+                                <Setter Property="Foreground" Value="#FFEEEEEE"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                    <Condition Property="IsEnabled" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="border" Property="Background" Value="#19FCD6"/>
+                                <Setter TargetName="border" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <TranslateTransform Y="-3"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="border" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect BlurRadius="12" ShadowDepth="0" Color="#00D9A6" Opacity="0.18"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </MultiTrigger>
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter TargetName="border" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <TranslateTransform Y="0"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="border" Property="Effect" Value="{x:Null}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Page.Resources>
 
     <Grid>
-        <StackPanel x:Name="MainPanel" VerticalAlignment="Center" HorizontalAlignment="Center"
-                    Opacity="0">
-            <StackPanel.RenderTransform>
-                <TranslateTransform Y="30"/>
-            </StackPanel.RenderTransform>
+        <Canvas x:Name="ParticleCanvas" Background="Transparent"/>
+        <Border
+            x:Name="BreathPanel"
+            Background="#40FFFFFF"
+            CornerRadius="30"
+            BorderBrush="#80FFFFFF"
+            BorderThickness="1.5"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Padding="40">
+            <StackPanel x:Name="MainPanel" VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Opacity="0">
+                <StackPanel.RenderTransform>
+                    <TranslateTransform Y="30"/>
+                </StackPanel.RenderTransform>
 
-            <TextBlock Text="Quelle est ta date de naissance ?" TextWrapping="Wrap"/>
-            <TextBlock Text="Format : JJ/MM/AAAA" FontSize="20" Margin="0,0,0,10" Opacity="0.7"/>
-            <TextBox x:Name="DateNaissanceInput" 
-                    MaxLength="10"
-                    PreviewTextInput="DateNaissance_PreviewTextInput"
-                    TextChanged="DateNaissance_TextChanged"
-                    Loaded="AgeInput_Loaded">
-                <TextBox.Resources>
-                    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="TextBox">
-                                    <Border Background="{TemplateBinding Background}"
-                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                            BorderThickness="{TemplateBinding BorderThickness}"
-                                            CornerRadius="5">
-                                        <ScrollViewer x:Name="PART_ContentHost"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </TextBox.Resources>
-            </TextBox>
-            <TextBlock x:Name="ErrorMessage" 
-                      Text="Format invalide. Utilisez JJ/MM/AAAA" 
-                      FontSize="16" 
-                      Foreground="#FFE6E6" 
-                      Margin="0,5,0,0" 
-                      Visibility="Collapsed"/>
-            <Button x:Name="SuivantButton" Content="Suivant" Click="Suivant_Click"/>
-
-        </StackPanel>
+                <TextBlock Text="Quelle est ta date de naissance ?" TextWrapping="Wrap"/>
+                <TextBlock Text="On a besoin de ta date de naissance pour continuer." FontSize="18" Foreground="#CCFFFFFF" Margin="0,0,0,20" TextAlignment="Center"/>
+                <TextBlock Text="Format : JJ/MM/AAAA" FontSize="20" Margin="0,0,0,10" Opacity="0.7"/>
+                <TextBox x:Name="DateNaissanceInput" 
+                        MaxLength="10"
+                        PreviewTextInput="DateNaissance_PreviewTextInput"
+                        TextChanged="DateNaissance_TextChanged"
+                        Loaded="AgeInput_Loaded"/>
+                <TextBlock x:Name="ErrorMessage" 
+                          Text="Format invalide. Utilisez JJ/MM/AAAA" 
+                          FontSize="16" 
+                          Foreground="#FFE6E6" 
+                          Margin="0,5,0,0" 
+                          Visibility="Collapsed"/>
+                <Button x:Name="SuivantButton" Content="Suivant" Click="Suivant_Click"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </Page>
