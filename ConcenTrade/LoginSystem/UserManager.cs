@@ -32,6 +32,10 @@ namespace Concentrade
             {
                 var authResponse = await _supabase.Auth.SignUp(email, password);
 
+                if (authResponse == null) {
+                    return false;
+                }
+
                 if (authResponse.User == null)
                 {
                     string errorMessage = "Une erreur inconnue est survenue lors de l'inscription.";
@@ -89,6 +93,20 @@ namespace Concentrade
             {
                 MessageBox.Show($"Erreur lors de la mise à jour des propriétés de l'utilisateur : {ex.Message}");
             }
+        }
+        public static void PushIntoBDD_FireAndForget()
+        {
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await PushIntoBDD();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Erreur dans PushIntoBDD : " + ex.Message);
+                }
+            });
         }
 
         public static async Task<User?> FindUser(string email)

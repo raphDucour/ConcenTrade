@@ -11,6 +11,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ConcenTrade
 {
@@ -192,8 +193,7 @@ namespace ConcenTrade
             Settings.Default.UserBirthDate = dateNaissance;
 
             user.SauvegarderDansSettings();
-            UserManager.PushIntoBDD();
-
+            UserManager.PushIntoBDD_FireAndForget();
             MessageBox.Show("Informations mises à jour avec succès !");
         }
 
