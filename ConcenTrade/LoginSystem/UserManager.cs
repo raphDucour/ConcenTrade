@@ -30,16 +30,11 @@ namespace Concentrade
         {
             try
             {
-                var authResponse = await _supabase.Auth.SignUp(email, password);
+                var session = await _supabase.Auth.SignUp(email, password);
 
-                if (authResponse == null) {
-                    return false;
-                }
-
-                if (authResponse.User == null)
+                if (session == null || session.User == null)
                 {
-                    string errorMessage = "Une erreur inconnue est survenue lors de l'inscription.";
-                    Console.WriteLine(errorMessage);
+                    MessageBox.Show("Erreur lors de l'inscription. Veuillez réessayer.");
                     return false;
                 }
 
@@ -50,7 +45,7 @@ namespace Concentrade
                 var insertResult = await _supabase.From<User>().Insert(newUserProfile);
                 if (insertResult.Models.Count == 0)
                 {
-                    System.Windows.MessageBox.Show("Erreur lors de la création du profil utilisateur (insertion échouée).");
+                    MessageBox.Show("Erreur lors de la création du profil utilisateur (insertion échouée).");
                     return false;
                 }
 
@@ -59,7 +54,7 @@ namespace Concentrade
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erreur lors de l'enregistrement ou de la création du profil utilisateur: {ex.Message}");
+                MessageBox.Show("Erreur lors de l'inscription : " + ex.Message);
                 return false;
             }
         }
