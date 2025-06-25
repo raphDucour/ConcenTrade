@@ -195,12 +195,17 @@ namespace Concentrade
         {
             if (errorMessage.Contains("user already exists", StringComparison.OrdinalIgnoreCase) ||
                 errorMessage.Contains("email_exists", StringComparison.OrdinalIgnoreCase) ||
-                errorMessage.Contains("already registered", StringComparison.OrdinalIgnoreCase))
+                errorMessage.Contains("already registered", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("user_already_exists", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("email address already exists", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("email already in use", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("email already exists", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("duplicate key value violates unique constraint", StringComparison.OrdinalIgnoreCase))
             {
                 return "Cet email est déjà utilisé. Veuillez en choisir un autre ou vous connecter.";
             }
             if (errorMessage.Contains("weak password", StringComparison.OrdinalIgnoreCase) ||
-                errorMessage.Contains("password", StringComparison.OrdinalIgnoreCase) && errorMessage.Contains("weak", StringComparison.OrdinalIgnoreCase))
+                (errorMessage.Contains("password", StringComparison.OrdinalIgnoreCase) && errorMessage.Contains("weak", StringComparison.OrdinalIgnoreCase)))
             {
                 return "Le mot de passe est trop faible. Choisissez un mot de passe plus complexe (au moins 8 caractères, avec chiffres et lettres).";
             }
