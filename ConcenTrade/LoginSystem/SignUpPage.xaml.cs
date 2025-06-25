@@ -12,26 +12,34 @@ namespace Concentrade.LoginSystem
             InitializeComponent();
         }
 
-        private async void SignUpButton_Click(object sender, RoutedEventArgs e) // Rendre la méthode asynchrone
+        private async void SignUpButton_Click(object sender, RoutedEventArgs e)
         {
-            string email = EmailBox.Text.Trim();
-            string password = PasswordBox.Password.Trim();
+            SignUpButton.IsEnabled = false;
+            try
+            {
+                string email = EmailBox.Text.Trim();
+                string password = PasswordBox.Password.Trim();
 
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
-            {
-                MessageBox.Show("Tous les champs sont obligatoires.");
-                return;
-            }
+                if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+                {
+                    MessageBox.Show("Tous les champs sont obligatoires.");
+                    return;
+                }
 
-            bool success = await UserManager.Register(email, password); // Appeler la méthode asynchrone
-            if (success)
-            {
-                MessageBox.Show("Compte créé avec succès, veuillez verifier votre email !");
-                this.NavigationService?.Navigate(new LoginPage());
+                bool success = await UserManager.Register(email, password);
+                if (success)
+                {
+                    MessageBox.Show("Compte créé avec succès, veuillez verifier votre email !");
+                    this.NavigationService?.Navigate(new LoginPage());
+                }
+                else
+                {
+                    MessageBox.Show("il y a eu une erreur");
+                }
             }
-            else
+            finally
             {
-                MessageBox.Show("il y a eu une erreur");
+                SignUpButton.IsEnabled = true;
             }
         }
 
