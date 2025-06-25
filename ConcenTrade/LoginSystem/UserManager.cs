@@ -34,7 +34,7 @@ namespace Concentrade
 
                 if (session== null || session.User == null)
                 {
-                    MessageBox.Show("Erreur lors de l'inscription. Veuillez réessayer.");
+                    MessageBox.Show("Activez votre connexion internet svp!");
                     return false;
                 }
 
@@ -54,7 +54,7 @@ namespace Concentrade
             }
             catch (Exception ex)
             {
-                MessageBox.Show(GetFriendlyErrorMessage(ex.Message));
+                MessageBox.Show(GetSignUpFriendlyErrorMessage(ex.Message));
                 return false;
             }
         }
@@ -126,7 +126,7 @@ namespace Concentrade
 
                 if (session == null || session.User == null)
                 {
-                    System.Windows.MessageBox.Show("Identifiants incorrects ou email non confirmé.");
+                    System.Windows.MessageBox.Show("Activez votre connexion internet svp!");
                     return false;
                 }
 
@@ -135,7 +135,7 @@ namespace Concentrade
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Erreur lors de la connexion : " + ex.Message);
+                System.Windows.MessageBox.Show(GetLoginFriendlyErrorMessage(ex.Message));
                 return false;
             }
         }
@@ -191,7 +191,7 @@ namespace Concentrade
             }
         }
 
-        public static string GetFriendlyErrorMessage(string errorMessage)
+        public static string GetSignUpFriendlyErrorMessage(string errorMessage)
         {
             if (errorMessage.Contains("user already exists", StringComparison.OrdinalIgnoreCase) ||
                 errorMessage.Contains("email_exists", StringComparison.OrdinalIgnoreCase) ||
@@ -217,12 +217,64 @@ namespace Concentrade
             }
             if (errorMessage.Contains("network", StringComparison.OrdinalIgnoreCase) ||
                 errorMessage.Contains("timeout", StringComparison.OrdinalIgnoreCase) ||
-                errorMessage.Contains("connection", StringComparison.OrdinalIgnoreCase))
+                errorMessage.Contains("connection", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("No such host", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("Aucune connexion", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("network unreachable", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("impossible de contacter le serveur", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("hôte inconnu", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("unknown host", StringComparison.OrdinalIgnoreCase))
             {
                 return "Problème de connexion au serveur. Vérifiez votre connexion internet.";
             }
             // Ajoute d'autres cas spécifiques si besoin
-            return "Une erreur est survenue. Merci de réessayer ou de contacter le support si le problème persiste.";
+            string error = $"Une erreur est survenue. Merci de réessayer ou de contacter le support si le problème persiste : {errorMessage}";
+            return error;
+        }
+
+        public static string GetLoginFriendlyErrorMessage(string errorMessage)
+        {
+            if (errorMessage.Contains("invalid login credentials", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("invalid credentials", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("identifiants incorrects", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("wrong password", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("mot de passe incorrect", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Email ou mot de passe incorrect.";
+            }
+            if (errorMessage.Contains("email not confirmed", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("email_not_confirmed", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("unconfirmed", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Votre email n'a pas été confirmé. Veuillez vérifier votre boîte mail.";
+            }
+            if (errorMessage.Contains("user not found", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("user_not_found", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("aucun utilisateur", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Aucun compte n'est associé à cet email.";
+            }
+            if (errorMessage.Contains("rate limit", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("too many requests", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("429", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Trop de tentatives. Veuillez patienter quelques instants avant de réessayer.";
+            }
+            if (errorMessage.Contains("network", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("timeout", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("connection", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("No such host", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("Aucune connexion", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("network unreachable", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("impossible de contacter le serveur", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("hôte inconnu", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("unknown host", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Problème de connexion au serveur. Vérifiez votre connexion internet.";
+            }
+            // Ajoute d'autres cas spécifiques si besoin
+            string error = $"Une erreur est survenue. Merci de réessayer ou de contacter le support si le problème persiste : {errorMessage}";
+            return error;
         }
     }
 }
