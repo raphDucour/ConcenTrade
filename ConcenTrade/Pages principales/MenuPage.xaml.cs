@@ -41,7 +41,6 @@ namespace Concentrade
             InitializeComponent();
             DataContext = this;
             Points = Properties.Settings.Default.Points;
-            DureeSlider.Value = 50;
 
             // ✅ LIGNE MODIFIÉE : On initialise les labels des sliders personnalisés au démarrage
             CustomTimeSlider_ValueChanged(null, null);
@@ -55,19 +54,19 @@ namespace Concentrade
                     null,
                     PomodoroModeButton,
                     CustomModeButton,
-                    StartSessionButton,
                     FocusModeToggle,
+                    StartSessionButton,
                     SettingsButton,
                     CollectionButton
                 };
                 var texts = new string[] {
                     "Avant de commencer, nous allons vous présenter les différents boutons et fonctionnalités de l'application.",
-                    "Mode Pomodoro : 25 minutes de travail, 5 minutes de pause, répétés sur plusieurs cycles pour maximiser ta concentration !",
+                    "Mode Pomodoro : 25 minutes de travail, 5 minutes de pause, répétés sur plusieurs cycles pour maximiser ta concentration !\n\nAstuce : règle le nombre de cycles juste en dessous pour choisir combien de fois tu veux enchaîner 25 min de travail puis 5 min de pause dans ta session.",
                     "Mode Temps personnalisé : choisis toi-même la durée de travail, de pause et le nombre de cycles selon tes besoins.",
+                    "Active le Mode Focus pour bloquer les applications distrayantes.\n\n⚠️ En mode normal, si tu ouvres une application bloquée, tu peux choisir de la fermer ou de continuer temporairement.\nEn mode Focus, tu n'auras qu'un seul choix : l'application sera automatiquement bloquée et tu ne pourras pas l'utiliser tant que la session est en cours.",
                     "Clique ici pour démarrer une session de concentration.",
-                    "Active le Mode Focus pour bloquer les applications distrayantes.",
-                    "Accède aux paramètres de l'application.",
-                    "Consulte ta collection de cartes ici."
+                    "Accède aux paramètres de l'application. C'est ici que tu peux modifier ton prénom, ta date de naissance, et ajouter ou supprimer des applications distrayantes à bloquer.",
+                    "Ici, tu peux accéder à ta collection de cartes et acheter des caisses pour débloquer de nouvelles cartes et agrandir ta collection."
                 };
                 TutorialOverlayControl.StartTutorial(targets, texts);
                 //Properties.Settings.Default.IsTutorialDone = true;      A remettre dans le code si on veut pas que le tuto se lance a chaque fois
@@ -147,15 +146,7 @@ namespace Concentrade
         {
             if (SliderLabel == null) return;
 
-            double valeurActuelle = e.NewValue;
-            int positionPlusProche = _positionsSlider.OrderBy(p => Math.Abs(p - valeurActuelle)).First();
-
-            if (Math.Abs(DureeSlider.Value - positionPlusProche) > 5)
-            {
-                DureeSlider.Value = positionPlusProche;
-            }
-
-            int cycles = ConvertirPositionEnCycles(DureeSlider.Value);
+            int cycles = (int)Math.Round(DureeSlider.Value);
             int dureeTravail = cycles * 25;
             int dureePause = (cycles > 1) ? (cycles - 1) * 5 : 0;
             int dureeTotale = dureeTravail + dureePause;
@@ -191,7 +182,7 @@ namespace Concentrade
         }
 
         // ✅ MÉTHODE MODIFIÉE
-        private void StartSession_Click(object sender, RoutedEventArgs e)
+        public void StartSession_Click(object sender, RoutedEventArgs e)
         {
             // On récupère l'état du Mode Focus au moment du clic
             bool isFocusMode = FocusModeToggle.IsChecked == true;

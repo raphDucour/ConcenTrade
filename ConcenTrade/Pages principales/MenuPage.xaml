@@ -103,7 +103,8 @@
                 <TextBlock x:Name="SliderLabel" Text="Durée de la session : 25 min" Foreground="{StaticResource ZenTextBrush}" FontSize="22" FontWeight="Normal" HorizontalAlignment="Center" Margin="0,0,0,10" Opacity="0.8"/>
                 <Slider x:Name="DureeSlider"
                         Width="350"
-                        Minimum="0" Maximum="100"
+                        Minimum="1" Maximum="10"
+                        Value="1"
                         ValueChanged="DureeSlider_ValueChanged"
                         Margin="0,0,0,40"
                         Style="{StaticResource ZenSliderStyle}"/>
@@ -159,7 +160,7 @@
                         </ControlTemplate>
                     </ToggleButton.Template>
                 </ToggleButton>
-                <TextBlock Text="Mode Focus : pas d'autorisation aux app bloquées"
+                <TextBlock Text="Mode Focus : blocage total des applications distrayantes"
                            Foreground="White"
                            FontSize="16"
                            VerticalAlignment="Center"

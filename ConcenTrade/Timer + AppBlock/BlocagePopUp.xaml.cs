@@ -15,7 +15,7 @@ namespace Concentrade
         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
         private const int SW_MINIMIZE = 6;
 
-        // La seule information de sortie qui nous intéresse maintenant.
+        // La seule information de sortie qui nous intéresse maintenant..
         public bool TemporarilyAllowed { get; private set; }
         public TimeSpan AllowedDuration { get; private set; }
 
