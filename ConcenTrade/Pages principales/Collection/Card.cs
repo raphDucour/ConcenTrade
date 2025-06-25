@@ -137,12 +137,12 @@ namespace Concentrade.Collections_de_cartes
             List<Card> ListCaisse = new List<Card>
             {
                 // epics
-                new Card("Hippo Bosse", CardRarity.Epic, "/Images/Cards/epics/hipo epic.png","?"),
-                new Card("R-Aigle", CardRarity.Epic, "/Images/Cards/epics/aigle EPIC .png","?"),
-                new Card("Hibourge", CardRarity.Epic, "/Images/Cards/epics/hibou EPIC .png","?"),
+                new Card("Hippo Boss", CardRarity.Epic, "/Images/Cards/epics/hipo epic.png","?"),
+                new Card("R-Aigle", CardRarity.Epic, "/Images/Cards/epics/aigle epic.png ","?"),
+                new Card("Hibourge", CardRarity.Epic, "/Images/Cards/epics/hibou epic.png ","?"),
                 new Card("Elegang", CardRarity.Epic, "/Images/Cards/epics/elephant epic.png","?"),
                 new Card("Lez", CardRarity.Epic, "/Images/Cards/epics/lezard epic.png","?"),
-                new Card("PeliCalm", CardRarity.Epic, "/Images/Cards/epics/pelican EPIC.png","?"),
+                new Card("PeliCalme", CardRarity.Epic, "/Images/Cards/epics/pelican epic.png","?"),
             };
             ListCaisse=GetSortedByRarity(ListCaisse);
             return filterByOptainedCards(ListCaisse);
