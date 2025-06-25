@@ -40,10 +40,10 @@
 
         <!-- Overlay pour l'achat, maintenant plus stylisé -->
         <Grid x:Name="AchatOverlay" Background="#DD000000" Visibility="Collapsed">
-            <Border Background="#2B3A4A" CornerRadius="20" Padding="40"
+            <Border Background="#2B3A4A" CornerRadius="20" Padding="60"
                     HorizontalAlignment="Center" VerticalAlignment="Center"
                     BorderBrush="{StaticResource ZenButtonBorderBrush}" BorderThickness="1"
-                    MaxWidth="800">
+                    MaxWidth="1200">
                 <StackPanel>
                     <TextBlock Text="Boutique des Caisses" Style="{StaticResource PageTitle}" FontSize="36" Margin="0,0,0,30"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -76,6 +76,17 @@
                                 </StackPanel>
                             </Button>
                             <TextBlock x:Name="Caisse3Lock" Text="🔒" FontSize="48" Foreground="#FFD700" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+                        </Grid>
+                        <!-- Caisse 4 -->
+                        <Grid>
+                            <Button x:Name="Caisse4Button" Click="BuyCaisse4_Click" Style="{StaticResource ZenButtonStyle}" Margin="10" Padding="20" Width="200">
+                                <StackPanel>
+                                    <TextBlock Text="Caisse Légendaire" FontWeight="Bold" Foreground="White" TextAlignment="Center"/>
+                                    <TextBlock Text="Des cartes ultra-rares et légendaires !" TextWrapping="Wrap" Foreground="#CCCCCC" TextAlignment="Center" Margin="0,5,0,0"/>
+                                    <TextBlock x:Name="Caisse4Cost" Text="Coût: 2000 Points" FontStyle="Italic" Foreground="#AAAAAA" TextAlignment="Center" Margin="0,10,0,0"/>
+                                </StackPanel>
+                            </Button>
+                            <TextBlock x:Name="Caisse4Lock" Text="🔒" FontSize="48" Foreground="#FFD700" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
                         </Grid>
                     </StackPanel>
                     <Button Content="Fermer" Style="{StaticResource ZenButtonStyle}" Click="CloseAchatOverlay_Click"
