@@ -2,6 +2,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using System.Windows.Input;
 
 namespace Concentrade.Pages_principales
 {
@@ -39,57 +41,26 @@ namespace Concentrade.Pages_principales
             if (_targets == null || _texts == null || _step >= _targets.Length)
             {
                 IsOpen = false;
-                SpotlightCanvas.Children.Clear();
+                IntroOverlay.Visibility = Visibility.Collapsed;
                 return;
-            }
-            SpotlightCanvas.Children.Clear();
-            if (_targets[_step] != null)
-            {
-                // Calculer la position du bouton ciblé
-                var target = _targets[_step] as FrameworkElement;
-                if (target != null && target.IsVisible)
-                {
-                    // Obtenir la position du bouton par rapport à la fenêtre principale
-                    var relativePoint = target.TransformToAncestor(Window.GetWindow(this)).Transform(new Point(0, 0));
-                    double centerX = relativePoint.X + target.ActualWidth / 2;
-                    double centerY = relativePoint.Y + target.ActualHeight / 2;
-                    double radius = Math.Max(target.ActualWidth, target.ActualHeight) / 2 + 30; // marge autour du bouton
-
-                    // Overlay sombre
-                    var overlay = new Rectangle
-                    {
-                        Width = Window.GetWindow(this).ActualWidth,
-                        Height = Window.GetWindow(this).ActualHeight,
-                        Fill = new SolidColorBrush(Color.FromArgb(180, 20, 20, 30))
-                    };
-
-                    // Trou circulaire (spotlight)
-                    var geometryGroup = new GeometryGroup();
-                    geometryGroup.Children.Add(new RectangleGeometry(new Rect(0, 0, overlay.Width, overlay.Height)));
-                    geometryGroup.Children.Add(new EllipseGeometry(new Point(centerX, centerY), radius, radius));
-                    geometryGroup.FillRule = FillRule.EvenOdd;
-                    var path = new Path
-                    {
-                        Data = geometryGroup,
-                        Fill = overlay.Fill,
-                        Opacity = 1,
-                        IsHitTestVisible = false
-                    };
-                    SpotlightCanvas.Children.Add(path);
-                }
             }
             if (_targets[_step] == null)
             {
-                TutorialPopup.Placement = System.Windows.Controls.Primitives.PlacementMode.Center;
-                TutorialPopup.PlacementTarget = null;
+                // Affiche l'intro overlay centré
+                IntroText.Text = _texts[_step];
+                IntroOverlay.Visibility = Visibility.Visible;
+                TutorialPopup.IsOpen = false;
             }
             else
             {
+                IntroOverlay.Visibility = Visibility.Collapsed;
                 TutorialPopup.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
                 TutorialPopup.PlacementTarget = _targets[_step];
+                TutorialPopup.HorizontalOffset = 0;
+                TutorialPopup.VerticalOffset = 0;
+                TutorialText.Text = _texts[_step];
+                IsOpen = true;
             }
-            TutorialText.Text = _texts[_step];
-            IsOpen = true;
         }
 
         private void NextTutorialStep_Click(object sender, RoutedEventArgs e)
@@ -103,6 +74,25 @@ namespace Concentrade.Pages_principales
             {
                 IsOpen = false;
             }
+        }
+
+        private void MainWindow_SizeChanged_CenterPopup(object sender, SizeChangedEventArgs e)
+        {
+            if (_targets != null && _step < _targets.Length && _targets[_step] == null && TutorialPopup.IsOpen)
+            {
+                var mainWindow = Window.GetWindow(this);
+                if (mainWindow != null)
+                {
+                    TutorialPopup.HorizontalOffset = (mainWindow.ActualWidth - TutorialPopup.ActualWidth) / 2;
+                    TutorialPopup.VerticalOffset = (mainWindow.ActualHeight - TutorialPopup.ActualHeight) / 2;
+                }
+            }
+        }
+
+        private void IntroNext_Click(object sender, RoutedEventArgs e)
+        {
+            _step++;
+            ShowStep();
         }
     }
 } 
