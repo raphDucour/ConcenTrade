@@ -60,10 +60,19 @@ namespace Concentrade.Pages_principales
             else
             {
                 IntroOverlay.Visibility = Visibility.Collapsed;
-                TutorialPopup.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
+                if (_targets[_step] is TextBlock tb && tb.Name == "CycleCountLabel")
+                {
+                    TutorialPopup.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                    TutorialPopup.VerticalOffset = 12;
+                    TutorialPopup.HorizontalOffset = 0;
+                }
+                else
+                {
+                    TutorialPopup.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
+                    TutorialPopup.HorizontalOffset = 0;
+                    TutorialPopup.VerticalOffset = 0;
+                }
                 TutorialPopup.PlacementTarget = _targets[_step];
-                TutorialPopup.HorizontalOffset = 0;
-                TutorialPopup.VerticalOffset = 0;
                 TutorialText.Text = _texts[_step];
                 IsOpen = true;
 
@@ -87,6 +96,16 @@ namespace Concentrade.Pages_principales
                     };
                     scale.BeginAnimation(ScaleTransform.ScaleXProperty, pulse);
                     scale.BeginAnimation(ScaleTransform.ScaleYProperty, pulse);
+                }
+
+                if (_step == 1 && _targets[_step] is RadioButton pomodoroButton)
+                {
+                    pomodoroButton.IsChecked = true;
+                }
+                if (_step == 3)
+                {
+                    var menuPage = Window.GetWindow(this)?.Content as MenuPage;
+                    menuPage?.StartSession_Click(null, null);
                 }
             }
         }

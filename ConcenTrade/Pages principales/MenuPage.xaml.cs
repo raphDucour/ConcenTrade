@@ -55,17 +55,17 @@ namespace Concentrade
                     null,
                     PomodoroModeButton,
                     CustomModeButton,
-                    StartSessionButton,
                     FocusModeToggle,
+                    StartSessionButton,
                     SettingsButton,
                     CollectionButton
                 };
                 var texts = new string[] {
                     "Avant de commencer, nous allons vous présenter les différents boutons et fonctionnalités de l'application.",
-                    "Mode Pomodoro : 25 minutes de travail, 5 minutes de pause, répétés sur plusieurs cycles pour maximiser ta concentration !",
+                    "Mode Pomodoro : 25 minutes de travail, 5 minutes de pause, répétés sur plusieurs cycles pour maximiser ta concentration !\n\nAstuce : règle le nombre de cycles juste en dessous pour choisir combien de fois tu veux enchaîner 25 min de travail puis 5 min de pause dans ta session.",
                     "Mode Temps personnalisé : choisis toi-même la durée de travail, de pause et le nombre de cycles selon tes besoins.",
-                    "Clique ici pour démarrer une session de concentration.",
                     "Active le Mode Focus pour bloquer les applications distrayantes.",
+                    "Clique ici pour démarrer une session de concentration.",
                     "Accède aux paramètres de l'application.",
                     "Consulte ta collection de cartes ici."
                 };
@@ -191,7 +191,7 @@ namespace Concentrade
         }
 
         // ✅ MÉTHODE MODIFIÉE
-        private void StartSession_Click(object sender, RoutedEventArgs e)
+        public void StartSession_Click(object sender, RoutedEventArgs e)
         {
             // On récupère l'état du Mode Focus au moment du clic
             bool isFocusMode = FocusModeToggle.IsChecked == true;
