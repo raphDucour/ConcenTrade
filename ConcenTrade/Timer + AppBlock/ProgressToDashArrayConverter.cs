@@ -9,13 +9,13 @@ namespace Concentrade
 {
     /// <summary>
     /// Convertit une valeur de progression (0-100) en une collection de tirets (StrokeDashArray)
-    /// pour dessiner un arc de cercle.
+    /// pour dessiner un arc de cercle...
     /// </summary>
     public class ProgressToDashArrayConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            // S'assure que toutes les valeurs nécessaires sont présentes et valides.
+            // S'assure que toutes les valeurs nécessaires sont présentes et valides..
             if (values == null || values.Length < 4 ||
                 !double.TryParse(values[0]?.ToString(), out double progress) ||
                 !double.TryParse(values[1]?.ToString(), out double width) ||
@@ -26,7 +26,7 @@ namespace Concentrade
                 return new DoubleCollection(new[] { 0.0 });
             }
 
-            // Calcule la circonférence de l'ellipse en se basant sur ses dimensions et l'épaisseur du trait.
+            // Calcule la circonférence de l'ellipse en se basant sur ses dimensions et l'épaisseur du trait..
             double radiusX = (width - strokeThickness) / 2;
             double radiusY = (height - strokeThickness) / 2;
             // Utilise la formule de Ramanujan pour une approximation précise de la circonférence d'une ellipse.
