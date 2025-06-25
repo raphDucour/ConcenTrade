@@ -5,15 +5,36 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="400">
-    <Grid>
+    <Grid Background="Transparent">
+        <Canvas x:Name="SpotlightCanvas" IsHitTestVisible="False"/>
         <Popup x:Name="TutorialPopup"
                Placement="Right"
                StaysOpen="False"
                AllowsTransparency="True">
-            <Border Background="#CC263445" CornerRadius="12" Padding="20" >
+            <Border Background="#202B38"
+                    CornerRadius="24"
+                    Padding="32"
+                    BorderBrush="{DynamicResource TurquoiseBorderBrush}"
+                    BorderThickness="1">
                 <StackPanel>
-                    <TextBlock x:Name="TutorialText" Text="Explication du bouton..." Foreground="White" FontSize="18" Margin="0,0,0,10"/>
-                    <Button Content="Suivant" Click="NextTutorialStep_Click" Margin="0,10,0,0"/>
+                    <TextBlock x:Name="TutorialText"
+                               Text="Explication du bouton..."
+                               Foreground="{DynamicResource ZenTextBrush}"
+                               FontSize="22"
+                               FontFamily="Segoe UI"
+                               FontWeight="SemiBold"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,16"
+                               VerticalAlignment="Center"/>
+                    <Button Content="Suivant"
+                            Click="NextTutorialStep_Click"
+                            Style="{DynamicResource ZenButtonStyle}"
+                            Margin="0,10,0,0"
+                            Height="44"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            HorizontalAlignment="Right"
+                            Width="120"/>
                 </StackPanel>
             </Border>
         </Popup>
