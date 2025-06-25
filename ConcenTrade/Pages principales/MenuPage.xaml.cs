@@ -41,7 +41,6 @@ namespace Concentrade
             InitializeComponent();
             DataContext = this;
             Points = Properties.Settings.Default.Points;
-            DureeSlider.Value = 50;
 
             // ✅ LIGNE MODIFIÉE : On initialise les labels des sliders personnalisés au démarrage
             CustomTimeSlider_ValueChanged(null, null);
@@ -147,15 +146,7 @@ namespace Concentrade
         {
             if (SliderLabel == null) return;
 
-            double valeurActuelle = e.NewValue;
-            int positionPlusProche = _positionsSlider.OrderBy(p => Math.Abs(p - valeurActuelle)).First();
-
-            if (Math.Abs(DureeSlider.Value - positionPlusProche) > 5)
-            {
-                DureeSlider.Value = positionPlusProche;
-            }
-
-            int cycles = ConvertirPositionEnCycles(DureeSlider.Value);
+            int cycles = (int)Math.Round(DureeSlider.Value);
             int dureeTravail = cycles * 25;
             int dureePause = (cycles > 1) ? (cycles - 1) * 5 : 0;
             int dureeTotale = dureeTravail + dureePause;
