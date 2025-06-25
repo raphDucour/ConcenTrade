@@ -26,7 +26,7 @@ namespace Concentrade
                 return new DoubleCollection(new[] { 0.0 });
             }
 
-            // Calcule la circonférence de l'ellipse en se basant sur ses dimensions et l'épaisseur du trait.
+            // Calcule la circonférence de l'ellipse en se basant sur ses dimensions et l'épaisseur du trait..
             double radiusX = (width - strokeThickness) / 2;
             double radiusY = (height - strokeThickness) / 2;
             // Utilise la formule de Ramanujan pour une approximation précise de la circonférence d'une ellipse.
