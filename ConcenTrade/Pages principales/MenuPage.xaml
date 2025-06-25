@@ -159,7 +159,7 @@
                         </ControlTemplate>
                     </ToggleButton.Template>
                 </ToggleButton>
-                <TextBlock Text="Mode Focus : pas d'autorisation aux app bloquées"
+                <TextBlock Text="Mode Focus : blocage total des applications distrayantes"
                            Foreground="White"
                            FontSize="16"
                            VerticalAlignment="Center"
