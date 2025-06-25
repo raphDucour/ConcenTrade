@@ -54,7 +54,7 @@ namespace Concentrade
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erreur lors de l'inscription : " + ex.Message);
+                MessageBox.Show(GetFriendlyErrorMessage(ex.Message));
                 return false;
             }
         }
@@ -189,6 +189,35 @@ namespace Concentrade
             {
                 MessageBox.Show($"Erreur lors de la sauvegarde des points : {ex.Message}");
             }
+        }
+
+        public static string GetFriendlyErrorMessage(string errorMessage)
+        {
+            if (errorMessage.Contains("user already exists", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("email_exists", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("already registered", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Cet email est déjà utilisé. Veuillez en choisir un autre ou vous connecter.";
+            }
+            if (errorMessage.Contains("weak password", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("password", StringComparison.OrdinalIgnoreCase) && errorMessage.Contains("weak", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Le mot de passe est trop faible. Choisissez un mot de passe plus complexe (au moins 8 caractères, avec chiffres et lettres).";
+            }
+            if (errorMessage.Contains("rate limit", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("too many requests", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("429", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Trop de tentatives. Veuillez patienter quelques instants avant de réessayer.";
+            }
+            if (errorMessage.Contains("network", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("timeout", StringComparison.OrdinalIgnoreCase) ||
+                errorMessage.Contains("connection", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Problème de connexion au serveur. Vérifiez votre connexion internet.";
+            }
+            // Ajoute d'autres cas spécifiques si besoin
+            return "Une erreur est survenue. Merci de réessayer ou de contacter le support si le problème persiste.";
         }
     }
 }
