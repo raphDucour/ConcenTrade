@@ -74,9 +74,11 @@ namespace Concentrade.Collections_de_cartes
                 new Card("PeliCalme", CardRarity.Epic, "/Images/Cards/epics/pelican epic.png","Planifie ta journée, évite les distractions numériques."),
 
                 // legendaires
-
-
-                // legendaires
+                new Card("Celesthar", CardRarity.Rare, "/Images/Cards/rares/ange legendaire.png","?"),
+                new Card("AntaGoat", CardRarity.Rare, "/Images/Cards/rares/chevre legendaire.png","?"),
+                new Card("Vincent", CardRarity.Rare, "/Images/Cards/rares/dragon legendaire.png","?"),
+                new Card("Pwin Tu", CardRarity.Rare, "/Images/Cards/rares/grosnez legendaire.png","?"),
+                new Card("Garou", CardRarity.Rare, "/Images/Cards/rares/loup legendaire.png","?"),
 
             };
         }
@@ -150,6 +152,11 @@ namespace Concentrade.Collections_de_cartes
             List<Card> ListCaisse = new List<Card>
             {
                 // legendaires
+                new Card("Celesthar", CardRarity.Rare, "/Images/Cards/rares/ange legendaire.png","?"),
+                new Card("AntaGoat", CardRarity.Rare, "/Images/Cards/rares/chevre legendaire.png","?"),
+                new Card("Vincent", CardRarity.Rare, "/Images/Cards/rares/dragon legendaire.png","?"),
+                new Card("Pwin Tu", CardRarity.Rare, "/Images/Cards/rares/grosnez legendaire.png","?"),
+                new Card("Garou", CardRarity.Rare, "/Images/Cards/rares/loup legendaire.png","?"),
             };
             ListCaisse = GetSortedByRarity(ListCaisse);
             return filterByOptainedCards(ListCaisse);
