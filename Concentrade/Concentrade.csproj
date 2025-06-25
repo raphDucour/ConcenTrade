@@ -83,7 +83,6 @@
 
   <ItemGroup>
     <DesignDataWithDesignTimeCreatableTypes Include="Images\Cards\communes\cochon.png" />
-    <Resource Include="Images\Cards\legendaires\ange legendaire.png" />
     <Resource Include="Images\Cards\legendaires\chevre legendaire.png" />
     <Resource Include="Images\Cards\legendaires\dragon legendaire.png" />
     <Resource Include="Images\Cards\legendaires\loup legendaire.png" />

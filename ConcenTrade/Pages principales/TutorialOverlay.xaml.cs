@@ -12,7 +12,11 @@ namespace Concentrade.Pages_principales
         public bool IsOpen
         {
             get { return TutorialPopup.IsOpen; }
-            set { TutorialPopup.IsOpen = value; }
+            set
+            {
+                TutorialPopup.IsOpen = value;
+                this.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
 
         public TutorialOverlay()
@@ -35,7 +39,16 @@ namespace Concentrade.Pages_principales
                 IsOpen = false;
                 return;
             }
-            TutorialPopup.PlacementTarget = _targets[_step];
+            if (_targets[_step] == null)
+            {
+                TutorialPopup.Placement = System.Windows.Controls.Primitives.PlacementMode.Center;
+                TutorialPopup.PlacementTarget = null;
+            }
+            else
+            {
+                TutorialPopup.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
+                TutorialPopup.PlacementTarget = _targets[_step];
+            }
             TutorialText.Text = _texts[_step];
             IsOpen = true;
         }

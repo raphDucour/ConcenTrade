@@ -19,6 +19,7 @@
             <SolidColorBrush x:Key="ZenButtonHoverBrush" Color="#FFFFFF" Opacity="0.1"/>
             <SolidColorBrush x:Key="ZenButtonHoverTextBrush" Color="#FFFFFF"/>
             <SolidColorBrush x:Key="ZenButtonHoverBorderBrush" Color="#FFFFFF" Opacity="0.9"/>
+            <SolidColorBrush x:Key="TurquoiseBorderBrush" Color="#00D9A6"/>
 
             <!-- STYLE AJOUTÉ POUR LES BOUTONS DE FENÊTRE PERSONNALISÉS -->
             <Style x:Key="WindowButtonStyle" TargetType="Button">
@@ -317,6 +318,9 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
+            <DropShadowEffect x:Key="DropShadowEffect" BlurRadius="18" ShadowDepth="0" Color="Black" Opacity="0.35"/>
+
             <!-- ... Le reste de vos styles ne change pas ... -->
         </ResourceDictionary>
     </Application.Resources>

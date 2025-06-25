@@ -51,8 +51,9 @@ namespace Concentrade
         {
             if (!Properties.Settings.Default.IsTutorialDone)
             {
-                var targets = new UIElement[] { StartSessionButton, FocusModeToggle, SettingsButton, CollectionButton };
+                var targets = new UIElement[] { null, StartSessionButton, FocusModeToggle, SettingsButton, CollectionButton };
                 var texts = new string[] {
+                    "Avant de commencer, nous allons vous présenter les différents boutons et fonctionnalités de l'application.",
                     "Clique ici pour démarrer une session de concentration.",
                     "Active le Mode Focus pour bloquer les applications distrayantes.",
                     "Accède aux paramètres de l'application.",
