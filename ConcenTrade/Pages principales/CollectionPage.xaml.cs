@@ -91,7 +91,7 @@ namespace Concentrade.Pages_principales
             }
             else
             {
-                Caisse4Cost.Text = "Coût: 1500 Points";
+                Caisse4Cost.Text = "Coût: 2000 Points";
                 Caisse4Cost.FontSize = 14;
                 Caisse4Cost.Foreground = new SolidColorBrush(Color.FromRgb(0xAA, 0xAA, 0xAA));
                 Caisse4Button.IsEnabled = true;
