@@ -29,12 +29,8 @@ namespace Concentrade.LoginSystem
                 bool success = await UserManager.Register(email, password);
                 if (success)
                 {
-                    MessageBox.Show("Compte créé avec succès, veuillez verifier votre email !");
+                    MessageBox.Show("Super, veuillez verifier votre email !");
                     this.NavigationService?.Navigate(new LoginPage());
-                }
-                else
-                {
-                    MessageBox.Show("il y a eu une erreur");
                 }
             }
             finally
