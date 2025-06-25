@@ -152,11 +152,11 @@ namespace Concentrade.Collections_de_cartes
             List<Card> ListCaisse = new List<Card>
             {
                 // legendaires
-                new Card("Celesthar", CardRarity.Rare, "/Images/Cards/rares/ange legendaire.png","?"),
-                new Card("AntaGoat", CardRarity.Rare, "/Images/Cards/rares/chevre legendaire.png","?"),
-                new Card("Vincent", CardRarity.Rare, "/Images/Cards/rares/dragon legendaire.png","?"),
-                new Card("Pwin Tu", CardRarity.Rare, "/Images/Cards/rares/grosnez legendaire.png","?"),
-                new Card("Garou", CardRarity.Rare, "/Images/Cards/rares/loup legendaire.png","?"),
+                new Card("Celesthar", CardRarity.Legendary, "/Images/Cards/legendaires/ange legendaire.png","?"),
+                new Card("AntaGoat", CardRarity.Legendary, "/Images/Cards/legendaires/chevre legendaire.png","?"),
+                new Card("Vincent", CardRarity.Legendary, "/Images/Cards/legendaires/dragon legendaire.png","?"),
+                new Card("Pwin Tu", CardRarity.Legendary, "/Images/Cards/legendaires/grosnez legendaire.png","?"),
+                new Card("Garou", CardRarity.Legendary, "/Images/Cards/legendaires/loup legendaire.png","?"),
             };
             ListCaisse = GetSortedByRarity(ListCaisse);
             return filterByOptainedCards(ListCaisse);
