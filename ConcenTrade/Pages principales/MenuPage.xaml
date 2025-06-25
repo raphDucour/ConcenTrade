@@ -33,7 +33,52 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
+        <!-- Style sobre et moderne pour les boutons du menu engrenage -->
+        <Style x:Key="SettingsMenuButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Padding" Value="18,10"/>
+            <Setter Property="Margin" Value="0,4,0,4"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <ContentPresenter VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#263445"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Style spécial pour le bouton Quitter -->
+        <Style x:Key="QuitButtonStyle" TargetType="Button" BasedOn="{StaticResource SettingsMenuButtonStyle}">
+            <Setter Property="Background" Value="#E57373"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <ContentPresenter VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
     <Grid x:Name="MainGrid" Background="{StaticResource ZenBackgroundBrush}">
         <Canvas x:Name="ParticleCanvas" Background="Transparent"/>
@@ -130,9 +175,9 @@
         <Popup x:Name="SettingsPopup" PlacementTarget="{Binding ElementName=SettingsButton}" Placement="Top" AllowsTransparency="True" StaysOpen="False">
             <Border Background="#37474F" BorderBrush="{StaticResource ZenButtonBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="10" Margin="0,0,0,10">
                 <StackPanel>
-                    <Button Content="⚙️ Préférences" Click="Settings_Click" Style="{StaticResource ZenButtonStyle}" Margin="2"/>
-                    <Button Content="🔒 Se déconnecter" Click="Logout_Click" Style="{StaticResource ZenButtonStyle}" Margin="2"/>
-                    <Button Content="❌ Quitter" Click="Quit_Click" Style="{StaticResource ZenButtonStyle}" Background="#E57373" Foreground="White" Margin="2"/>
+                    <Button Content="⚙️ Préférences" Click="Settings_Click" Style="{StaticResource SettingsMenuButtonStyle}"/>
+                    <Button Content="🔒 Se déconnecter" Click="Logout_Click" Style="{StaticResource SettingsMenuButtonStyle}"/>
+                    <Button Content="❌ Quitter" Click="Quit_Click" Style="{StaticResource QuitButtonStyle}"/>
                 </StackPanel>
             </Border>
         </Popup>
