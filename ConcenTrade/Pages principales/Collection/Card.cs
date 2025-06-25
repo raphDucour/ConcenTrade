@@ -66,19 +66,18 @@ namespace Concentrade.Collections_de_cartes
                 new Card("Zêrbe", CardRarity.Rare, "/Images/Cards/rares/zebre rare.png","Chill comme ce Zêrbe."),
 
                 // epics
-                new Card("Hippo Boss", CardRarity.Epic, "/Images/Cards/epics/hipo epic.png","Lunettes en place, stylos prêts, focus activé."),
-                new Card("R-Aigle", CardRarity.Epic, "/Images/Cards/epics/aigle epic.png ","Vision de roi, costar taillé, objectif verrouillé, réussite assurée."),
+                new Card("Hippo Boss", CardRarity.Epic, "/Images/Cards/epics/hipo epic.png","Coupe les notifications, protège ta concentration."),
+                new Card("R-Aigle", CardRarity.Epic, "/Images/Cards/epics/aigle epic.png ","Travaille en blocs : 25 min focus, 5 min pause."),
                 new Card("Hibourge", CardRarity.Epic, "/Images/Cards/epics/hibou epic.png ","Pose ton tel, concentre-toi, les messages attendront."),
                 new Card("Elegang", CardRarity.Epic, "/Images/Cards/epics/elephant epic.png","Reste focus, ta route dépend de toi."),
                 new Card("Lez", CardRarity.Epic, "/Images/Cards/epics/lezard epic.png","Change de posture souvent, ton cerveau te dira merci."),
                 new Card("PeliCalme", CardRarity.Epic, "/Images/Cards/epics/pelican epic.png","Planifie ta journée, évite les distractions numériques."),
 
                 // legendaires
-                new Card("Celesthar", CardRarity.Legendary, "/Images/Cards/legendaires/ange legendaire.png","?"),
-                new Card("AntaGoat", CardRarity.Legendary, "/Images/Cards/legendaires/chevre legendaire.png","?"),
-                new Card("Vincent", CardRarity.Legendary, "/Images/Cards/legendaires/dragon legendaire.png","?"),
-                new Card("Pwin Tu", CardRarity.Legendary, "/Images/Cards/legendaires/grosnez legendaire.png","?"),
-                new Card("Garou", CardRarity.Legendary, "/Images/Cards/legendaires/loup legendaire.png","?"),
+                new Card("AntaGoat", CardRarity.Legendary, "/Images/Cards/legendaires/chevre legendaire.png","bêêê..."),
+                new Card("Vincent", CardRarity.Legendary, "/Images/Cards/legendaires/dragon legendaire.png","Ton esprit, tel un dragon enflammé, consume le doute et forge la réussite."),
+                new Card("Pwin Tu", CardRarity.Legendary, "/Images/Cards/legendaires/grosnez legendaire.png","Une idée aiguisée ne tranche que si elle est poussée jusqu’au bout."),
+                new Card("Garou", CardRarity.Legendary, "/Images/Cards/legendaires/loup legendaire.png","Gare à toi si tu ne te concentres pas."),
 
             };
         }
@@ -152,7 +151,6 @@ namespace Concentrade.Collections_de_cartes
             List<Card> ListCaisse = new List<Card>
             {
                 // legendaires
-                new Card("Celesthar", CardRarity.Legendary, "/Images/Cards/legendaires/ange legendaire.png","?"),
                 new Card("AntaGoat", CardRarity.Legendary, "/Images/Cards/legendaires/chevre legendaire.png","?"),
                 new Card("Vincent", CardRarity.Legendary, "/Images/Cards/legendaires/dragon legendaire.png","?"),
                 new Card("Pwin Tu", CardRarity.Legendary, "/Images/Cards/legendaires/grosnez legendaire.png","?"),
