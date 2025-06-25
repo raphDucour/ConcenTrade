@@ -32,7 +32,7 @@ namespace Concentrade
             {
                 var session = await _supabase.Auth.SignUp(email, password);
 
-                if (session == null || session.User == null)
+                if (session== null)
                 {
                     MessageBox.Show("Erreur lors de l'inscription. Veuillez réessayer.");
                     return false;
