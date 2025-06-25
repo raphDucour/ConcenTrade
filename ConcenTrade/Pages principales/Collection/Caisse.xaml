@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     Title="Caisse">
 
-    <Grid x:Name="RootGrid">
+    <Grid x:Name="RootGrid" Background="{StaticResource ZenBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="2*"/>
