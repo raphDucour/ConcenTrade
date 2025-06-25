@@ -83,32 +83,8 @@
 
   <ItemGroup>
     <DesignDataWithDesignTimeCreatableTypes Include="Images\Cards\communes\cochon.png" />
-    <Resource Include="Images\Cards\legendaires\ange legendaire.png" />
-    <Resource Include="Images\Cards\legendaires\chevre LEGENDAIRE.png" />
-    <Resource Include="Images\Cards\legendaires\dragon LEGENDAIRE.png" />
-    <Resource Include="Images\Cards\legendaires\Loup LEGENDAIRE.png" />
     <Resource Include="Images\Cards\legendaires\pinochio legendaire.png" />
-    <Resource Include="Images\Cards\epics\aigle EPIC .png" />
-    <Resource Include="Images\Cards\epics\elephant epic.png" />
-    <Resource Include="Images\Cards\epics\hibou EPIC .png" />
-    <Resource Include="Images\Cards\epics\hipo epic.png" />
     <Resource Include="Images\Cards\epics\lezard epic.png" />
-    <Resource Include="Images\Cards\epics\pelican EPIC.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- Rares -->
-    <Resource Include="Images\Cards\rares\anne rare.png" />
-    <Resource Include="Images\Cards\rares\cafard rare.png" />
-    <Resource Include="Images\Cards\rares\cameleon rare.png" />
-    <Resource Include="Images\Cards\rares\cuisinier rare.png" />
-    <Resource Include="Images\Cards\rares\ecureuil rare.png" />
-    <Resource Include="Images\Cards\rares\flaman rose rare.png" />
-    <Resource Include="Images\Cards\rares\koala rare.png" />
-    <Resource Include="Images\Cards\rares\mouche rare.png" />
-    <Resource Include="Images\Cards\rares\panda.png" />
-    <Resource Include="Images\Cards\rares\verre de terrre rare.png" />
-    <Resource Include="Images\Cards\rares\zebre rare.png" />
   </ItemGroup>
 
 </Project>

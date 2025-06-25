@@ -213,6 +213,7 @@ namespace Concentrade
 
         private void Quit_Click(object sender, RoutedEventArgs e)
         {
+            UserManager.PushIntoBDD();
             Application.Current.Shutdown();
         }
 
@@ -231,9 +232,9 @@ namespace Concentrade
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             SettingsPopup.IsOpen = false;
-            Properties.Settings.Default.UserEmail = "";
-            Properties.Settings.Default.Save();
+            UserManager.PushIntoBDD_FireAndForget();
             this.NavigationService?.Navigate(new LoginPage());
         }
+
     }
 }
