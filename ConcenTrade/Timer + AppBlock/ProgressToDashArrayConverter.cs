@@ -9,7 +9,7 @@ namespace Concentrade
 {
     /// <summary>
     /// Convertit une valeur de progression (0-100) en une collection de tirets (StrokeDashArray)
-    /// pour dessiner un arc de cercle..
+    /// pour dessiner un arc de cercle...
     /// </summary>
     public class ProgressToDashArrayConverter : IMultiValueConverter
     {
