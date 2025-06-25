@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using Concentrade.Collections_de_cartes;
+using System.Windows.Media.Animation;
 
 namespace Concentrade.Pages_principales.Collection
 {
@@ -61,6 +62,13 @@ namespace Concentrade.Pages_principales.Collection
             string savedXaml = XamlWriter.Save(this);
             string fixedXaml = savedXaml.Replace(" Name=\"MainGrid\"", "");
             return (CardControl)XamlReader.Parse(fixedXaml);
+        }
+
+        public void AnimateTipAppearance(double durationSeconds = 5)
+        {
+            CardDescriptionText.Opacity = 0;
+            var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(durationSeconds));
+            CardDescriptionText.BeginAnimation(System.Windows.Controls.TextBlock.OpacityProperty, fadeIn);
         }
     }
 }

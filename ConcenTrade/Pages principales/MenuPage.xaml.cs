@@ -69,7 +69,7 @@ namespace Concentrade
                     "Ici, tu peux accéder à ta collection de cartes et acheter des caisses pour débloquer de nouvelles cartes et agrandir ta collection."
                 };
                 TutorialOverlayControl.StartTutorial(targets, texts);
-                //Properties.Settings.Default.IsTutorialDone = true;      A remettre dans le code si on veut pas que le tuto se lance a chaque fois
+                Properties.Settings.Default.IsTutorialDone = true;     
                 Properties.Settings.Default.Save();
             }
             CreateAndAnimateParticles(10);
@@ -223,7 +223,7 @@ namespace Concentrade
 
         private void Stats_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService?.Navigate(new Pages_principales.CollectionPage());
+            this.NavigationService?.Navigate(new Pages_principales.SessionHistoryPage());
         }
 
         private void Quit_Click(object sender, RoutedEventArgs e)

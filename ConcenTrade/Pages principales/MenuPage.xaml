@@ -171,6 +171,7 @@
 
         </StackPanel>
         <Button x:Name="CollectionButton" Content="🃏 Ma Collection" Click="Stats_Click" Style="{StaticResource ZenIconButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,30,0,0" FontSize="18" FontWeight="SemiBold"/>
+        <Button x:Name="StatsButton" Content="📊 Statistiques" Click="Stats_Click" Style="{StaticResource ZenIconButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,80,0,0" FontSize="18" FontWeight="SemiBold"/>
         <TextBlock Text="{Binding Points, StringFormat='💰 {0} Points'}" Foreground="{StaticResource ZenButtonTextBrush}" FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,35,40,0" Opacity="0.7"/>
         <Button x:Name="SettingsButton" Content="⚙️" Click="SettingsButton_Click" Style="{StaticResource ZenIconButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,40,30" FontSize="32"/>
 

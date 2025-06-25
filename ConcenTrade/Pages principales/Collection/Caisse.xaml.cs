@@ -78,8 +78,8 @@ namespace Concentrade.Pages_principales.Collection
             var animation = new DoubleAnimation
             {
                 From = 0,
-                To = -15000,
-                Duration = TimeSpan.FromSeconds(10),
+                To = -7000,
+                Duration = TimeSpan.FromSeconds(6),
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
             };
 
