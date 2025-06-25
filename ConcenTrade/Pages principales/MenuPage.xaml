@@ -35,6 +35,72 @@
             </Setter>
         </Style>
 
+        <!-- Toggle Switch moderne pour Mode Focus -->
+        <Style x:Key="ModernSwitch" TargetType="ToggleButton">
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid ClipToBounds="True">
+                            <!-- Track -->
+                            <Border x:Name="SwitchTrack"
+                                    CornerRadius="14"
+                                    Height="28" Width="50"
+                                    Background="#333"/>
+                            <!-- Thumb -->
+                            <Ellipse x:Name="SwitchThumb"
+                                     Width="24" Height="24"
+                                     Fill="White"
+                                     Margin="2"
+                                     HorizontalAlignment="Left"
+                                     VerticalAlignment="Center">
+                                <Ellipse.RenderTransform>
+                                    <TranslateTransform x:Name="ThumbTransform" X="0"/>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <!-- Animation on Checked -->
+                            <Trigger Property="IsChecked" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="ThumbTransform"
+                                                             Storyboard.TargetProperty="X"
+                                                             To="22"
+                                                             Duration="0:0:0.2"/>
+                                            <ColorAnimation Storyboard.TargetName="SwitchTrack"
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                            To="#4ADE80" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Setter TargetName="SwitchTrack" Property="Background" Value="#4ADE80"/>
+                            </Trigger>
+                            <!-- Animation on Unchecked -->
+                            <Trigger Property="IsChecked" Value="False">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="ThumbTransform"
+                                                             Storyboard.TargetProperty="X"
+                                                             To="0"
+                                                             Duration="0:0:0.2"/>
+                                            <ColorAnimation Storyboard.TargetName="SwitchTrack"
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                            To="#333" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Setter TargetName="SwitchTrack" Property="Background" Value="#333"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </Page.Resources>
     <Grid>
         <Grid x:Name="MainGrid">
@@ -83,7 +149,11 @@
                     MaxWidth="350" Style="{StaticResource ZenSliderStyle}"/>
                     </StackPanel>
 
-                    <CheckBox x:Name="FocusModeCheckBox" Content="Mode Focus" Foreground="White" Margin="0,10,0,0"/>
+                    <!-- Nouveau Toggle Switch moderne pour Mode Focus -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0">
+                        <ToggleButton x:Name="FocusModeSwitch" Style="{StaticResource ModernSwitch}" VerticalAlignment="Center"/>
+                        <TextBlock Text="Mode Focus" Foreground="White" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    </StackPanel>
                     
                     <Button Content="Démarrer la concentration" MaxWidth="300" Height="50" Style="{StaticResource ZenButtonStyle}" Click="StartSession_Click" FontSize="22" BorderThickness="2" Margin="0,40,0,0"/>
                 </StackPanel>

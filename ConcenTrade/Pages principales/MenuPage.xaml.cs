@@ -170,7 +170,7 @@ namespace Concentrade
         private void StartSession_Click(object sender, RoutedEventArgs e)
         {
             // On récupère l'état du Mode Focus au moment du clic
-            bool isFocusMode = FocusModeCheckBox.IsChecked == true;
+            bool isFocusMode = FocusModeSwitch.IsChecked == true;
 
             // On vérifie quel mode de timer est sélectionné (Pomodoro ou Personnalisé)
             if (PomodoroModeButton.IsChecked == true)
