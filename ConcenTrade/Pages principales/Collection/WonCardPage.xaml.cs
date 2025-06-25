@@ -10,6 +10,7 @@ namespace Concentrade.Pages_principales.Collection
         {
             InitializeComponent();
             CardControlFull.SetCard(card);
+            CardControlFull.AnimateTipAppearance();
         }
 
         private void VoirCollection_Click(object sender, RoutedEventArgs e)

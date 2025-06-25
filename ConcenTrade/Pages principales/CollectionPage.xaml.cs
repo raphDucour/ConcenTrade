@@ -48,9 +48,9 @@ namespace Concentrade.Pages_principales
             int nbCommunes = cards.Count(c => c.Rarity == CardRarity.Common);
             int nbRares = cards.Count(c => c.Rarity == CardRarity.Rare);
             int nbEpics = cards.Count(c => c.Rarity == CardRarity.Epic);
-            Caisse2Openable = nbCommunes >= 1;
-            Caisse3Openable = nbCommunes >= 20 && nbRares >= 2;
-            Caisse4Openable = nbEpics >= 3; // Exemple de condition, à adapter selon ta logique
+            Caisse2Openable = nbCommunes >= 15;
+            Caisse3Openable = nbCommunes >= 15 && nbRares >= 11;
+            Caisse4Openable = nbEpics >= 6; 
         }
         private void UpdateCaisseLocks()
         {
