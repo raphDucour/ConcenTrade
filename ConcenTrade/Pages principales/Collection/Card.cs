@@ -36,42 +36,42 @@ namespace Concentrade.Collections_de_cartes
             return new List<Card>
             {
                 // Communes
-                new Card("Chat Zen", CardRarity.Common, "/Images/Cards/communes/Chat.png","Prends quelques minutes pour respirer profondément et relâcher la pression, comme un chat qui médite."),
-                new Card("Chien Focus", CardRarity.Common, "/Images/Cards/communes/Chien.png","Reste fidèle à ta tâche, évite les distractions et récompense-toi après un effort soutenu."),
-                new Card("Coq Matinal", CardRarity.Common, "/Images/Cards/communes/Poule.png","Commence ta journée par une tâche importante pour profiter de ton énergie matinale."),
-                new Card("Renard Sage", CardRarity.Common, "/Images/Cards/communes/renard.png","Planifie tes pauses stratégiquement pour garder ton esprit vif et créatif."),
-                new Card("Cochon Calme", CardRarity.Common, "/Images/Cards/communes/cochon.png","Garde ton espace de travail propre pour éviter l'encombrement mental."),
-                new Card("Dauphin Agile", CardRarity.Common, "/Images/Cards/communes/Dophin.png","Alterner entre différentes tâches peut stimuler ta créativité, mais termine toujours ce que tu commences."),
-                new Card("Fourmi Ouvrière", CardRarity.Common, "/Images/Cards/communes/fourmi.png","Divise les gros projets en petites étapes pour avancer régulièrement."),
-                new Card("Girafe Sereine", CardRarity.Common, "/Images/Cards/communes/Giraffe.png","Prends du recul sur tes priorités pour mieux voir l'ensemble de tes objectifs."),
-                new Card("Phoque Paisible", CardRarity.Common, "/Images/Cards/communes/phoc.png","Fais des pauses régulières pour t'étirer et recharger ton énergie."),
-                new Card("Rat Rusé", CardRarity.Common, "/Images/Cards/communes/rat.png","Trouve des astuces pour contourner les tentations numériques (mode avion, applis de blocage, etc.)."),
-                new Card("Singe Joueur", CardRarity.Common, "/Images/Cards/communes/singe.png","Accorde-toi des moments ludiques entre deux sessions de travail intense pour garder la motivation."),
-                new Card("Taupe Travailleuse", CardRarity.Common, "/Images/Cards/communes/taupe.png","Travaille dans un environnement calme et tamisé pour favoriser la concentration."),
+                new Card("Chat Zen", CardRarity.Common, "/Images/Cards/communes/Chat.png","Lis quelques pages avant de commencer : ça calme l’esprit."),
+                new Card("Chien Focus", CardRarity.Common, "/Images/Cards/communes/Chien.png","Commence ta session par 1 minute de respiration."),
+                new Card("Coq Matinal", CardRarity.Common, "/Images/Cards/communes/Poule.png","Commence par la tâche la plus simple pour te lancer."),
+                new Card("Renard Sage", CardRarity.Common, "/Images/Cards/communes/renard.png","Commence lentement, mais avec intention : la constance paie."),
+                new Card("Cochon Calme", CardRarity.Common, "/Images/Cards/communes/cochon.png","Écris tes objectifs avant de te lancer, ça clarifie l’esprit."),
+                new Card("Dauphin Agile", CardRarity.Common, "/Images/Cards/communes/Dophin.png","Respire profondément avant de commencer, comme un dauphin calme."),
+                new Card("Fourmi Ouvrière", CardRarity.Common, "/Images/Cards/communes/fourmi.png","Avance petit à petit, la régularité fait la force."),
+                new Card("Girafe Sereine", CardRarity.Common, "/Images/Cards/communes/Giraffe.png","Prends de la hauteur pour mieux organiser tes idées."),
+                new Card("Phoque Paisible", CardRarity.Common, "/Images/Cards/communes/phoc.png","Travaille en douceur, évite la précipitation inutile."),
+                new Card("Rat Rusé", CardRarity.Common, "/Images/Cards/communes/rat.png","Sois précis et rapide : chaque mouvement compte vraiment."),
+                new Card("Singe Joueur", CardRarity.Common, "/Images/Cards/communes/singe.png","Ce singe est distrait, évite ça, reste focus sur ta tâche."),
+                new Card("Taupe Travailleuse", CardRarity.Common, "/Images/Cards/communes/taupe.png","Focus comme la taupe, observe chaque détail."),
                 new Card("Têtard Évolutif", CardRarity.Common, "/Images/Cards/communes/Tetard.png","Sois patient avec toi-même, la concentration s'améliore avec la pratique."),
-                new Card("Tortue Sage", CardRarity.Rare, "/Images/Cards/communes/Tortue.png","Avance lentement mais sûrement, la régularité est la clé du progrès."),
-                new Card("Vache Tranquille", CardRarity.Common, "/Images/Cards/communes/vache.png","Prends le temps de savourer tes réussites, même les plus petites, pour renforcer ta motivation."),
+                new Card("Tortue Sage", CardRarity.Common, "/Images/Cards/communes/Tortue.png","Avance lentement mais sûrement, la régularité est la clé du progrès."),
+                new Card("Vache LockedIn", CardRarity.Common, "/Images/Cards/communes/vache.png","Garde une concentration intense, rien ne te distrait."),
 
                 // rares
-                new Card("Âne Concentré", CardRarity.Epic, "/Images/Cards/rares/anne rare.png","Ne laisse pas le hasard décider pour toi. Planifie ta session avant de commencer."),
-                new Card("Cafard Chillax", CardRarity.Epic, "/Images/Cards/rares/cafard rare.png","Accorde-toi de vraies pauses pour mieux repartir."),
-                new Card("Caméléon Focus", CardRarity.Epic, "/Images/Cards/rares/cameleon rare.png","Adapte ton environnement à ta tâche."),
-                new Card("Chef Ornitho", CardRarity.Epic, "/Images/Cards/rares/cuisinier rare.png","La concentration, c'est comme une cuisson : à feu doux mais constant."),
-                new Card("Professeur Noisette", CardRarity.Epic, "/Images/Cards/rares/ecureuil rare.png","Crée-toi un coin calme, rien qu'à toi."),
-                new Card("Flamàn l'Organisé", CardRarity.Epic, "/Images/Cards/rares/flaman rose rare.png","Adopte une posture royale."),
-                new Card("Koala Cool", CardRarity.Epic, "/Images/Cards/rares/koala rare.png","Adopte la lenteur consciente : prends de petites pauses régulières pour respirer profondément et revenir plus frais à ta tâche."),
-                new Card("Œil de Mouche", CardRarity.Epic, "/Images/Cards/rares/mouche rare.png","Comme une mouche aux yeux perçants, garde ton attention fixée sur un seul objectif à la fois pour maximiser ton efficacité."),
-                new Card("Mélodie du Panda", CardRarity.Epic, "/Images/Cards/rares/panda.png","Laisse-toi porter par le rythme de ta respiration, comme les notes d'une flûte, pour apaiser ton esprit et retrouver ta concentration."),
-                new Card("Verre de Livre", CardRarity.Epic, "/Images/Cards/rares/verre de terrre rare.png","Plonge dans ta lecture comme ce ver dans son livre — lentement, mais avec appétit ! Et surtout, évite de te faire dévorer par la procrastination."),
-                new Card("Rayures en Pause", CardRarity.Epic, "/Images/Cards/rares/zebre rare.png","Chille comme ce zèbre : parfois, s'asseoir et déconnecter, c'est le meilleur moyen de recharger ses batteries."),
+                new Card("Âne Concentré", CardRarity.Rare, "/Images/Cards/rares/anne rare.png","Cet âne est distrait... ne sois pas un âne."),
+                new Card("Cafard Chillax", CardRarity.Rare, "/Images/Cards/rares/cafard rare.png","Accorde-toi de vraies pauses pour mieux repartir."),
+                new Card("Caméléon Focus", CardRarity.Rare, "/Images/Cards/rares/cameleon rare.png","Adapte ton environnement à ta tâche."),
+                new Card("Chef Ornitho", CardRarity.Rare, "/Images/Cards/rares/cuisinier rare.png","La concentration, c'est comme une cuisson: à feu doux mais constant."),
+                new Card("Professeur Noisette", CardRarity.Rare, "/Images/Cards/rares/ecureuil rare.png","Crée-toi un coin calme, rien qu'à toi."),
+                new Card("Flamàn d'Oz", CardRarity.Rare, "/Images/Cards/rares/flaman rose rare.png","Adopte une posture royale."),
+                new Card("Koala Cool", CardRarity.Rare, "/Images/Cards/rares/koala rare.png","Adopte la lenteur consciente : prends des pauses régulières."),
+                new Card("Œil de Mouche", CardRarity.Rare, "/Images/Cards/rares/mouche rare.png","Élimine les bourdonnements (avec un insecticide)."),
+                new Card("Mélodie du Panda", CardRarity.Rare, "/Images/Cards/rares/panda.png","Laisse-toi porter par le rythme de ta respiration."),
+                new Card("Ver de Livre", CardRarity.Rare, "/Images/Cards/rares/verre de terrre rare.png","Plonge dans ta lecture comme ce ver dans son livre."),
+                new Card("Zêrbe", CardRarity.Rare, "/Images/Cards/rares/zebre rare.png","Chill comme ce Zêrbe."),
 
                 // epics
-                new Card("Hippo Boss", CardRarity.Epic, "/Images/Cards/epics/hipo epic.png","?"),
-                new Card("Aigle", CardRarity.Epic, "/Images/Cards/epics/aigle EPIC.png ","?"),
-                new Card("Hibou", CardRarity.Epic, "/Images/Cards/epics/hibou EPIC.png ","?"),
-                new Card("Elephant", CardRarity.Epic, "/Images/Cards/epics/elephant epic.png","?"),
-                new Card("Lezard", CardRarity.Epic, "/Images/Cards/epics/lezard epic.png","?"),
-                new Card("Pelican", CardRarity.Epic, "/Images/Cards/epics/pelican EPIC.png","?"),
+                new Card("Hippo Boss", CardRarity.Epic, "/Images/Cards/epics/hipo epic.png","Lunettes en place, stylos prêts, focus activé."),
+                new Card("R-Aigle", CardRarity.Epic, "/Images/Cards/epics/aigle epic.png ","Vision de roi, costar taillé, objectif verrouillé, réussite assurée."),
+                new Card("Hibourge", CardRarity.Epic, "/Images/Cards/epics/hibou epic.png ","Pose ton tel, concentre-toi, les messages attendront."),
+                new Card("Elegang", CardRarity.Epic, "/Images/Cards/epics/elephant epic.png","Reste focus, ta route dépend de toi."),
+                new Card("Lez", CardRarity.Epic, "/Images/Cards/epics/lezard epic.png","Change de posture souvent, ton cerveau te dira merci."),
+                new Card("PeliCalme", CardRarity.Epic, "/Images/Cards/epics/pelican epic.png","Planifie ta journée, évite les distractions numériques."),
 
                 // legendaires
 
@@ -89,21 +89,21 @@ namespace Concentrade.Collections_de_cartes
             List < Card >  ListCaisse = new List<Card>
             {
                 // Communes
-                new Card("Chat Zen", CardRarity.Common, "/Images/Cards/communes/Chat.png","Prends quelques minutes pour respirer profondément et relâcher la pression, comme un chat qui médite."),
-                new Card("Chien Focus", CardRarity.Common, "/Images/Cards/communes/Chien.png","Reste fidèle à ta tâche, évite les distractions et récompense-toi après un effort soutenu."),
-                new Card("Coq Matinal", CardRarity.Common, "/Images/Cards/communes/Poule.png","Commence ta journée par une tâche importante pour profiter de ton énergie matinale."),
-                new Card("Renard Sage", CardRarity.Common, "/Images/Cards/communes/renard.png","Planifie tes pauses stratégiquement pour garder ton esprit vif et créatif."),
-                new Card("Cochon Calme", CardRarity.Common, "/Images/Cards/communes/cochon.png","Garde ton espace de travail propre pour éviter l'encombrement mental."),
-                new Card("Dauphin Agile", CardRarity.Common, "/Images/Cards/communes/Dophin.png","Alterner entre différentes tâches peut stimuler ta créativité, mais termine toujours ce que tu commences."),
-                new Card("Fourmi Ouvrière", CardRarity.Common, "/Images/Cards/communes/fourmi.png","Divise les gros projets en petites étapes pour avancer régulièrement."),
-                new Card("Girafe Sereine", CardRarity.Common, "/Images/Cards/communes/Giraffe.png","Prends du recul sur tes priorités pour mieux voir l'ensemble de tes objectifs."),
-                new Card("Phoque Paisible", CardRarity.Common, "/Images/Cards/communes/phoc.png","Fais des pauses régulières pour t'étirer et recharger ton énergie."),
-                new Card("Rat Rusé", CardRarity.Common, "/Images/Cards/communes/rat.png","Trouve des astuces pour contourner les tentations numériques (mode avion, applis de blocage, etc.)."),
-                new Card("Singe Joueur", CardRarity.Common, "/Images/Cards/communes/singe.png","Accorde-toi des moments ludiques entre deux sessions de travail intense pour garder la motivation."),
-                new Card("Taupe Travailleuse", CardRarity.Common, "/Images/Cards/communes/taupe.png","Travaille dans un environnement calme et tamisé pour favoriser la concentration."),
-                new Card("Têtard Évolutif", CardRarity.Common, "/Images/Cards/communes/Tetard.png","Sois patient avec toi-même, la concentration s'améliore avec la pratique."),
-                new Card("Tortue Sage", CardRarity.Rare, "/Images/Cards/communes/Tortue.png","Avance lentement mais sûrement, la régularité est la clé du progrès."),
-                new Card("Vache Tranquille", CardRarity.Common, "/Images/Cards/communes/vache.png","Prends le temps de savourer tes réussites, même les plus petites, pour renforcer ta motivation."),
+                new Card("Chat Zen", CardRarity.Common, "/Images/Cards/communes/Chat.png","?"),
+                new Card("Chien Focus", CardRarity.Common, "/Images/Cards/communes/Chien.png","?"),
+                new Card("Coq Matinal", CardRarity.Common, "/Images/Cards/communes/Poule.png","?"),
+                new Card("Renard Sage", CardRarity.Common, "/Images/Cards/communes/renard.png","?"),
+                new Card("Cochon Calme", CardRarity.Common, "/Images/Cards/communes/cochon.png","?"),
+                new Card("Dauphin Agile", CardRarity.Common, "/Images/Cards/communes/Dophin.png","?"),
+                new Card("Fourmi Ouvrière", CardRarity.Common, "/Images/Cards/communes/fourmi.png","?"),
+                new Card("Girafe Sereine", CardRarity.Common, "/Images/Cards/communes/Giraffe.png","?"),
+                new Card("Phoque Paisible", CardRarity.Common, "/Images/Cards/communes/phoc.png","?"),
+                new Card("Rat Rusé", CardRarity.Common, "/Images/Cards/communes/rat.png","?"),
+                new Card("Singe Joueur", CardRarity.Common, "/Images/Cards/communes/singe.png","?"),
+                new Card("Taupe Travailleuse", CardRarity.Common, "/Images/Cards/communes/taupe.png","?"),
+                new Card("Têtard Évolutif", CardRarity.Common, "/Images/Cards/communes/Tetard.png","?"),
+                new Card("Tortue Sage", CardRarity.Common, "/Images/Cards/communes/Tortue.png","?"),
+                new Card("Vache LockedIn", CardRarity.Common, "/Images/Cards/communes/vache.png","?"),
             };
             ListCaisse = GetSortedByRarity(ListCaisse);
             return filterByOptainedCards(ListCaisse);
@@ -114,17 +114,17 @@ namespace Concentrade.Collections_de_cartes
             List<Card> ListCaisse = new List<Card>
             {
                 // rares
-                new Card("Anne", CardRarity.Epic, "/Images/Cards/rares/anne rare.png","?"),
-                new Card("Cafard", CardRarity.Epic, "/Images/Cards/rares/cafard rare.png","?"),
-                new Card("Cameleon", CardRarity.Epic, "/Images/Cards/rares/cameleon rare.png","?"),
-                new Card("Cuisinier", CardRarity.Epic, "/Images/Cards/rares/cuisinier rare.png","?"),
-                new Card("Ecureuil", CardRarity.Epic, "/Images/Cards/rares/ecureuil rare.png","?"),
-                new Card("Flaman Rose", CardRarity.Epic, "/Images/Cards/rares/flaman rose rare.png","?"),
-                new Card("Koala", CardRarity.Epic, "/Images/Cards/rares/koala rare.png","?"),
-                new Card("Mouche", CardRarity.Epic, "/Images/Cards/rares/mouche rare.png","?"),
-                new Card("Panda", CardRarity.Epic, "/Images/Cards/rares/panda.png","?"),
-                new Card("Verre de terre", CardRarity.Epic, "/Images/Cards/rares/verre de terrre rare.png","?"),
-                new Card("Zebre", CardRarity.Epic, "/Images/Cards/rares/zebre rare.png","?"),
+                new Card("Âne Concentré", CardRarity.Rare, "/Images/Cards/rares/anne rare.png","?"),
+                new Card("Cafard Chillax", CardRarity.Rare, "/Images/Cards/rares/cafard rare.png","?"),
+                new Card("Caméléon Focus", CardRarity.Rare, "/Images/Cards/rares/cameleon rare.png","?"),
+                new Card("Chef Ornitho", CardRarity.Rare, "/Images/Cards/rares/cuisinier rare.png","?"),
+                new Card("Professeur Noisette", CardRarity.Rare, "/Images/Cards/rares/ecureuil rare.png","?"),
+                new Card("Flamàn d'Oz", CardRarity.Rare, "/Images/Cards/rares/flaman rose rare.png","?"),
+                new Card("Koala Cool", CardRarity.Rare, "/Images/Cards/rares/koala rare.png","?"),
+                new Card("Œil de Mouche", CardRarity.Rare, "/Images/Cards/rares/mouche rare.png","?"),
+                new Card("Mélodie du Panda", CardRarity.Rare, "/Images/Cards/rares/panda.png","?"),
+                new Card("Ver de Livre", CardRarity.Rare, "/Images/Cards/rares/verre de terrre rare.png","?"),
+                new Card("Zêrbe", CardRarity.Rare, "/Images/Cards/rares/zebre rare.png","?"),
             };
             ListCaisse = GetSortedByRarity(ListCaisse);
             return filterByOptainedCards(ListCaisse);
@@ -134,12 +134,13 @@ namespace Concentrade.Collections_de_cartes
         {
             List<Card> ListCaisse = new List<Card>
             {
-                new Card("Hippopotame", CardRarity.Epic, "/Images/Cards/epics/hipo epic.png","?"),
-                new Card("Aigle", CardRarity.Epic, "/Images/Cards/epics/aigle EPIC .png","?"),
-                new Card("Hibou", CardRarity.Epic, "/Images/Cards/epics/hibou EPIC .png","?"),
-                new Card("Elephant", CardRarity.Epic, "/Images/Cards/epics/elephant epic.png","?"),
-                new Card("Lezard", CardRarity.Epic, "/Images/Cards/epics/lezard epic.png","?"),
-                new Card("Pelican", CardRarity.Epic, "/Images/Cards/epics/pelican EPIC.png","?"),
+                // epics
+                new Card("Hippo Bosse", CardRarity.Epic, "/Images/Cards/epics/hipo epic.png","?"),
+                new Card("R-Aigle", CardRarity.Epic, "/Images/Cards/epics/aigle EPIC .png","?"),
+                new Card("Hibourge", CardRarity.Epic, "/Images/Cards/epics/hibou EPIC .png","?"),
+                new Card("Elegang", CardRarity.Epic, "/Images/Cards/epics/elephant epic.png","?"),
+                new Card("Lez", CardRarity.Epic, "/Images/Cards/epics/lezard epic.png","?"),
+                new Card("PeliCalm", CardRarity.Epic, "/Images/Cards/epics/pelican EPIC.png","?"),
             };
             ListCaisse=GetSortedByRarity(ListCaisse);
             return filterByOptainedCards(ListCaisse);
@@ -148,7 +149,7 @@ namespace Concentrade.Collections_de_cartes
         {
             List<Card> ListCaisse = new List<Card>
             {
-
+                // legendaires
             };
             ListCaisse = GetSortedByRarity(ListCaisse);
             return filterByOptainedCards(ListCaisse);
