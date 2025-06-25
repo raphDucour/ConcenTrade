@@ -88,12 +88,12 @@
     <Resource Include="Images\Cards\legendaires\dragon legendaire.png" />
     <Resource Include="Images\Cards\legendaires\loup legendaire.png" />
     <Resource Include="Images\Cards\legendaires\grosnez legendaire.png" />
-    <Resource Include="Images\Cards\epics\aigle EPIC .png" />
+    <Resource Include="Images\Cards\epics\aigle epic.png" />
     <Resource Include="Images\Cards\epics\elephant epic.png" />
-    <Resource Include="Images\Cards\epics\hibou EPIC .png" />
+    <Resource Include="Images\Cards\epics\hibou epic.png" />
     <Resource Include="Images\Cards\epics\hipo epic.png" />
     <Resource Include="Images\Cards\epics\lezard epic.png" />
-    <Resource Include="Images\Cards\epics\pelican EPIC.png" />
+    <Resource Include="Images\Cards\epics\pelican epic.png" />
   </ItemGroup>
 
   <ItemGroup>
