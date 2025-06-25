@@ -51,9 +51,19 @@ namespace Concentrade
         {
             if (!Properties.Settings.Default.IsTutorialDone)
             {
-                var targets = new UIElement[] { null, StartSessionButton, FocusModeToggle, SettingsButton, CollectionButton };
+                var targets = new UIElement[] {
+                    null,
+                    PomodoroModeButton,
+                    CustomModeButton,
+                    StartSessionButton,
+                    FocusModeToggle,
+                    SettingsButton,
+                    CollectionButton
+                };
                 var texts = new string[] {
                     "Avant de commencer, nous allons vous présenter les différents boutons et fonctionnalités de l'application.",
+                    "Mode Pomodoro : 25 minutes de travail, 5 minutes de pause, répétés sur plusieurs cycles pour maximiser ta concentration !",
+                    "Mode Temps personnalisé : choisis toi-même la durée de travail, de pause et le nombre de cycles selon tes besoins.",
                     "Clique ici pour démarrer une session de concentration.",
                     "Active le Mode Focus pour bloquer les applications distrayantes.",
                     "Accède aux paramètres de l'application.",

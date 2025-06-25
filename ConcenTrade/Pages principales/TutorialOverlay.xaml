@@ -6,6 +6,7 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="400">
     <Grid Background="Transparent">
+        <Canvas x:Name="SpotlightCanvas" IsHitTestVisible="False"/>
         <Popup x:Name="TutorialPopup"
                Placement="Right"
                StaysOpen="False"
