@@ -3,18 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Concentrade" Height="1080" Width="1920"
         Background="{StaticResource ZenBackgroundBrush}"
-        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        WindowStyle="None"
+        ResizeMode="NoResize">
 
     <Grid>
         <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
 
         <Grid VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,5,10,0">
             <StackPanel Orientation="Horizontal">
-                <Button Content="—" Click="MinimizeButton_Click" Style="{StaticResource WindowButtonStyle}"/>
-
-                <Button Content="☐" Click="MaximizeButton_Click" Style="{StaticResource WindowButtonStyle}"/>
-
-                <Button Content="✕" Click="CloseButton_Click" Style="{StaticResource WindowButtonStyle}"/>
+                <!-- Les boutons de fenêtre ont été retirés -->
             </StackPanel>
         </Grid>
     </Grid>
