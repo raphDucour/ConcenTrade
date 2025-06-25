@@ -9,6 +9,8 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
+using System.Globalization;
+using System.Windows.Data;
 
 namespace Concentrade
 {
@@ -45,6 +47,41 @@ namespace Concentrade
 
             // ✅ LIGNE MODIFIÉE : On initialise les labels des sliders personnalisés au démarrage
             CustomTimeSlider_ValueChanged(null, null);
+
+            // Ajout : écoute du redimensionnement pour marges dynamiques
+            this.SizeChanged += MenuPage_SizeChanged;
+        }
+
+        private void MenuPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // Espace haut : 2%, bas : 0% de la hauteur
+            double marginTop = this.ActualHeight * 0.02;
+            double marginBottom = 0;
+            if (CentralPanel != null)
+                CentralPanel.Margin = new Thickness(0, marginTop, 0, marginBottom);
+
+            // Espace entre logo et le reste : 1% de la hauteur
+            if (CentralPanel.Children.Count > 0 && CentralPanel.Children[0] is FrameworkElement logo)
+            {
+                logo.Margin = new Thickness(0, 0, 0, this.ActualHeight * 0.01);
+            }
+
+            // Adaptation de la taille de police (ultra compact)
+            double labelFontSize = this.ActualHeight < 800 ? 10 : 12;
+            double buttonFontSize = this.ActualHeight < 800 ? 11 : 13;
+            // Labels sliders
+            if (WorkTimeLabel != null) WorkTimeLabel.FontSize = labelFontSize;
+            if (BreakTimeLabel != null) BreakTimeLabel.FontSize = labelFontSize;
+            if (CycleCountLabel != null) CycleCountLabel.FontSize = labelFontSize;
+            if (SliderLabel != null) SliderLabel.FontSize = labelFontSize;
+            // Bouton principal
+            foreach (var child in CentralPanel.Children)
+            {
+                if (child is Button btn && btn.Content?.ToString()?.Contains("Démarrer") == true)
+                {
+                    btn.FontSize = buttonFontSize;
+                }
+            }
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -236,5 +273,23 @@ namespace Concentrade
             this.NavigationService?.Navigate(new LoginPage());
         }
 
+    }
+
+    public class WidthPercentageConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is double width && parameter != null && double.TryParse(parameter.ToString(), out double percent))
+            {
+                // Limite min et max optionnelle ici si besoin
+                return width * percent;
+            }
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
