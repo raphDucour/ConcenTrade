@@ -18,7 +18,8 @@ namespace Concentrade.Pages_principales
         List<Card> cards = Card.GetAllCardsSortedByRarity();
         public bool Caisse2Openable;
         public bool Caisse3Openable;
-       
+        public bool Caisse4Openable;
+
 
         private int userPoints;
 
@@ -48,8 +49,10 @@ namespace Concentrade.Pages_principales
         {
             int nbCommunes = cards.Count(c => c.Rarity == CardRarity.Common);
             int nbRares = cards.Count(c => c.Rarity == CardRarity.Rare);
+            int nbEpics = cards.Count(c => c.Rarity == CardRarity.Epic);
             Caisse2Openable = nbCommunes >= 1;
             Caisse3Openable = nbCommunes >= 20 && nbRares >= 2;
+            Caisse4Openable = nbEpics >= 3; // Exemple de condition, à adapter selon ta logique
         }
         private void UpdateCaisseLocks()
         {
@@ -80,6 +83,20 @@ namespace Concentrade.Pages_principales
                 Caisse3Cost.FontSize = 14;
                 Caisse3Cost.Foreground = new SolidColorBrush(Color.FromRgb(0xAA, 0xAA, 0xAA));
                 Caisse3Button.IsEnabled = true;
+            }
+            if (!Caisse4Openable)
+            {
+                Caisse4Cost.Text = "🔒";
+                Caisse4Cost.FontSize = 36;
+                Caisse4Cost.Foreground = new SolidColorBrush(Color.FromRgb(0xFF, 0xD7, 0x00));
+                Caisse4Button.IsEnabled = false;
+            }
+            else
+            {
+                Caisse4Cost.Text = "Coût: 800 Points";
+                Caisse4Cost.FontSize = 14;
+                Caisse4Cost.Foreground = new SolidColorBrush(Color.FromRgb(0xAA, 0xAA, 0xAA));
+                Caisse4Button.IsEnabled = true;
             }
         }
 
@@ -143,7 +160,16 @@ namespace Concentrade.Pages_principales
             this.NavigationService?.Navigate(new Caisse(CaisseCards,800));
         }
 
-        
+        private void BuyCaisse4_Click(object sender, RoutedEventArgs e)
+        {
+            List<Card> CaisseCards = Card.GetCaisse4Cards();
+            if (HasAllCards(CaisseCards))
+            {
+                MessageBox.Show("Tu possèdes déjà toutes les cartes de cette caisse !");
+                return;
+            }
+            this.NavigationService?.Navigate(new Caisse(CaisseCards, 2000));
+        }
 
         private bool HasAllCards(List<Card> caisseCards)
         {
