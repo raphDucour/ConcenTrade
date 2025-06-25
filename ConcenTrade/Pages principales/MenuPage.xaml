@@ -3,7 +3,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Concentrade"
+      xmlns:local="clr-namespace:Concentrade.Pages_principales"
+      xmlns:localCollection="clr-namespace:Concentrade.Pages_principales.Collection"
       mc:Ignorable="d" 
       d:DesignHeight="1080" d:DesignWidth="1920"
       Title="MenuPage"
@@ -165,7 +166,7 @@
                            Margin="16,0,0,0"/>
             </StackPanel>
 
-            <Button Content="Démarrer la concentration" Width="300" Height="60" Style="{StaticResource ZenButtonStyle}" Click="StartSession_Click" FontSize="22" BorderThickness="2" Margin="0,40,0,0"/>
+            <Button x:Name="StartSessionButton" Content="Démarrer la concentration" Width="300" Height="60" Style="{StaticResource ZenButtonStyle}" Click="StartSession_Click" FontSize="22" BorderThickness="2" Margin="0,40,0,0"/>
 
         </StackPanel>
         <Button x:Name="CollectionButton" Content="🃏 Ma Collection" Click="Stats_Click" Style="{StaticResource ZenIconButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,30,0,0" FontSize="18" FontWeight="SemiBold"/>
@@ -181,5 +182,8 @@
                 </StackPanel>
             </Border>
         </Popup>
+
+        <!-- Overlay du tutoriel interactif -->
+        <local:TutorialOverlay x:Name="TutorialOverlayControl" />
     </Grid>
 </Page>

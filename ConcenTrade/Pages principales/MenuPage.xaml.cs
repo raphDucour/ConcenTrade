@@ -49,6 +49,19 @@ namespace Concentrade
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            if (!Properties.Settings.Default.IsTutorialDone)
+            {
+                var targets = new UIElement[] { StartSessionButton, FocusModeToggle, SettingsButton, CollectionButton };
+                var texts = new string[] {
+                    "Clique ici pour démarrer une session de concentration.",
+                    "Active le Mode Focus pour bloquer les applications distrayantes.",
+                    "Accède aux paramètres de l'application.",
+                    "Consulte ta collection de cartes ici."
+                };
+                TutorialOverlayControl.StartTutorial(targets, texts);
+                //Properties.Settings.Default.IsTutorialDone = true;      A remettre dans le code si on veut pas que le tuto se lance a chaque fois
+                Properties.Settings.Default.Save();
+            }
             CreateAndAnimateParticles(10);
         }
 
