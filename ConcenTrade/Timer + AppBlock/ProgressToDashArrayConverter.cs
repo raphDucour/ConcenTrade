@@ -15,7 +15,7 @@ namespace Concentrade
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            // S'assure que toutes les valeurs nécessaires sont présentes et valides.
+            // S'assure que toutes les valeurs nécessaires sont présentes et valides..
             if (values == null || values.Length < 4 ||
                 !double.TryParse(values[0]?.ToString(), out double progress) ||
                 !double.TryParse(values[1]?.ToString(), out double width) ||
