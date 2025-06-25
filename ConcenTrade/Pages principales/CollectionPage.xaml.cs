@@ -21,12 +21,10 @@ namespace Concentrade.Pages_principales
         public bool Caisse4Openable;
 
 
-        private int userPoints;
 
         public CollectionPage()
         {
             InitializeComponent();
-            LoadUserPoints();
             InitializeCaisseOpenable();
             UpdateCaisseLocks();
             InitializeCards();
@@ -93,23 +91,15 @@ namespace Concentrade.Pages_principales
             }
             else
             {
-                Caisse4Cost.Text = "Coût: 800 Points";
+                Caisse4Cost.Text = "Coût: 1500 Points";
                 Caisse4Cost.FontSize = 14;
                 Caisse4Cost.Foreground = new SolidColorBrush(Color.FromRgb(0xAA, 0xAA, 0xAA));
                 Caisse4Button.IsEnabled = true;
             }
         }
 
-        private void LoadUserPoints()
-        {
-            userPoints = 10000; //Settings.Default.Points;
-        }
+        
 
-        private void SaveUserPoints()
-        {
-            Settings.Default.Points = userPoints;
-            Settings.Default.Save();
-        }
 
         private void RetourButton_Click(object sender, RoutedEventArgs e)
         {
