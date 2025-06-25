@@ -38,7 +38,7 @@
         </Grid>
         <Popup x:Name="TutorialPopup"
                Placement="Right"
-               StaysOpen="False"
+               StaysOpen="True"
                AllowsTransparency="True">
             <Border Background="#202B38"
                     CornerRadius="24"

@@ -36,6 +36,19 @@ namespace Concentrade.Pages_principales
             ShowStep();
         }
 
+        public void CloseTutorial()
+        {
+            if (_lastTarget != null && _currentPulseTransform != null)
+            {
+                _lastTarget.RenderTransform = null;
+                _lastTarget.RenderTransformOrigin = new Point(0.5, 0.5);
+                _currentPulseTransform = null;
+            }
+            IsOpen = false;
+            IntroOverlay.Visibility = Visibility.Collapsed;
+            _step = 0;
+        }
+
         private void ShowStep()
         {
             if (_lastTarget != null && _currentPulseTransform != null)
@@ -119,13 +132,7 @@ namespace Concentrade.Pages_principales
             }
             else
             {
-                IsOpen = false;
-                if (_lastTarget != null && _currentPulseTransform != null)
-                {
-                    _lastTarget.RenderTransform = null;
-                    _lastTarget.RenderTransformOrigin = new Point(0.5, 0.5);
-                    _currentPulseTransform = null;
-                }
+                CloseTutorial();
             }
         }
 
