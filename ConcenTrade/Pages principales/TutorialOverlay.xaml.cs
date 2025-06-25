@@ -1,9 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Windows.Threading;
-using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 namespace Concentrade.Pages_principales
 {
@@ -12,6 +10,8 @@ namespace Concentrade.Pages_principales
         private int _step = 0;
         private UIElement[] _targets;
         private string[] _texts;
+        private ScaleTransform _currentPulseTransform = null;
+        private FrameworkElement _lastTarget = null;
 
         public bool IsOpen
         {
@@ -38,6 +38,13 @@ namespace Concentrade.Pages_principales
 
         private void ShowStep()
         {
+            if (_lastTarget != null && _currentPulseTransform != null)
+            {
+                _lastTarget.RenderTransform = null;
+                _lastTarget.RenderTransformOrigin = new Point(0.5, 0.5);
+                _currentPulseTransform = null;
+            }
+
             if (_targets == null || _texts == null || _step >= _targets.Length)
             {
                 IsOpen = false;
@@ -46,7 +53,6 @@ namespace Concentrade.Pages_principales
             }
             if (_targets[_step] == null)
             {
-                // Affiche l'intro overlay centré
                 IntroText.Text = _texts[_step];
                 IntroOverlay.Visibility = Visibility.Visible;
                 TutorialPopup.IsOpen = false;
@@ -60,6 +66,28 @@ namespace Concentrade.Pages_principales
                 TutorialPopup.VerticalOffset = 0;
                 TutorialText.Text = _texts[_step];
                 IsOpen = true;
+
+                var target = _targets[_step] as FrameworkElement;
+                if (target != null)
+                {
+                    var scale = new ScaleTransform(1, 1);
+                    target.RenderTransform = scale;
+                    target.RenderTransformOrigin = new Point(0.5, 0.5);
+                    _currentPulseTransform = scale;
+                    _lastTarget = target;
+
+                    var pulse = new DoubleAnimation
+                    {
+                        From = 1.0,
+                        To = 1.15,
+                        Duration = TimeSpan.FromMilliseconds(400),
+                        AutoReverse = true,
+                        RepeatBehavior = RepeatBehavior.Forever,
+                        EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
+                    };
+                    scale.BeginAnimation(ScaleTransform.ScaleXProperty, pulse);
+                    scale.BeginAnimation(ScaleTransform.ScaleYProperty, pulse);
+                }
             }
         }
 
@@ -73,18 +101,11 @@ namespace Concentrade.Pages_principales
             else
             {
                 IsOpen = false;
-            }
-        }
-
-        private void MainWindow_SizeChanged_CenterPopup(object sender, SizeChangedEventArgs e)
-        {
-            if (_targets != null && _step < _targets.Length && _targets[_step] == null && TutorialPopup.IsOpen)
-            {
-                var mainWindow = Window.GetWindow(this);
-                if (mainWindow != null)
+                if (_lastTarget != null && _currentPulseTransform != null)
                 {
-                    TutorialPopup.HorizontalOffset = (mainWindow.ActualWidth - TutorialPopup.ActualWidth) / 2;
-                    TutorialPopup.VerticalOffset = (mainWindow.ActualHeight - TutorialPopup.ActualHeight) / 2;
+                    _lastTarget.RenderTransform = null;
+                    _lastTarget.RenderTransformOrigin = new Point(0.5, 0.5);
+                    _currentPulseTransform = null;
                 }
             }
         }
