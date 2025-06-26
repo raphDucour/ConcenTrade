@@ -14,9 +14,12 @@
         <Canvas x:Name="ParticleCanvas" />
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>   <!-- Titre et retour -->
-                <RowDefinition Height="*"/>      <!-- ScrollViewer -->
-                <RowDefinition Height="Auto"/>   <!-- Bouton -->
+                <RowDefinition Height="Auto"/>
+                <!-- Titre et retour -->
+                <RowDefinition Height="*"/>
+                <!-- ScrollViewer -->
+                <RowDefinition Height="Auto"/>
+                <!-- Bouton -->
             </Grid.RowDefinitions>
 
             <!-- Bouton Retour en haut à gauche -->
@@ -45,48 +48,39 @@
                     BorderBrush="{StaticResource ZenButtonBorderBrush}" BorderThickness="1"
                     MaxWidth="1200">
                 <StackPanel>
-                    <TextBlock Text="Boutique des Caisses" Style="{StaticResource PageTitle}" FontSize="36" Margin="0,0,0,30"/>
+                    <TextBlock Text="Boutique" Style="{StaticResource PageTitle}" FontSize="36" Margin="0,0,0,30"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <!-- Caisse 1 -->
-                        <Button Click="BuyCat_Click" Style="{StaticResource ZenButtonStyle}" Margin="10" Padding="20" Width="200">
-                            <StackPanel>
-                                <TextBlock Text="Caisse du Débutant" FontWeight="Bold" Foreground="White" TextAlignment="Center"/>
-                                <TextBlock Text="Contient les animaux de base" TextWrapping="Wrap" Foreground="#CCCCCC" TextAlignment="Center" Margin="0,5,0,0"/>
-                                <TextBlock Text="Coût: 100 Points" FontStyle="Italic" Foreground="#AAAAAA" TextAlignment="Center" Margin="0,10,0,0"/>
-                            </StackPanel>
-                        </Button>
-                        <!-- Caisse 2 -->
                         <Grid>
-                            <Button x:Name="Caisse2Button" Click="BuyDog_Click" Style="{StaticResource ZenButtonStyle}" Margin="10" Padding="20" Width="200">
+                            <Button x:Name="Caisse1Button" Click="BuyDog_Click" Style="{StaticResource ZenButtonStyle}" Margin="10" Padding="20" Width="200" Height="200">
                                 <StackPanel>
-                                    <TextBlock Text="Caisse de l'Explorateur" FontWeight="Bold" Foreground="White" TextAlignment="Center"/>
-                                    <TextBlock Text="Débloque des compagnons rares" TextWrapping="Wrap" Foreground="#CCCCCC" TextAlignment="Center" Margin="0,5,0,0"/>
-                                    <TextBlock x:Name="Caisse2Cost" Text="Coût: 300 Points" FontStyle="Italic" Foreground="#AAAAAA" TextAlignment="Center" Margin="0,10,0,0"/>
+                                    <Image Source="/Images/coffres/coffre commun.png" Stretch="Uniform" Height="198"/>
                                 </StackPanel>
                             </Button>
-                            <TextBlock x:Name="Caisse2Lock" Text="🔒" FontSize="48" Foreground="#FFD700" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+                        </Grid>
+                        <!-- Caisse 2 -->
+                        <Grid>
+                            <Button x:Name="Caisse2Button" Click="BuyDog_Click" Style="{StaticResource ZenButtonStyle}" Margin="10" Padding="20" Width="200" Height="200">
+                                <StackPanel>
+                                    <Image x:Name="Caisse2Image" Source="/Images/coffres/coffre rare.png" Stretch="Uniform" Height="198"/>
+                                </StackPanel>
+                            </Button>
                         </Grid>
                         <!-- Caisse 3 -->
                         <Grid>
-                            <Button x:Name="Caisse3Button" Click="BuyDragon_Click" Style="{StaticResource ZenButtonStyle}" Margin="10" Padding="20" Width="200">
+                            <Button x:Name="Caisse3Button" Click="BuyDragon_Click" Style="{StaticResource ZenButtonStyle}" Margin="10" Padding="20" Width="200" Height="200">
                                 <StackPanel>
-                                    <TextBlock Text="Caisse du Maître Zen" FontWeight="Bold" Foreground="White" TextAlignment="Center"/>
-                                    <TextBlock Text="Des créatures épiques vous attendent" TextWrapping="Wrap" Foreground="#CCCCCC" TextAlignment="Center" Margin="0,5,0,0"/>
-                                    <TextBlock x:Name="Caisse3Cost" Text="Coût: 800 Points" FontStyle="Italic" Foreground="#AAAAAA" TextAlignment="Center" Margin="0,10,0,0"/>
+                                    <Image x:Name="Caisse3Image" Source="/Images/coffres/coffre epic.png" Stretch="Uniform" Height="198"/>
                                 </StackPanel>
                             </Button>
-                            <TextBlock x:Name="Caisse3Lock" Text="🔒" FontSize="48" Foreground="#FFD700" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
                         </Grid>
                         <!-- Caisse 4 -->
                         <Grid>
-                            <Button x:Name="Caisse4Button" Click="BuyCaisse4_Click" Style="{StaticResource ZenButtonStyle}" Margin="10" Padding="20" Width="200">
+                            <Button x:Name="Caisse4Button" Click="BuyCaisse4_Click" Style="{StaticResource ZenButtonStyle}" Margin="10" Padding="20" Width="200" Height="200">
                                 <StackPanel>
-                                    <TextBlock Text="Caisse Légendaire" FontWeight="Bold" Foreground="White" TextAlignment="Center"/>
-                                    <TextBlock Text="Des cartes ultra-rares et légendaires !" TextWrapping="Wrap" Foreground="#CCCCCC" TextAlignment="Center" Margin="0,5,0,0"/>
-                                    <TextBlock x:Name="Caisse4Cost" Text="Coût: 2000 Points" FontStyle="Italic" Foreground="#AAAAAA" TextAlignment="Center" Margin="0,10,0,0"/>
+                                    <Image x:Name="Caisse4Image" Source="/Images/coffres/coffre legendaire.png" Stretch="Uniform" Height="198"/>
                                 </StackPanel>
                             </Button>
-                            <TextBlock x:Name="Caisse4Lock" Text="🔒" FontSize="48" Foreground="#FFD700" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
                         </Grid>
                     </StackPanel>
                     <Button Content="Fermer" Style="{StaticResource ZenButtonStyle}" Click="CloseAchatOverlay_Click"
@@ -96,3 +90,4 @@
         </Grid>
     </Grid>
 </Page>
+

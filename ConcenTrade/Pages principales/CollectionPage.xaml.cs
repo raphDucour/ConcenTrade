@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System;
 using System.Windows.Media.Effects;
+using System.Windows.Media.Imaging;
 
 namespace Concentrade.Pages_principales
 {
@@ -29,17 +30,17 @@ namespace Concentrade.Pages_principales
             UpdateCaisseLocks();
             InitializeCards();
         }
-        
+
 
         private void InitializeCards()
         {
-            
+
 
             foreach (Card card in cards) // Ne prend qu'une carte de chaque type.;
             {
                 var cardControl = new CardControl();
                 cardControl.SetCard(card);
-                
+
                 CardsPanel.Children.Add(cardControl);
             }
         }
@@ -48,57 +49,47 @@ namespace Concentrade.Pages_principales
             int nbCommunes = cards.Count(c => c.Rarity == CardRarity.Common);
             int nbRares = cards.Count(c => c.Rarity == CardRarity.Rare);
             int nbEpics = cards.Count(c => c.Rarity == CardRarity.Epic);
-            Caisse2Openable = nbCommunes >= 15;
-            Caisse3Openable = nbCommunes >= 15 && nbRares >= 11;
-            Caisse4Openable = nbEpics >= 6; 
+            Caisse2Openable = nbCommunes >= 1;
+            Caisse3Openable = nbRares >= 1;
+            Caisse4Openable = nbEpics >= 1; // Exemple de condition, à adapter selon ta logique
         }
         private void UpdateCaisseLocks()
         {
             if (!Caisse2Openable)
             {
-                Caisse2Cost.Text = "🔒";
-                Caisse2Cost.FontSize = 36;
-                Caisse2Cost.Foreground = new SolidColorBrush(Color.FromRgb(0xFF, 0xD7, 0x00)); // Doré
                 Caisse2Button.IsEnabled = false;
+                Caisse2Image.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/coffres/cadna rare.png", UriKind.Absolute));
             }
             else
             {
-                Caisse2Cost.Text = "Coût: 300 Points";
-                Caisse2Cost.FontSize = 14;
-                Caisse2Cost.Foreground = new SolidColorBrush(Color.FromRgb(0xAA, 0xAA, 0xAA));
                 Caisse2Button.IsEnabled = true;
+                //Caisse2Image.Source = new BitmapImage(new Uri("pack://application:,,,/Images/coffres/coffre rare.png"));
             }
+
             if (!Caisse3Openable)
             {
-                Caisse3Cost.Text = "🔒";
-                Caisse3Cost.FontSize = 36;
-                Caisse3Cost.Foreground = new SolidColorBrush(Color.FromRgb(0xFF, 0xD7, 0x00));
                 Caisse3Button.IsEnabled = false;
+                Caisse3Image.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/coffres/cadna epic.png", UriKind.Absolute));
             }
             else
             {
-                Caisse3Cost.Text = "Coût: 800 Points";
-                Caisse3Cost.FontSize = 14;
-                Caisse3Cost.Foreground = new SolidColorBrush(Color.FromRgb(0xAA, 0xAA, 0xAA));
                 Caisse3Button.IsEnabled = true;
+                //Caisse3Image.Source = new BitmapImage(new Uri("pack://application:,,,/Images/coffres/coffre epic.png"));
             }
+
             if (!Caisse4Openable)
             {
-                Caisse4Cost.Text = "🔒";
-                Caisse4Cost.FontSize = 36;
-                Caisse4Cost.Foreground = new SolidColorBrush(Color.FromRgb(0xFF, 0xD7, 0x00));
                 Caisse4Button.IsEnabled = false;
+                Caisse4Image.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/coffres/cadna legendaire.png", UriKind.Absolute));
             }
             else
             {
-                Caisse4Cost.Text = "Coût: 2000 Points";
-                Caisse4Cost.FontSize = 14;
-                Caisse4Cost.Foreground = new SolidColorBrush(Color.FromRgb(0xAA, 0xAA, 0xAA));
                 Caisse4Button.IsEnabled = true;
+                //Caisse4Image.Source = new BitmapImage(new Uri("pack://application:,,,/Images/coffres/coffre legendaire.png"));
             }
         }
 
-        
+
 
 
         private void RetourButton_Click(object sender, RoutedEventArgs e)
@@ -125,7 +116,7 @@ namespace Concentrade.Pages_principales
                 MessageBox.Show("Tu possèdes déjà toutes les cartes de cette caisse !");
                 return;
             }
-            this.NavigationService?.Navigate(new Caisse(CaisseCards,100)); // Caisse Poules
+            this.NavigationService?.Navigate(new Caisse(CaisseCards, 100)); // Caisse Poules
         }
 
         private void BuyDog_Click(object sender, RoutedEventArgs e)
@@ -136,7 +127,7 @@ namespace Concentrade.Pages_principales
                 MessageBox.Show("Tu possèdes déjà toutes les cartes de cette caisse !");
                 return;
             }
-            this.NavigationService?.Navigate(new Caisse(CaisseCards,300));
+            this.NavigationService?.Navigate(new Caisse(CaisseCards, 300));
         }
 
         private void BuyDragon_Click(object sender, RoutedEventArgs e)
@@ -147,7 +138,7 @@ namespace Concentrade.Pages_principales
                 MessageBox.Show("Tu possèdes déjà toutes les cartes de cette caisse !");
                 return;
             }
-            this.NavigationService?.Navigate(new Caisse(CaisseCards,800));
+            this.NavigationService?.Navigate(new Caisse(CaisseCards, 800));
         }
 
         private void BuyCaisse4_Click(object sender, RoutedEventArgs e)
@@ -174,9 +165,9 @@ namespace Concentrade.Pages_principales
             {
                 CreateAndAnimateParticles(10);
             }
-        }        
-        
-        
+        }
+
+
         private Random _random = new Random();
         private void CreateAndAnimateParticles(int count)
         {
@@ -233,6 +224,8 @@ namespace Concentrade.Pages_principales
 
             transform.BeginAnimation(TranslateTransform.XProperty, animX);
             transform.BeginAnimation(TranslateTransform.YProperty, animY);
-        }     
+        }
     }
-} 
+}
+
+

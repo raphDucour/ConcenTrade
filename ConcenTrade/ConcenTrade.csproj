@@ -46,6 +46,13 @@
     <None Remove="Images\Cards\communes\Tetard.png" />
     <None Remove="Images\Cards\communes\Tortue.png" />
     <None Remove="Images\Cards\communes\vache.png" />
+    <None Remove="Images\coffres\cadna epic.png" />
+    <None Remove="Images\coffres\cadna legendaire.png" />
+    <None Remove="Images\coffres\cadna rare.png" />
+    <None Remove="Images\coffres\coffre commun.png" />
+    <None Remove="Images\coffres\coffre epic.png" />
+    <None Remove="Images\coffres\coffre legendaire.png" />
+    <None Remove="Images\coffres\coffre rare.png" />
     <None Remove="Images\ConcenTrade logo sans texte.png" />
     <None Remove="Images\ConcenTrade Logo.png" />
     <None Remove="Images\ConcenTrade_logo_v2-removebg-preview.png" />
@@ -70,6 +77,13 @@
     <Resource Include="Images\Cards\communes\Tetard.png" />
     <Resource Include="Images\Cards\communes\Tortue.png" />
     <Resource Include="Images\Cards\communes\vache.png" />
+    <Resource Include="Images\coffres\cadna epic.png" />
+    <Resource Include="Images\coffres\cadna legendaire.png" />
+    <Resource Include="Images\coffres\cadna rare.png" />
+    <Resource Include="Images\coffres\coffre commun.png" />
+    <Resource Include="Images\coffres\coffre epic.png" />
+    <Resource Include="Images\coffres\coffre legendaire.png" />
+    <Resource Include="Images\coffres\coffre rare.png" />
     <Resource Include="Images\ConcenTrade logo sans texte.png" />
     <Resource Include="Images\ConcenTrade Logo.png" />
     <Resource Include="Images\ConcenTrade_logo_v2-removebg-preview.png" />
