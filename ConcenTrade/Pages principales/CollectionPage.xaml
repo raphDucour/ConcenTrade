@@ -52,7 +52,7 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <!-- Caisse 1 -->
                         <Grid>
-                            <Button x:Name="Caisse1Button" Click="BuyDog_Click" Style="{StaticResource ZenButtonStyle}" Margin="10" Padding="20" Width="200" Height="200">
+                            <Button x:Name="Caisse1Button" Click="BuyCat_Click" Style="{StaticResource ZenButtonStyle}" Margin="10" Padding="20" Width="200" Height="200">
                                 <StackPanel>
                                     <Image Source="/Images/coffres/coffre commun.png" Stretch="Uniform" Height="198"/>
                                 </StackPanel>
