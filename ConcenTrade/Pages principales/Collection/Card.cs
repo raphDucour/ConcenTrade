@@ -58,23 +58,23 @@ namespace Concentrade.Collections_de_cartes
                 new Card("Caméléon Focus", CardRarity.Rare, "/Images/Cards/rares/cameleon rare.png","Adapte ton environnement à ta tâche."),
                 new Card("Chef Ornitho", CardRarity.Rare, "/Images/Cards/rares/cuisinier rare.png","La concentration, c'est comme une cuisson: à feu doux mais constant."),
                 new Card("Professeur Noisette", CardRarity.Rare, "/Images/Cards/rares/ecureuil rare.png","Crée-toi un coin calme, rien qu'à toi."),
-                new Card("Flamàn d'Oz", CardRarity.Rare, "/Images/Cards/rares/flaman rose rare.png","Adopte une posture royale."),
+                new Card("Flamàn d'Oz", CardRarity.Rare, "/Images/Cards/rares/flaman rose rare.png","Toujours garder une bonne posture pendant sa session."),
                 new Card("Koala Cool", CardRarity.Rare, "/Images/Cards/rares/koala rare.png","Adopte la lenteur consciente : prends des pauses régulières."),
                 new Card("Œil de Mouche", CardRarity.Rare, "/Images/Cards/rares/mouche rare.png","Élimine les bourdonnements (avec un insecticide)."),
                 new Card("Mélodie du Panda", CardRarity.Rare, "/Images/Cards/rares/panda.png","Laisse-toi porter par le rythme de ta respiration."),
                 new Card("Ver de Livre", CardRarity.Rare, "/Images/Cards/rares/verre de terrre rare.png","Plonge dans ta lecture comme ce ver dans son livre."),
-                new Card("Zêrbe", CardRarity.Rare, "/Images/Cards/rares/zebre rare.png","Chill comme ce Zêrbe."),
+                new Card("Zèbre Zêrbe", CardRarity.Rare, "/Images/Cards/rares/zebre rare.png","Chill comme Zêrbe pendant ta pause."),
 
                 // epics
                 new Card("Hippo Boss", CardRarity.Epic, "/Images/Cards/epics/hipo epic.png","Coupe les notifications, protège ta concentration."),
                 new Card("R-Aigle", CardRarity.Epic, "/Images/Cards/epics/aigle epic.png ","Travaille en blocs : 25 min focus, 5 min pause."),
-                new Card("Hibourge", CardRarity.Epic, "/Images/Cards/epics/hibou epic.png ","Pose ton tel, concentre-toi, les messages attendront."),
+                new Card("HiBoom", CardRarity.Epic, "/Images/Cards/epics/hibou epic.png ","Pose ton tel, concentre-toi, les messages attendront."),
                 new Card("Elegang", CardRarity.Epic, "/Images/Cards/epics/elephant epic.png","Reste focus, ta route dépend de toi."),
                 new Card("Lez", CardRarity.Epic, "/Images/Cards/epics/lezard epic.png","Change de posture souvent, ton cerveau te dira merci."),
                 new Card("PeliCalme", CardRarity.Epic, "/Images/Cards/epics/pelican epic.png","Planifie ta journée, évite les distractions numériques."),
 
                 // legendaires
-                new Card("AntaGoat", CardRarity.Legendary, "/Images/Cards/legendaires/chevre legendaire.png","bêêê..."),
+                new Card("AntaGoat", CardRarity.Legendary, "/Images/Cards/legendaires/chevre legendaire.png","Ne te laisse pas distraire par les actions des autres. Suis ton propre chemin."),
                 new Card("Vincent", CardRarity.Legendary, "/Images/Cards/legendaires/dragon legendaire.png","Ton esprit, tel un dragon enflammé, consume le doute et forge la réussite."),
                 new Card("Pwin Tu", CardRarity.Legendary, "/Images/Cards/legendaires/grosnez legendaire.png","Une idée aiguisée ne tranche que si elle est poussée jusqu’au bout."),
                 new Card("Garou", CardRarity.Legendary, "/Images/Cards/legendaires/loup legendaire.png","Gare à toi si tu ne te concentres pas."),
@@ -87,7 +87,7 @@ namespace Concentrade.Collections_de_cartes
 
         public static List<Card> GetCaisse1Cards()
         {
-            List < Card >  ListCaisse = new List<Card>
+            List<Card> ListCaisse = new List<Card>
             {
                 // Communes
                 new Card("Chat Zen", CardRarity.Common, "/Images/Cards/communes/Chat.png","?"),
@@ -143,7 +143,7 @@ namespace Concentrade.Collections_de_cartes
                 new Card("Lez", CardRarity.Epic, "/Images/Cards/epics/lezard epic.png","?"),
                 new Card("PeliCalme", CardRarity.Epic, "/Images/Cards/epics/pelican epic.png","?"),
             };
-            ListCaisse=GetSortedByRarity(ListCaisse);
+            ListCaisse = GetSortedByRarity(ListCaisse);
             return filterByOptainedCards(ListCaisse);
         }
         public static List<Card> GetCaisse4Cards()
@@ -160,7 +160,7 @@ namespace Concentrade.Collections_de_cartes
             return filterByOptainedCards(ListCaisse);
         }
 
-        public static List<Card> filterByOptainedCards(List<Card>  ListCaisse)
+        public static List<Card> filterByOptainedCards(List<Card> ListCaisse)
         {
             List<Card> cards = Card.GetAllCardsSortedByRarity();
 
@@ -175,7 +175,7 @@ namespace Concentrade.Collections_de_cartes
         public static Card FindCard(string name)
         {
             return GetAllPossibleCards().FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                ?? new Card(name, CardRarity.Common, "/Images/Cards/Chat.png",""); // Fallback sur une image qui existe
+                ?? new Card(name, CardRarity.Common, "/Images/Cards/Chat.png", ""); // Fallback sur une image qui existe
         }
 
         public static string GetRarityColor(CardRarity rarity)
