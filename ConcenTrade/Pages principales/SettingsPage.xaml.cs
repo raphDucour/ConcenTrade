@@ -206,26 +206,20 @@ namespace ConcenTrade
         private void GererAppsBloquees_Click(object sender, RoutedEventArgs e)
         {
             var currentBlockedApps = LoadBlockedApps().ToArray();
-            // CHANGEMENT : On charge aussi la liste des applications ignorées
             var currentIgnoredApps = LoadIgnoredAppsForUser();
 
-            // On passe les deux listes à la fenêtre de configuration
             var settingsWindow = new BlockedAppsSettings(currentBlockedApps, currentIgnoredApps);
 
             if (settingsWindow.ShowDialog() == true)
             {
-                // La sauvegarde des applications bloquées ne change pas
                 var newBlockedApps = settingsWindow.BlockedApps;
                 SaveBlockedAppsForUser(newBlockedApps);
-                // Synchronise l'instance globale d'AppBlocker avec la nouvelle liste
                 ((App)Application.Current).AppBlocker.UpdateBlockedApps(LoadBlockedApps());
-
-                // CHANGEMENT : On sauvegarde la nouvelle liste des applications ignorées
+                
                 var newIgnoredApps = settingsWindow.IgnoredApps;
                 SaveIgnoredAppsForUser(newIgnoredApps);
             }
         }
-
 
         public static List<string> LoadBlockedApps()
         {
@@ -234,10 +228,9 @@ namespace ConcenTrade
                        .Select(app => app.Trim())
                        .ToList();
         }
-        // Méthodes déplacées depuis UserManager.cs pour la gestion des paramètres utilisateur
+
         public static void SaveBlockedAppsForUser(IEnumerable<string> blockedApps)
         {
-            // Enregistre la liste des apps bloquées dans les settings locaux
             Settings.Default.BlockedApps = string.Join(",", blockedApps);
             Settings.Default.Save();
         }

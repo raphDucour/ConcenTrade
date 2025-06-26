@@ -20,12 +20,18 @@ namespace Concentrade.Pages_principales
             {
                 TutorialPopup.IsOpen = value;
                 this.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+                // Permettre les interactions seulement quand le tutoriel est actif
+                this.IsHitTestVisible = value;
             }
         }
 
         public TutorialOverlay()
         {
             InitializeComponent();
+            // S'assurer que le tutoriel est fermé au démarrage
+            this.Visibility = Visibility.Collapsed;
+            this.IsHitTestVisible = false;
+            TutorialPopup.IsOpen = false;
         }
 
         public void StartTutorial(UIElement[] targets, string[] texts)
@@ -33,6 +39,11 @@ namespace Concentrade.Pages_principales
             _targets = targets;
             _texts = texts;
             _step = 0;
+            
+            // S'assurer que le tutoriel est visible et actif
+            this.Visibility = Visibility.Visible;
+            this.IsHitTestVisible = true;
+            
             ShowStep();
         }
 

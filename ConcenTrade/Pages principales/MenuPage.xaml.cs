@@ -48,30 +48,10 @@ namespace Concentrade
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!Properties.Settings.Default.IsTutorialDone)
-            {
-                var targets = new UIElement[] {
-                    null,
-                    PomodoroModeButton,
-                    CustomModeButton,
-                    FocusModeToggle,
-                    StartSessionButton,
-                    SettingsButton,
-                    CollectionButton
-                };
-                var texts = new string[] {
-                    "Avant de commencer, nous allons vous présenter les différents boutons et fonctionnalités de l'application.",
-                    "Mode Pomodoro : 25 minutes de travail, 5 minutes de pause, répétés sur plusieurs cycles pour maximiser ta concentration !\n\nAstuce : règle le nombre de cycles juste en dessous pour choisir combien de fois tu veux enchaîner 25 min de travail puis 5 min de pause dans ta session.",
-                    "Mode Temps personnalisé : choisis toi-même la durée de travail, de pause et le nombre de cycles selon tes besoins.",
-                    "Active le Mode Focus pour bloquer les applications distrayantes.\n\n⚠️ En mode normal, si tu ouvres une application bloquée, tu peux choisir de la fermer ou de continuer temporairement.\nEn mode Focus, tu n'auras qu'un seul choix : l'application sera automatiquement bloquée et tu ne pourras pas l'utiliser tant que la session est en cours.",
-                    "Clique ici pour démarrer une session de concentration.",
-                    "Accède aux paramètres de l'application. C'est ici que tu peux modifier ton prénom, ta date de naissance, et ajouter ou supprimer des applications distrayantes à bloquer.",
-                    "Ici, tu peux accéder à ta collection de cartes et acheter des caisses pour débloquer de nouvelles cartes et agrandir ta collection."
-                };
-                TutorialOverlayControl.StartTutorial(targets, texts);
-                Properties.Settings.Default.IsTutorialDone = true;     
-                Properties.Settings.Default.Save();
-            }
+            // Tutoriel complètement désactivé au chargement - il ne se lance que manuellement
+            Properties.Settings.Default.IsTutorialDone = true;
+            Properties.Settings.Default.Save();
+            
             CreateAndAnimateParticles(10);
         }
 
@@ -226,6 +206,36 @@ namespace Concentrade
             this.NavigationService?.Navigate(new Pages_principales.SessionHistoryPage());
         }
 
+        private void Tutorial_Click(object sender, RoutedEventArgs e)
+        {
+            // Lancer le tutoriel interactif
+            StartTutorial();
+        }
+
+        // Méthode pour lancer le tutoriel interactif
+        private void StartTutorial()
+        {
+            var targets = new UIElement[] {
+                null,
+                PomodoroModeButton,
+                CustomModeButton,
+                FocusModeToggle,
+                StartSessionButton,
+                SettingsButton,
+                CollectionButton
+            };
+            var texts = new string[] {
+                "Avant de commencer, nous allons vous présenter les différents boutons et fonctionnalités de l'application.",
+                "Mode Pomodoro : 25 minutes de travail, 5 minutes de pause, répétés sur plusieurs cycles pour maximiser ta concentration !\n\nAstuce : règle le nombre de cycles juste en dessous pour choisir combien de fois tu veux enchaîner 25 min de travail puis 5 min de pause dans ta session.",
+                "Mode Temps personnalisé : choisis toi-même la durée de travail, de pause et le nombre de cycles selon tes besoins.",
+                "Active le Mode Focus pour bloquer les applications distrayantes.\n\n⚠️ En mode normal, si tu ouvres une application bloquée, tu peux choisir de la fermer ou de continuer temporairement.\nEn mode Focus, tu n'auras qu'un seul choix : l'application sera automatiquement bloquée et tu ne pourras pas l'utiliser tant que la session est en cours.",
+                "Clique ici pour démarrer une session de concentration.",
+                "Accède aux paramètres de l'application. C'est ici que tu peux modifier ton prénom, ta date de naissance, et ajouter ou supprimer des applications distrayantes à bloquer.",
+                "Ici, tu peux accéder à ta collection de cartes et acheter des caisses pour débloquer de nouvelles cartes et agrandir ta collection."
+            };
+            TutorialOverlayControl.StartTutorial(targets, texts);
+        }
+
         private void Quit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
@@ -249,6 +259,11 @@ namespace Concentrade
             Properties.Settings.Default.UserEmail = "";
             Properties.Settings.Default.Save();
             this.NavigationService?.Navigate(new LoginPage());
+        }
+
+        private void Collection_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService?.Navigate(new Pages_principales.CollectionPage());
         }
     }
 }
