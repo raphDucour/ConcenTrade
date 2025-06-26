@@ -21,6 +21,7 @@ namespace ConcenTrade
         private readonly AppBlocker _appBlocker;
         private Random _random = new Random();
 
+        // Initialise la page des paramètres et charge les données utilisateur
         public SettingsPage()
         {
             InitializeComponent();
@@ -28,6 +29,7 @@ namespace ConcenTrade
             ChargerDonneesUtilisateur();
         }
 
+        // Crée et anime les particules lors du chargement de la page
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (this.ActualWidth > 0 && this.ActualHeight > 0)
@@ -36,6 +38,7 @@ namespace ConcenTrade
             }
         }
 
+        // Crée et anime un nombre spécifique de particules
         private void CreateAndAnimateParticles(int count)
         {
             for (int i = 0; i < count; i++)
@@ -59,6 +62,7 @@ namespace ConcenTrade
             }
         }
 
+        // Anime une particule individuelle avec un mouvement aléatoire
         private void AnimateParticle(Ellipse particle)
         {
             var transform = (TranslateTransform)particle.RenderTransform;
@@ -92,6 +96,7 @@ namespace ConcenTrade
             transform.BeginAnimation(TranslateTransform.YProperty, animY);
         }
 
+        // Charge les données utilisateur depuis les paramètres
         private void ChargerDonneesUtilisateur()
         {
             PrenomBox.Text = Settings.Default.UserName;
@@ -112,7 +117,7 @@ namespace ConcenTrade
             string distrait = Settings.Default.Distraction switch
             {
                 true => "Oui",
-                false => "Non"
+                false => "No"
             };
             foreach (ComboBoxItem item in DistraitCombo.Items)
             {
@@ -124,11 +129,13 @@ namespace ConcenTrade
             }
         }
 
+        // Restreint la saisie de la date de naissance aux chiffres et slash
         private void DateNaissance_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !char.IsDigit(e.Text[0]) && e.Text[0] != '/';
         }
 
+        // Gère le formatage automatique de la date de naissance
         private void DateNaissance_TextChanged(object sender, TextChangedEventArgs e)
         {
             var textBox = (TextBox)sender;
@@ -156,6 +163,7 @@ namespace ConcenTrade
             }
         }
 
+        // Calcule et affiche l'âge actuel de l'utilisateur
         private void MettreAJourAgeAffiche(DateTime dateNaissance)
         {
             var today = DateTime.Today;
@@ -164,6 +172,7 @@ namespace ConcenTrade
             AgeActuelBlock.Text = $"{age} ans";
         }
 
+        // Valide si une date est correcte et réaliste
         private bool IsValidDate(string date)
         {
             if (!DateTime.TryParseExact(date, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime parsedDate))
@@ -172,6 +181,7 @@ namespace ConcenTrade
             return parsedDate <= DateTime.Today && parsedDate > DateTime.Today.AddYears(-120);
         }
 
+        // Sauvegarde les informations utilisateur modifiées
         private void Sauvegarder_Click(object sender, RoutedEventArgs e)
         {
             if (!IsValidDate(DateNaissanceBox.Text))
@@ -197,12 +207,14 @@ namespace ConcenTrade
             MessageBox.Show("Informations mises à jour avec succès !");
         }
 
+        // Retourne à la page précédente
         private void Retour_Click(object sender, RoutedEventArgs e)
         {
             if (NavigationService?.CanGoBack == true)
                 NavigationService.GoBack();
         }
 
+        // Ouvre la fenêtre de gestion des applications bloquées
         private void GererAppsBloquees_Click(object sender, RoutedEventArgs e)
         {
             var currentBlockedApps = LoadBlockedApps().ToArray();
@@ -221,6 +233,7 @@ namespace ConcenTrade
             }
         }
 
+        // Charge la liste des applications bloquées depuis les paramètres
         public static List<string> LoadBlockedApps()
         {
             return Settings.Default.BlockedApps
@@ -229,12 +242,14 @@ namespace ConcenTrade
                        .ToList();
         }
 
+        // Sauvegarde la liste des applications bloquées dans les paramètres
         public static void SaveBlockedAppsForUser(IEnumerable<string> blockedApps)
         {
             Settings.Default.BlockedApps = string.Join(",", blockedApps);
             Settings.Default.Save();
         }
 
+        // Charge la liste des applications ignorées depuis les paramètres
         public static List<string> LoadIgnoredAppsForUser()
         { 
             return Settings.Default.IgnoredApps
@@ -243,6 +258,7 @@ namespace ConcenTrade
                        .ToList();
         }
 
+        // Sauvegarde la liste des applications ignorées dans les paramètres
         public static void SaveIgnoredAppsForUser(IEnumerable<string> ignoredApps)
         {
             Settings.Default.IgnoredApps = string.Join(",", ignoredApps);

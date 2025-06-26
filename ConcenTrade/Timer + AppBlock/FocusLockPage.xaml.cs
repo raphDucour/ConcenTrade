@@ -15,6 +15,7 @@ namespace Concentrade
         private readonly Process _processToBlock;
         private readonly DispatcherTimer _focusTimer;
 
+        // Initialise le popup de mode focus avec le nom de l'application et le processus
         public FocusModePopup(string appName, Process processToBlock)
         {
             InitializeComponent();
@@ -27,13 +28,14 @@ namespace Concentrade
             this.Closed += (s, e) => _focusTimer.Stop();
         }
 
+        // Ferme l'application distrayante
         private void CloseApp_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (!_processToBlock.HasExited)
                 {
-                    _processToBlock.Kill(true); // Ferme le processus et ses enfants
+                    _processToBlock.Kill(true);
                 }
             }
             catch (Exception ex)
@@ -43,19 +45,18 @@ namespace Concentrade
             this.Close();
         }
 
+        // Garde le focus sur le popup et minimise l'application distrayante
         private void FocusTimer_Tick(object? sender, EventArgs e)
         {
             if (_processToBlock == null || _processToBlock.HasExited)
             {
                 _focusTimer.Stop();
-                this.Close(); // Ferme le popup si l'app est déjà fermée
+                this.Close();
                 return;
             }
             try
             {
-                // On s'assure que notre popup reste au premier plan
                 this.Activate();
-                // On minimise la fenêtre de l'app distrayante en continu
                 if (_processToBlock.MainWindowHandle != IntPtr.Zero)
                 {
                     ShowWindow(_processToBlock.MainWindowHandle, SW_MINIMIZE);

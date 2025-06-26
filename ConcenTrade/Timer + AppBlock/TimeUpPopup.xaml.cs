@@ -19,6 +19,7 @@ namespace Concentrade
         public TimeUpAction Action { get; private set; }
         public TimeSpan ExtensionDuration { get; private set; }
 
+        // Initialise le popup de fin de temps avec le nom de l'application et le processus
         public TimeUpPopup(string appName, Process processToBlock)
         {
             InitializeComponent();
@@ -35,6 +36,7 @@ namespace Concentrade
             DurationComboBox.SelectedIndex = 1;
         }
 
+        // Garde le focus sur le popup et minimise l'application
         private void FocusTimer_Tick(object? sender, EventArgs e)
         {
             if (_processToBlock == null || _processToBlock.HasExited) { _focusTimer.Stop(); this.Close(); return; }
@@ -46,6 +48,7 @@ namespace Concentrade
             catch { _focusTimer.Stop(); }
         }
 
+        // Prolonge le temps d'autorisation de l'application
         private void ExtendButton_Click(object sender, RoutedEventArgs e)
         {
             Action = TimeUpAction.Extend;
@@ -56,6 +59,7 @@ namespace Concentrade
             Close();
         }
 
+        // Ferme l'application
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Action = TimeUpAction.Close;

@@ -7,25 +7,25 @@ using Supabase;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
-using Supabase.Gotrue; // <--- ASSUREZ-VOUS QUE CETTE LIGNE EST TOUJOURS PRÉSENTE !
+using Supabase.Gotrue;
 using System.Windows;
 
 namespace Concentrade
 {
     public static class UserManager
     {
-        // Vos identifiants Supabase
         private static string SupabaseUrl = "https://vmxaqzggcidruxgvctrs.supabase.co";
         private static string SupabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZteGFxemdnY2lkcnV4Z3ZjdHJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAyNDM0NDQsImV4cCI6MjA2NTgxOTQ0NH0.z7EC8JwvcKTwr2fbGsGCRpuMqziMXStE9wkL-YTXQUk";
 
         private static Supabase.Client _supabase;
 
+        /// <summary>Initialise le client Supabase</summary>
         static UserManager()
         {
-            // Initialisation du client Supabase
             _supabase = new Supabase.Client(SupabaseUrl, SupabaseKey);
         }
 
+        /// <summary>Enregistre un nouvel utilisateur avec email et mot de passe</summary>
         public static async Task<bool> Register(string email, string password)
         {
             try
@@ -38,7 +38,6 @@ namespace Concentrade
                     return false;
                 }
 
-                // Création du profil utilisateur dans la table User avec email comme clé primaire
                 var newUserProfile = new User();
                 newUserProfile.email = email;
                 newUserProfile.QuestionnaireDone = false;
@@ -59,6 +58,7 @@ namespace Concentrade
             }
         }
 
+        /// <summary>Met à jour les propriétés utilisateur dans la base de données</summary>
         public static async Task PushIntoBDD()
         {
             try
@@ -89,6 +89,8 @@ namespace Concentrade
                 MessageBox.Show($"Erreur lors de la mise à jour des propriétés de l'utilisateur : {ex.Message}");
             }
         }
+
+        /// <summary>Lance PushIntoBDD de manière asynchrone sans attendre le résultat</summary>
         public static void PushIntoBDD_FireAndForget()
         {
             _ = Task.Run(async () =>
@@ -104,6 +106,7 @@ namespace Concentrade
             });
         }
 
+        /// <summary>Recherche un utilisateur par son email</summary>
         public static async Task<User?> FindUser(string email)
         {
             try
@@ -118,6 +121,7 @@ namespace Concentrade
             }
         }
 
+        /// <summary>Authentifie un utilisateur avec email et mot de passe</summary>
         public static async Task<bool> Login(string email, string password)
         {
             try
@@ -130,7 +134,7 @@ namespace Concentrade
                     return false;
                 }
 
-                await LoadProperties(email); // Optionnel : charge les propriétés si besoin
+                await LoadProperties(email);
                 return true;
             }
             catch (Exception ex)
@@ -140,6 +144,7 @@ namespace Concentrade
             }
         }
 
+        /// <summary>Charge les propriétés utilisateur depuis la base de données</summary>
         public static async Task LoadProperties(string email)
         {
             try
@@ -147,10 +152,6 @@ namespace Concentrade
                 var user = await FindUser(email);
                 if (user != null)
                 {
-                    //if (user.email == Properties.Settings.Default.UserEmail)
-                    //{
-                        //verfié si la version plus recente du compte est celle sur le pc ou celle sur la bdd
-                    //}
                     Properties.Settings.Default.UserEmail = email;
                     Properties.Settings.Default.UserName = user.Name;
                     Properties.Settings.Default.BestMoment = user.BestMoment;
@@ -172,6 +173,7 @@ namespace Concentrade
             }
         }
 
+        /// <summary>Sauvegarde les points d'un utilisateur dans la base de données</summary>
         public static async Task SavePoints(string email, long points)
         {
             try
@@ -191,6 +193,7 @@ namespace Concentrade
             }
         }
 
+        /// <summary>Convertit les erreurs d'inscription en messages utilisateur compréhensibles</summary>
         public static string GetSignUpFriendlyErrorMessage(string errorMessage)
         {
             if (errorMessage.Contains("user already exists", StringComparison.OrdinalIgnoreCase) ||
@@ -227,11 +230,11 @@ namespace Concentrade
             {
                 return "Problème de connexion au serveur. Vérifiez votre connexion internet.";
             }
-            // Ajoute d'autres cas spécifiques si besoin
             string error = $"Une erreur est survenue. Merci de réessayer ou de contacter le support si le problème persiste : {errorMessage}";
             return error;
         }
 
+        /// <summary>Convertit les erreurs de connexion en messages utilisateur compréhensibles</summary>
         public static string GetLoginFriendlyErrorMessage(string errorMessage)
         {
             if (errorMessage.Contains("invalid login credentials", StringComparison.OrdinalIgnoreCase) ||
@@ -272,7 +275,6 @@ namespace Concentrade
             {
                 return "Problème de connexion au serveur. Vérifiez votre connexion internet.";
             }
-            // Ajoute d'autres cas spécifiques si besoin
             string error = $"Une erreur est survenue. Merci de réessayer ou de contacter le support si le problème persiste : {errorMessage}";
             return error;
         }

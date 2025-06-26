@@ -9,6 +9,7 @@ namespace Concentrade
         public ObservableCollection<RunningApp> RunningApps { get; set; }
         public bool ContinueWithoutClosing { get; private set; }
 
+        // Initialise la fenêtre de confirmation des applications distrayantes
         public DistractingAppsConfirmation(AppBlocker appBlocker)
         {
             InitializeComponent();
@@ -17,6 +18,7 @@ namespace Concentrade
             LoadRunningApps(appBlocker);
         }
 
+        // Charge la liste des applications distrayantes en cours d'exécution
         private void LoadRunningApps(AppBlocker appBlocker)
         {
             foreach (var process in Process.GetProcesses())
@@ -45,6 +47,7 @@ namespace Concentrade
             }
         }
 
+        // Continue sans fermer les applications sélectionnées
         private void Continue_Click(object sender, RoutedEventArgs e)
         {
             ContinueWithoutClosing = true;
@@ -52,6 +55,7 @@ namespace Concentrade
             Close();
         }
 
+        // Ferme les applications sélectionnées
         private void CloseSelected_Click(object sender, RoutedEventArgs e)
         {
             ContinueWithoutClosing = false;

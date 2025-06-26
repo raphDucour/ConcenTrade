@@ -14,21 +14,24 @@ namespace Concentrade
         private UserAnswers _answers;
         private Random _random = new Random();
 
+        // Initialise la première page du questionnaire et crée un nouvel objet réponses
         public QuestionPrenom()
         {
             InitializeComponent();
-            _answers = new UserAnswers(); // première page, donc on crée les réponses
+            _answers = new UserAnswers();
             this.Loaded += QuestionPrenom_Loaded;
             NameInput.TextChanged += NameInput_TextChanged;
             SuivantButton.IsEnabled = false;
         }
 
+        // Place le focus sur le champ de saisie du prénom
         private void NameInput_Loaded(object sender, RoutedEventArgs e)
         {
             NameInput.Focus();
-            NameInput.SelectAll(); // Facultatif : sélectionne tout le texte si jamais il y a une valeur déjà
+            NameInput.SelectAll();
         }
 
+        // Permet de valider avec la touche Entrée
         private void Page_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -37,6 +40,7 @@ namespace Concentrade
             }
         }
 
+        // Crée et anime les particules lors du chargement de la page
         private void QuestionPrenom_Loaded(object sender, RoutedEventArgs e)
         {
             if (this.ActualWidth > 0 && this.ActualHeight > 0)
@@ -45,6 +49,7 @@ namespace Concentrade
             }
         }
 
+        // Crée et anime un nombre spécifique de particules
         private void CreateAndAnimateParticles(int count)
         {
             for (int i = 0; i < count; i++)
@@ -68,6 +73,7 @@ namespace Concentrade
             }
         }
 
+        // Anime une particule individuelle avec un mouvement aléatoire
         private void AnimateParticle(Ellipse particle)
         {
             var transform = (System.Windows.Media.TranslateTransform)particle.RenderTransform;
@@ -101,11 +107,13 @@ namespace Concentrade
             transform.BeginAnimation(System.Windows.Media.TranslateTransform.YProperty, animY);
         }
 
+        // Active le bouton suivant quand le prénom est saisi
         private void NameInput_TextChanged(object sender, TextChangedEventArgs e)
         {
             SuivantButton.IsEnabled = !string.IsNullOrWhiteSpace(NameInput.Text);
         }
 
+        // Valide et sauvegarde le prénom puis navigue vers la question suivante
         private void Suivant_Click(object sender, RoutedEventArgs e)
         {
             _answers.Prenom = NameInput.Text;
@@ -116,7 +124,6 @@ namespace Concentrade
                 return;
             }
 
-            // Navigue vers la page suivante (que tu créeras après)
             this.NavigationService?.Navigate(new QuestionAge(_answers));
         }
     }

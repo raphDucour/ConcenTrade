@@ -15,24 +15,26 @@ namespace Concentrade.Pages_principales.Collection
     {
         private Card? _card;
 
-        // NOUVELLE PROPRIÉTÉ PUBLIQUE
         public Card? CardData => _card;
 
         private const int STACK_OFFSET_VERTICAL = 8;
         private const int STACK_OFFSET_HORIZONTAL = 6;
         private const int MAX_STACKED_CARDS = 5;
 
+        // Initialise le contrôle de carte
         public CardControl()
         {
             InitializeComponent();
         }
 
+        // Définit la carte à afficher et met à jour l'affichage
         public void SetCard(Card card)
         {
             _card = card;
             UpdateCardDisplay();
         }
 
+        // Met à jour l'affichage de la carte avec ses propriétés
         private void UpdateCardDisplay()
         {
             if (_card != null)
@@ -57,6 +59,7 @@ namespace Concentrade.Pages_principales.Collection
             }
         }
 
+        // Crée une copie du contrôle de carte
         public CardControl Copy()
         {
             string savedXaml = XamlWriter.Save(this);
@@ -64,6 +67,7 @@ namespace Concentrade.Pages_principales.Collection
             return (CardControl)XamlReader.Parse(fixedXaml);
         }
 
+        // Anime l'apparition de la description de la carte
         public void AnimateTipAppearance(double durationSeconds = 5)
         {
             CardDescriptionText.Opacity = 0;

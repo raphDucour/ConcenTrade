@@ -20,33 +20,33 @@ namespace Concentrade.Pages_principales
             {
                 TutorialPopup.IsOpen = value;
                 this.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
-                // Permettre les interactions seulement quand le tutoriel est actif
                 this.IsHitTestVisible = value;
             }
         }
 
+        // Initialise le contrôle de tutoriel et le ferme par défaut
         public TutorialOverlay()
         {
             InitializeComponent();
-            // S'assurer que le tutoriel est fermé au démarrage
             this.Visibility = Visibility.Collapsed;
             this.IsHitTestVisible = false;
             TutorialPopup.IsOpen = false;
         }
 
+        // Démarre le tutoriel avec les éléments cibles et les textes
         public void StartTutorial(UIElement[] targets, string[] texts)
         {
             _targets = targets;
             _texts = texts;
             _step = 0;
             
-            // S'assurer que le tutoriel est visible et actif
             this.Visibility = Visibility.Visible;
             this.IsHitTestVisible = true;
             
             ShowStep();
         }
 
+        // Affiche l'étape actuelle du tutoriel avec animation
         private void ShowStep()
         {
             if (_lastTarget != null && _currentPulseTransform != null)
@@ -121,6 +121,7 @@ namespace Concentrade.Pages_principales
             }
         }
 
+        // Passe à l'étape suivante du tutoriel
         private void NextTutorialStep_Click(object sender, RoutedEventArgs e)
         {
             _step++;
@@ -140,6 +141,7 @@ namespace Concentrade.Pages_principales
             }
         }
 
+        // Passe à l'étape suivante depuis l'introduction
         private void IntroNext_Click(object sender, RoutedEventArgs e)
         {
             _step++;

@@ -49,6 +49,7 @@ namespace Concentrade
         // Requis par le désérialiseur Supabase
         public User() { }
 
+        /// <summary>Hache le mot de passe avec SHA256</summary>
         public static string HashPassword(string password)
         {
             using (SHA256 sha = SHA256.Create())
@@ -58,7 +59,7 @@ namespace Concentrade
             }
         }
 
-        // Ajustez cette méthode en fonction des champs restants
+        /// <summary>Remplit les données utilisateur depuis le questionnaire</summary>
         public void RemplirDepuisQuestionnaire(string prenom, string moment, bool launchOnStratup, bool distrait)
         {
             Name = prenom;

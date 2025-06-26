@@ -14,6 +14,7 @@ namespace Concentrade
         private UserAnswers _answers;
         private Random _random = new Random();
 
+        // Initialise la page de question sur le moment de travail avec les réponses utilisateur
         public QuestionMoment(UserAnswers answers)
         {
             InitializeComponent();
@@ -23,6 +24,7 @@ namespace Concentrade
             this.Loaded += QuestionMoment_Loaded;
         }
 
+        // Crée et anime les particules lors du chargement de la page
         private void QuestionMoment_Loaded(object sender, RoutedEventArgs e)
         {
             if (this.ActualWidth > 0 && this.ActualHeight > 0)
@@ -31,6 +33,7 @@ namespace Concentrade
             }
         }
 
+        // Crée et anime un nombre spécifique de particules
         private void CreateAndAnimateParticles(int count)
         {
             for (int i = 0; i < count; i++)
@@ -54,6 +57,7 @@ namespace Concentrade
             }
         }
 
+        // Anime une particule individuelle avec un mouvement aléatoire
         private void AnimateParticle(Ellipse particle)
         {
             var transform = (System.Windows.Media.TranslateTransform)particle.RenderTransform;
@@ -87,6 +91,7 @@ namespace Concentrade
             transform.BeginAnimation(System.Windows.Media.TranslateTransform.YProperty, animY);
         }
 
+        // Permet de valider avec la touche Entrée
         private void Page_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -95,6 +100,7 @@ namespace Concentrade
             }
         }
 
+        // Sauvegarde la réponse et navigue vers la question suivante
         private void Suivant_Click(object sender, RoutedEventArgs e)
         {
             var selectedItem = MomentInput.SelectedItem as ComboBoxItem;
@@ -110,6 +116,7 @@ namespace Concentrade
             this.NavigationService?.Navigate(new QuestionDistrait(_answers));
         }
 
+        // Active le bouton suivant quand une option est sélectionnée
         private void MomentInput_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SuivantButton.IsEnabled = MomentInput.SelectedIndex != -1;

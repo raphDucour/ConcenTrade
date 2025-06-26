@@ -6,6 +6,7 @@ namespace Concentrade.Pages_principales.Collection
 {
     public partial class WonCardPage : Page
     {
+        // Initialise la page avec la carte gagnée et anime son affichage
         public WonCardPage(Card card)
         {
             InitializeComponent();
@@ -13,6 +14,7 @@ namespace Concentrade.Pages_principales.Collection
             CardControlFull.AnimateTipAppearance();
         }
 
+        // Navigue vers la page de collection
         private void VoirCollection_Click(object sender, RoutedEventArgs e)
         {
             this.NavigationService?.Navigate(new CollectionPage());

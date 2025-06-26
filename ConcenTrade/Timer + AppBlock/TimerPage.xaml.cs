@@ -11,15 +11,10 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-// J'ai enlevé le "using System.Windows.Media;" en double
-// namespace Concentrade ...
-
 namespace Concentrade
 {
     public partial class TimerPage : Page
     {
-
-        // ... (Toutes vos variables privées restent les mêmes)
         private DispatcherTimer _timer;
         private TimeSpan _remaining;
         private TimeSpan _duration;
@@ -34,8 +29,8 @@ namespace Concentrade
         private PomodoroState _currentState;
         private int _totalCycles;
         private int _currentCycle;
-        private TimeSpan _workDuration = TimeSpan.FromMinutes(25); // Valeur par défaut si non spécifiée
-        private TimeSpan _breakDuration = TimeSpan.FromMinutes(5); // Valeur par défaut si non spécifiée
+        private TimeSpan _workDuration = TimeSpan.FromMinutes(25);
+        private TimeSpan _breakDuration = TimeSpan.FromMinutes(5);
         private Random _random = new Random();
         private List<MediaPlayer> _activeSoundPlayers = new List<MediaPlayer>();
         private DispatcherTimer _distractionPauseTimer;
@@ -44,37 +39,33 @@ namespace Concentrade
 
         private enum PomodoroState { Work, ShortBreak, Finished, Idle }
 
-        // --- CONSTRUCTEUR 1 MODIFIÉ ---
-        // Pour le mode Pomodoro classique. On ajoute isFocusMode.
-        public TimerPage(int cycles, bool isFocusMode = false) // isFocusMode a une valeur par défaut
+        // Initialise la page timer pour le mode Pomodoro classique
+        public TimerPage(int cycles, bool isFocusMode = false)
         {
             InitializeComponent();
             _totalCycles = cycles;
-            _isFocusMode = isFocusMode; // On assigne la nouvelle valeur
+            _isFocusMode = isFocusMode;
 
-            // Les durées standards de Pomodoro seront utilisées
             _workDuration = TimeSpan.FromMinutes(25);
             _breakDuration = TimeSpan.FromMinutes(5);
 
             InitializeTimerPage();
         }
 
-        // --- CONSTRUCTEUR 2 MODIFIÉ ---
-        // Pour le mode Personnalisé. On ajoute aussi isFocusMode.
+        // Initialise la page timer pour le mode personnalisé
         public TimerPage(TimeSpan workDuration, TimeSpan breakDuration, int cycles, bool isFocusMode)
         {
             InitializeComponent();
 
-            // On assigne toutes les valeurs reçues
             _workDuration = workDuration;
             _breakDuration = breakDuration;
             _totalCycles = cycles;
-            _isFocusMode = isFocusMode; // On assigne la nouvelle valeur
+            _isFocusMode = isFocusMode;
 
             InitializeTimerPage();
         }
 
-        // NOUVELLE MÉTHODE pour partager l'initialisation entre les deux constructeurs
+        // Initialise les composants communs de la page timer
         private void InitializeTimerPage()
         {
             _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
@@ -114,7 +105,7 @@ namespace Concentrade
             }));
         }
 
-
+        // Gère l'événement de chargement de la page
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (this.ActualWidth > 0 && this.ActualHeight > 0)
@@ -124,8 +115,7 @@ namespace Concentrade
             InitializePulseAnimation();
         }
 
-        #region Animation de Pulsation et Particules
-        // ... (Toutes les méthodes de cette région restent exactement les mêmes)
+        // Initialise l'animation de pulsation
         private void InitializePulseAnimation()
         {
             CircularProgressBar.ApplyTemplate();
@@ -136,6 +126,7 @@ namespace Concentrade
             }
         }
 
+        // Démarre l'animation de pulsation
         private void StartPulsing()
         {
             if (_progressBarTemplateRoot != null)
@@ -144,6 +135,7 @@ namespace Concentrade
             }
         }
 
+        // Arrête l'animation de pulsation
         private void StopPulsing()
         {
             if (_progressBarTemplateRoot != null)
@@ -152,6 +144,7 @@ namespace Concentrade
             }
         }
 
+        // Crée et anime les particules d'arrière-plan
         private void CreateAndAnimateParticles(int count)
         {
             for (int i = 0; i < count; i++)
@@ -175,6 +168,7 @@ namespace Concentrade
             }
         }
 
+        // Anime une particule individuelle
         private void AnimateParticle(Ellipse particle)
         {
             var transform = particle.RenderTransform as TranslateTransform;
@@ -209,6 +203,7 @@ namespace Concentrade
             transform.BeginAnimation(TranslateTransform.YProperty, animY);
         }
 
+        // Déclenche l'animation des particules à la fin d'un cycle
         private void TriggerEndOfCycleParticleAnimation()
         {
             foreach (Ellipse particle in ParticleCanvas.Children.OfType<Ellipse>())
@@ -217,6 +212,7 @@ namespace Concentrade
             }
         }
 
+        // Anime une particule vers le centre à la fin d'un cycle
         private void AnimateParticleToEndOfCycle(Ellipse particle)
         {
             var transform = particle.RenderTransform as TranslateTransform;
@@ -252,11 +248,7 @@ namespace Concentrade
             storyboard.Begin();
         }
 
-        #endregion
-
-        #region Logique du Timer Pomodoro
-        // ... (Toutes les autres méthodes de cette région restent exactement les mêmes)
-        // (InitializeCycleIndicators, UpdateCycleIndicators, StartPomodoro, StartWorkSession, etc.)
+        // Initialise les indicateurs de cycles
         private void InitializeCycleIndicators()
         {
             _cyclesIndicatorPanel = new StackPanel
@@ -281,6 +273,7 @@ namespace Concentrade
             }
         }
 
+        // Met à jour l'affichage des indicateurs de cycles
         private void UpdateCycleIndicators()
         {
             for (int i = 0; i < _totalCycles; i++)
@@ -303,12 +296,14 @@ namespace Concentrade
             }
         }
 
+        // Démarre la session Pomodoro
         private void StartPomodoro()
         {
             _currentCycle = 1;
             StartWorkSession();
         }
 
+        // Démarre une session de travail
         private void StartWorkSession()
         {
             _currentState = PomodoroState.Work;
@@ -324,6 +319,7 @@ namespace Concentrade
             StartPulsing();
         }
 
+        // Démarre une session de pause
         private void StartBreakSession()
         {
             StopPulsing();
@@ -338,18 +334,20 @@ namespace Concentrade
             _timer.Start();
         }
 
+        // Termine la session complète
         private void FinishSession()
         {
             StopPulsing();
             _timer.Stop();
             _currentState = PomodoroState.Finished;
             StateText.Text = "Félicitations !";
-            TimerText.Text = "🎉"; // Icône de fin
+            TimerText.Text = "🎉";
             UpdateCycleIndicators();
             SavePoints();
             _blocker.SetActive(false);
         }
 
+        // Gère le tick du timer principal
         private async void Timer_Tick(object? sender, EventArgs e)
         {
             if (_isPaused) return;
@@ -359,9 +357,8 @@ namespace Concentrade
 
             if (_currentState == PomodoroState.Work)
             {
-                // Award 1 point every 5 minutes (300 seconds)
                 if (_duration.TotalSeconds - _remaining.TotalSeconds > 0 && 
-                    (_duration.TotalSeconds - _remaining.TotalSeconds) % 299 == 0)//toutes les presque 5min pour pas que ca s'arrete avant d'avoir le point
+                    (_duration.TotalSeconds - _remaining.TotalSeconds) % 299 == 0)
                 {
                     _pointsAccumules++;
                     UpdatePointsText();
@@ -398,6 +395,7 @@ namespace Concentrade
             }
         }
 
+        // Joue un son à partir d'un fichier
         private void PlaySound(string uri)
         {
             try
@@ -432,6 +430,7 @@ namespace Concentrade
             }
         }
 
+        // Met à jour l'affichage du timer
         private void UpdateTimerDisplay(bool isInitialSet = false)
         {
             TimerText.Text = string.Format("{0:00}:{1:00}", (int)_remaining.TotalMinutes, _remaining.Seconds);
@@ -460,6 +459,7 @@ namespace Concentrade
             StateText.Text = stateInfo;
         }
 
+        // Anime la barre de progression
         private void AnimateProgressBar(double newValue, bool isInitialSet = false)
         {
             if (isInitialSet)
@@ -477,6 +477,7 @@ namespace Concentrade
             CircularProgressBar.BeginAnimation(ProgressBar.ValueProperty, animation);
         }
 
+        // Gère le clic sur le bouton pause/reprendre
         private void PauseButton_Click(object sender, RoutedEventArgs e)
         {
             if (_currentState == PomodoroState.Finished) return;
@@ -500,6 +501,7 @@ namespace Concentrade
             UpdateTimerDisplay();
         }
 
+        // Gère le clic sur le bouton stop
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
             StopPulsing();
@@ -508,19 +510,19 @@ namespace Concentrade
             SavePoints();
             _blocker.SetActive(false); 
 
-            // Les erreurs CS0103 sont corrigées ici.
-            // On navigue simplement vers une nouvelle page de menu.
             if (this.NavigationService != null)
             {
                 this.NavigationService.Navigate(new MenuPage());
             }
         }
 
+        // Met à jour l'affichage des points
         private void UpdatePointsText()
         {
             _pointsText.Text = $"{_pointsAccumules} points";
         }
 
+        // Sauvegarde les points accumulés
         private void SavePoints()
         {
             Properties.Settings.Default.Points += _pointsAccumules;
@@ -534,27 +536,22 @@ namespace Concentrade
             UpdatePointsText();
         }
 
-        // Dans le fichier ConcenTrade/Timer + AppBlock/TimerPage.xaml.cs, ajoutez cette nouvelle méthode
-
-        // 1. REMPLACEZ votre méthode existante par celle-ci
+        // Gère l'autorisation temporaire d'une application
         private void Blocker_OnTemporaryAllowance(object? sender, TemporaryAllowanceEventArgs e)
         {
-            // On s'assure que cette logique ne s'exécute que pendant une session de travail active
             if (_currentState != PomodoroState.Work || _isPaused) return;
 
-            // Met en pause le minuteur principal
             _timer.Stop();
             _isPaused = true;
             PauseButton.Content = "▶️ Reprendre";
             StateText.Text = $"En pause - {e.ProcessName} autorisé";
 
-            // Lance le minuteur de distraction
             StartDistractionTimer(e.ProcessName, e.Duration, isExtension: false);
         }
 
+        // Démarre le timer de distraction
         private void StartDistractionTimer(string processName, TimeSpan duration, bool isExtension)
         {
-            // Arrête tout minuteur précédent pour éviter les conflits
             _distractionPauseTimer?.Stop();
 
             _distractionPauseTimer = new DispatcherTimer { Interval = duration };
@@ -564,8 +561,7 @@ namespace Concentrade
             _distractionPauseTimer.Start();
         }
 
-        // Dans le fichier TimerPage.xaml.cs
-
+        // Gère la fin du timer de distraction
         private async void DistractionTimer_Finished(object? sender, EventArgs e)
         {
             _distractionPauseTimer?.Stop();
@@ -586,18 +582,13 @@ namespace Concentrade
             }
             else
             {
-                // --- DÉBUT DE LA CORRECTION ---
-
-                // Si un pop-up est déjà affiché pour un autre processus du même jeu, on ignore cet appel.
                 if (_isExtensionPopupShown)
                 {
                     return;
                 }
 
-                // On utilise un bloc try...finally pour garantir que le verrou sera toujours retiré.
                 try
                 {
-                    // On pose le verrou pour bloquer les autres pop-ups.
                     _isExtensionPopupShown = true;
 
                     await Task.Yield();
@@ -620,25 +611,21 @@ namespace Concentrade
                 }
                 finally
                 {
-                    // Très important : on retire le verrou pour permettre aux futurs pop-ups de s'afficher.
                     _isExtensionPopupShown = false;
                 }
-                // --- FIN DE LA CORRECTION ---
             }
         }
 
-
-        // 4. AJOUTEZ cette méthode utilitaire pour ne pas répéter de code
+        // Reprend le timer de travail
         private void ResumeWorkTimer()
         {
             if (_currentState == PomodoroState.Work)
             {
-                _timer.Start(); // Reprend le minuteur principal
+                _timer.Start();
                 _isPaused = false;
                 PauseButton.Content = "⏯️ Pause";
                 UpdateTimerDisplay();
             }
         }
-        #endregion
     }
 }

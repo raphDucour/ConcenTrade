@@ -1,6 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Collections.Generic; // Assurez-vous que cette ligne est présente
+using System.Collections.Generic;
 using System.Windows;
 using System.Linq;
 
@@ -8,12 +8,12 @@ namespace Concentrade
 {
     public partial class BlockedAppsSettings : Window
     {
-        // (La classe interne AppItem reste la même)
         public class AppItem
         {
             public string Name { get; set; }
             public bool IsSelected { get; set; }
 
+            // Initialise un élément d'application avec nom et état de sélection
             public AppItem(string name, bool isSelected = true)
             {
                 Name = name;
@@ -38,23 +38,23 @@ namespace Concentrade
             "Google Chrome", "Mozilla Firefox", "Opera", "OperaGX", "Microsoft Edge"
         };
 
-        // Le constructeur accepte maintenant aussi la liste des ignorées
+        // Initialise les paramètres des applications bloquées
         public BlockedAppsSettings(string[] currentBlockedApps, List<string> currentIgnoredApps)
         {
             InitializeComponent();
             BlockedApps = currentBlockedApps;
-            _initialIgnoredApps = currentIgnoredApps; // On stocke la liste initiale
-            IgnoredApps = new List<string>();       // On initialise la liste de retour
+            _initialIgnoredApps = currentIgnoredApps;
+            IgnoredApps = new List<string>();
             LoadBlockedApps();
         }
 
+        // Charge et affiche la liste des applications bloquées
         private void LoadBlockedApps()
         {
             var userBlockedAppsSet = new HashSet<string>(BlockedApps, StringComparer.OrdinalIgnoreCase);
             var userIgnoredAppsSet = new HashSet<string>(_initialIgnoredApps, StringComparer.OrdinalIgnoreCase);
             var allAppsInUi = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-            // ÉTAPE 1: Afficher les applications par défaut SAUF si elles sont ignorées
             foreach (var appName in _defaultApps)
             {
                 if (!userIgnoredAppsSet.Contains(appName))
@@ -64,7 +64,6 @@ namespace Concentrade
                 }
             }
 
-            // ÉTAPE 2: Ajouter les applications personnalisées sauvegardées par l'utilisateur
             foreach (var userApp in userBlockedAppsSet)
             {
                 if (!allAppsInUi.Contains(userApp))
@@ -76,19 +75,15 @@ namespace Concentrade
             SuggestedAppsList.ItemsSource = _apps;
         }
 
+        // Sauvegarde les applications sélectionnées et détermine les ignorées
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            // La logique de vérification des conflits (redondance) reste la même...
-
-            // On sauvegarde les applications qui sont cochées
             BlockedApps = _apps.Where(a => a.IsSelected)
                                  .Select(a => a.Name)
                                  .ToArray();
 
-            // NOUVELLE LOGIQUE : On détermine la nouvelle liste d'applications ignorées
             var currentAppsInUi = new HashSet<string>(_apps.Select(a => a.Name), StringComparer.OrdinalIgnoreCase);
 
-            // Une application par défaut est "ignorée" si elle n'est plus visible dans la liste
             IgnoredApps = _defaultApps
                 .Where(defaultApp => !currentAppsInUi.Contains(defaultApp))
                 .ToList();
@@ -97,7 +92,7 @@ namespace Concentrade
             Close();
         }
 
-        // Les autres méthodes (AddApp_Click, RemoveApp_Click, Cancel_Click) restent inchangées...
+        // Ajoute une nouvelle application à la liste
         private void AddApp_Click(object sender, RoutedEventArgs e)
         {
             var newApp = NewAppTextBox.Text.Trim();
@@ -115,6 +110,7 @@ namespace Concentrade
             }
         }
 
+        // Supprime une application de la liste
         private void RemoveApp_Click(object sender, RoutedEventArgs e)
         {
             if (sender is FrameworkElement element && element.DataContext is AppItem app)
@@ -123,6 +119,7 @@ namespace Concentrade
             }
         }
 
+        // Annule les modifications et ferme la fenêtre
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;

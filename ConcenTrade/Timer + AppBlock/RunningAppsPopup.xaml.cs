@@ -12,6 +12,7 @@ namespace Concentrade
         private readonly AppBlocker? _appBlocker;
         public bool ContinueWithoutClosing { get; private set; }
 
+        // Initialise le popup des applications en cours d'exécution
         public RunningAppsPopup(AppBlocker appBlocker)
         {
             InitializeComponent();
@@ -22,6 +23,7 @@ namespace Concentrade
             LoadRunningApps();
         }
 
+        // Charge la liste des applications distrayantes en cours d'exécution
         private void LoadRunningApps()
         {
             if (_appBlocker == null) return;
@@ -54,6 +56,7 @@ namespace Concentrade
             }
         }
 
+        // Ferme les applications sélectionnées
         private void CloseSelected_Click(object sender, RoutedEventArgs e)
         {
             ContinueWithoutClosing = false;
@@ -61,6 +64,7 @@ namespace Concentrade
             Close();
         }
 
+        // Continue sans fermer les applications
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             ContinueWithoutClosing = true;

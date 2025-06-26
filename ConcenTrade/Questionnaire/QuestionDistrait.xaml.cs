@@ -8,6 +8,7 @@ namespace Concentrade
     {
         private UserAnswers _answers;
 
+        // Initialise la page de question sur la distraction avec les réponses utilisateur
         public QuestionDistrait(UserAnswers answers)
         {
             InitializeComponent();
@@ -16,11 +17,13 @@ namespace Concentrade
             DistraitInput.SelectionChanged += DistraitInput_SelectionChanged;
         }
 
+        // Active le bouton terminer quand une option est sélectionnée
         private void DistraitInput_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TerminerButton.IsEnabled = DistraitInput.SelectedIndex != -1;
         }
 
+        // Permet de valider avec la touche Entrée
         private void Page_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -28,6 +31,8 @@ namespace Concentrade
                 TerminerButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             }
         }
+
+        // Sauvegarde la réponse et termine le questionnaire
         private void Terminer_Click(object sender, RoutedEventArgs e)
         {
             var selectedItem = DistraitInput.SelectedItem as ComboBoxItem;
@@ -42,14 +47,8 @@ namespace Concentrade
             _answers.SauvegarderDansSettings();
             UserManager.PushIntoBDD_FireAndForget();
 
-            // ➡️ Tu peux maintenant aller vers un écran de résumé ou Menu
-            // this.NavigationService?.Navigate(new QuestionRecap(_answers));
-
-
             string savedName = Properties.Settings.Default.UserName;
             this.NavigationService?.Navigate(new WelcomePage(savedName));
-            // Ex : navigation finale
-            // this.NavigationService?.Navigate(new MainMenu());
         }
     }
 }

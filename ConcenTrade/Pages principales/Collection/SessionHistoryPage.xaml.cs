@@ -18,6 +18,7 @@ namespace Concentrade.Pages_principales
         private Random _random = new Random();
         private ObservableCollection<StatEntry> stats = new ObservableCollection<StatEntry>();
 
+        // Initialise la page d'historique des sessions
         public SessionHistoryPage()
         {
             InitializeComponent();
@@ -25,6 +26,7 @@ namespace Concentrade.Pages_principales
             LoadStatsAndChart();
         }
 
+        // Parse une chaîne de données de session en liste de valeurs numériques
         public static List<double> ParseSessionString(string data)
         {
             var result = new List<double>();
@@ -41,6 +43,7 @@ namespace Concentrade.Pages_principales
             return result;
         }
 
+        // Charge les statistiques et génère le graphique avec des données simulées
         private void LoadStatsAndChart()
         {
             DateTime startDate = DateTime.Today.AddDays(-15);
@@ -65,6 +68,7 @@ namespace Concentrade.Pages_principales
             UpdateStatsBlock();
         }
 
+        // Met à jour le graphique avec les données des statistiques
         private void UpdateChartFromStats()
         {
             var values = new LiveCharts.ChartValues<double>(stats.Select(s => s.Hours));
@@ -103,6 +107,7 @@ namespace Concentrade.Pages_principales
             });
         }
 
+        // Met à jour le bloc des statistiques avec les valeurs calculées
         private void UpdateStatsBlock()
         {
             if (stats.Count == 0) return;
@@ -121,11 +126,13 @@ namespace Concentrade.Pages_principales
             public double Hours { get; set; }
         }
 
+        // Navigue vers la page de menu
         private void RetourButton_Click(object sender, RoutedEventArgs e)
         {
             this.NavigationService?.Navigate(new MenuPage());
         }
 
+        // Crée et anime les particules lors du chargement de la page
         private void SessionHistoryPage_Loaded(object sender, RoutedEventArgs e)
         {
             if (this.ActualWidth > 0 && this.ActualHeight > 0)
@@ -134,6 +141,7 @@ namespace Concentrade.Pages_principales
             }
         }
 
+        // Crée et anime un nombre spécifique de particules
         private void CreateAndAnimateParticles(int count)
         {
             for (int i = 0; i < count; i++)
@@ -157,6 +165,7 @@ namespace Concentrade.Pages_principales
             }
         }
 
+        // Anime une particule individuelle avec un mouvement aléatoire
         private void AnimateParticle(Ellipse particle)
         {
             var transform = (TranslateTransform)particle.RenderTransform;
@@ -190,21 +199,23 @@ namespace Concentrade.Pages_principales
             transform.BeginAnimation(TranslateTransform.YProperty, animY);
         }
 
+        // Affiche le panneau graphique et masque le tableau
         private void BtnGraphique_Click(object sender, RoutedEventArgs e)
         {
             SetPanelVisibility(true);
         }
 
+        // Affiche le panneau tableau et masque le graphique
         private void BtnTableau_Click(object sender, RoutedEventArgs e)
         {
             SetPanelVisibility(false);
         }
 
+        // Gère la visibilité des panneaux graphique et tableau
         private void SetPanelVisibility(bool showGraph)
         {
             GraphiquePanel.Visibility = showGraph ? Visibility.Visible : Visibility.Collapsed;
             TableauPanel.Visibility = showGraph ? Visibility.Collapsed : Visibility.Visible;
-            // Style boutons
             if (showGraph)
             {
                 BtnGraphique.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFD700"));

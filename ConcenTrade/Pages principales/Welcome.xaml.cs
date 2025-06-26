@@ -12,24 +12,22 @@ namespace Concentrade
     {
         private readonly string userName;
 
+        // Initialise la page de bienvenue avec le nom de l'utilisateur
         public WelcomePage(string name)
         {
             userName = name;
             InitializeComponent();
         }
 
+        // Lance la séquence d'animation de bienvenue et redirige vers le menu
         private async void Page_Loaded(object? sender, RoutedEventArgs e)
         {
-            // Initialisez le texte
             WelcomeText.Text = $"Bonjour {userName} !";
 
-            // Démarrer l'animation principale
             await AnimateWelcomeSequence();
 
-            // Attente avant redirection
-            await Task.Delay(2000); // Réduit le délai pour une transition plus rapide
+            await Task.Delay(2000);
 
-            // Lancer l'animation de transition vers MenuPage
             var transitionOutStoryboard = (Storyboard)FindResource("TransitionOutToMenu");
             if (transitionOutStoryboard != null)
             {
@@ -44,7 +42,6 @@ namespace Concentrade
             }
             else
             {
-                // Fallback if storyboard not found
                 if (Application.Current.MainWindow is MainWindow main)
                 {
                     main.NavigateTo(new MenuPage());
@@ -52,9 +49,9 @@ namespace Concentrade
             }
         }
 
+        // Exécute la séquence complète d'animations de bienvenue
         private async Task AnimateWelcomeSequence()
         {
-            // Animations du cercle de méditation
             var meditationCircleScaleUp = new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(1.0))
             {
                 EasingFunction = new BackEase { EasingMode = EasingMode.EaseOut, Amplitude = 0.3 }
@@ -65,22 +62,19 @@ namespace Concentrade
             MeditationCircle.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, meditationCircleScaleUp);
             MeditationCircle.BeginAnimation(OpacityProperty, meditationCircleFadeIn);
 
-            await Task.Delay(300); // Délai avant les vagues
+            await Task.Delay(300);
 
-            // Animations des vagues zen
             var wave1FadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(1.0)) { BeginTime = TimeSpan.FromSeconds(0.2) };
             var wave2FadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(1.0)) { BeginTime = TimeSpan.FromSeconds(0.4) };
 
             ZenWave1.BeginAnimation(OpacityProperty, wave1FadeIn);
             ZenWave2.BeginAnimation(OpacityProperty, wave2FadeIn);
 
-            // CHANGEMENT ICI : Paramètres de l'animation de ZenWave1 ajustés pour plus d'amplitude et durée
-            AnimateSubtleWave(ZenWave1, "ZenWave1Transform", 4.0, 15, -15); // Augmenter l'amplitude de déplacement et la durée
-            AnimateSubtleWave(ZenWave2, "ZenWave2Transform", 3.5, -5, 5); // Conserver l'animation précédente pour ZenWave2
+            AnimateSubtleWave(ZenWave1, "ZenWave1Transform", 4.0, 15, -15);
+            AnimateSubtleWave(ZenWave2, "ZenWave2Transform", 3.5, -5, 5);
 
-            await Task.Delay(500); // Délai avant le symbole de concentration
+            await Task.Delay(500);
 
-            // Animation du symbole de concentration
             var focusSymbolFadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(1.0));
             var focusSymbolScale = new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(1.0))
             {
@@ -91,9 +85,8 @@ namespace Concentrade
             FocusSymbol.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, focusSymbolScale);
             FocusSymbol.BeginAnimation(OpacityProperty, focusSymbolFadeIn);
 
-            await Task.Delay(500); // Délai avant le texte de bienvenue
+            await Task.Delay(500);
 
-            // Animation du texte de bienvenue (plus dynamique)
             var textSlideUp = new DoubleAnimation(30, 0, TimeSpan.FromSeconds(1.0))
             {
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
@@ -103,9 +96,8 @@ namespace Concentrade
             WelcomeText.RenderTransform.BeginAnimation(TranslateTransform.YProperty, textSlideUp);
             WelcomeText.BeginAnimation(OpacityProperty, textFadeIn);
 
-            await Task.Delay(500); // Délai avant le message de concentration
+            await Task.Delay(500);
 
-            // Animation du message de concentration
             var messageSlideUp = new DoubleAnimation(20, 0, TimeSpan.FromSeconds(0.8))
             {
                 EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
@@ -115,10 +107,10 @@ namespace Concentrade
             FocusMessage.RenderTransform.BeginAnimation(TranslateTransform.YProperty, messageSlideUp);
             FocusMessage.BeginAnimation(OpacityProperty, messageFadeIn);
 
-            await Task.Delay(1000); // Attendre la fin des animations avant de permettre la transition
+            await Task.Delay(1000);
         }
 
-        // Méthode pour une animation de vague plus subtile.
+        // Anime une vague avec un mouvement subtil de haut en bas
         private void AnimateSubtleWave(Path wave, string transformName, double durationSeconds, double fromY, double toY)
         {
             var transform = (TranslateTransform)((TransformGroup)wave.RenderTransform).Children[0];

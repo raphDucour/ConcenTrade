@@ -14,6 +14,7 @@ namespace Concentrade
         private readonly Regex _dateRegex = new Regex(@"^(\d{0,2})/?\d{0,2}/?\d{0,4}$");
         private Random _random = new Random();
 
+        // Initialise la page de question sur l'âge avec les réponses utilisateur
         public QuestionAge(UserAnswers answers)
         {
             InitializeComponent();
@@ -22,6 +23,7 @@ namespace Concentrade
             this.Loaded += QuestionAge_Loaded;
         }
 
+        // Crée et anime les particules lors du chargement de la page
         private void QuestionAge_Loaded(object sender, RoutedEventArgs e)
         {
             if (this.ActualWidth > 0 && this.ActualHeight > 0)
@@ -30,6 +32,7 @@ namespace Concentrade
             }
         }
 
+        // Crée et anime un nombre spécifique de particules
         private void CreateAndAnimateParticles(int count)
         {
             for (int i = 0; i < count; i++)
@@ -53,6 +56,7 @@ namespace Concentrade
             }
         }
 
+        // Anime une particule individuelle avec un mouvement aléatoire
         private void AnimateParticle(Ellipse particle)
         {
             var transform = (System.Windows.Media.TranslateTransform)particle.RenderTransform;
@@ -86,22 +90,24 @@ namespace Concentrade
             transform.BeginAnimation(System.Windows.Media.TranslateTransform.YProperty, animY);
         }
 
+        // Place le focus sur le champ de saisie de la date de naissance
         private void AgeInput_Loaded(object sender, RoutedEventArgs e)
         {
             DateNaissanceInput.Focus();
         }
 
+        // Restreint la saisie de la date aux chiffres et slash
         private void DateNaissance_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !char.IsDigit(e.Text[0]) && e.Text[0] != '/';
         }
 
+        // Gère le formatage automatique et la validation de la date
         private void DateNaissance_TextChanged(object sender, TextChangedEventArgs e)
         {
             var textBox = (TextBox)sender;
             var text = textBox.Text;
 
-            // Vérifier si le texte correspond au format attendu
             if (!_dateRegex.IsMatch(text))
             {
                 ErrorMessage.Visibility = Visibility.Visible;
@@ -109,7 +115,6 @@ namespace Concentrade
                 return;
             }
 
-            // Ajouter automatiquement les /
             if (text.Length == 2 && !text.EndsWith("/"))
             {
                 textBox.Text = text + "/";
@@ -125,6 +130,7 @@ namespace Concentrade
             SuivantButton.IsEnabled = IsValidDate(text);
         }
 
+        // Permet de valider avec la touche Entrée
         private void Page_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -133,15 +139,16 @@ namespace Concentrade
             }
         }
 
+        // Valide si une date est correcte et réaliste
         private bool IsValidDate(string date)
         {
             if (!DateTime.TryParseExact(date, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime parsedDate))
                 return false;
 
-            // Vérifier si la date n'est pas dans le futur et si l'âge est raisonnable (moins de 120 ans)
             return parsedDate <= DateTime.Today && parsedDate > DateTime.Today.AddYears(-120);
         }
 
+        // Valide et sauvegarde la date de naissance puis navigue vers la question suivante
         private void Suivant_Click(object sender, RoutedEventArgs e)
         {
             var dateNaissance = DateNaissanceInput.Text;

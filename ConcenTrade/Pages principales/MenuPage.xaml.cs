@@ -42,13 +42,11 @@ namespace Concentrade
             DataContext = this;
             Points = Properties.Settings.Default.Points;
 
-            // ✅ LIGNE MODIFIÉE : On initialise les labels des sliders personnalisés au démarrage
             CustomTimeSlider_ValueChanged(null, null);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            // Tutoriel complètement désactivé au chargement - il ne se lance que manuellement
             Properties.Settings.Default.IsTutorialDone = true;
             Properties.Settings.Default.Save();
             
@@ -134,7 +132,6 @@ namespace Concentrade
             SliderLabel.Text = $"Cycles : {cycles} (Total : {dureeTotale} min)";
         }
 
-        // ✅ NOUVELLE MÉTHODE
         private void ModeButton_Click(object sender, RoutedEventArgs e)
         {
             if (PomodoroPanel == null || CustomTimePanel == null) return;
@@ -157,35 +154,25 @@ namespace Concentrade
 
             WorkTimeLabel.Text = $"Temps de travail : {(int)WorkTimeSlider.Value} minutes";
             BreakTimeLabel.Text = $"Temps de pause : {(int)BreakTimeSlider.Value} minutes";
-            // ✅ Ligne ajoutée
             CycleCountLabel.Text = $"Nombre de cycles : {(int)CycleCountSlider.Value}";
         }
 
-        // ✅ MÉTHODE MODIFIÉE
         public void StartSession_Click(object sender, RoutedEventArgs e)
         {
-            // On récupère l'état du Mode Focus au moment du clic
             bool isFocusMode = FocusModeToggle.IsChecked == true;
 
-            // On vérifie quel mode de timer est sélectionné (Pomodoro ou Personnalisé)
             if (PomodoroModeButton.IsChecked == true)
             {
-                // Logique pour le mode Pomodoro
                 int cycles = ConvertirPositionEnCycles(DureeSlider.Value);
 
-                // On navigue vers la TimerPage en passant les durées standards de Pomodoro (25/5)
-                // et l'état du Mode Focus.
                 this.NavigationService?.Navigate(new TimerPage(TimeSpan.FromMinutes(25), TimeSpan.FromMinutes(5), cycles, isFocusMode));
             }
             else
             {
-                // Logique pour le mode Personnalisé
                 TimeSpan workDuration = TimeSpan.FromMinutes((int)WorkTimeSlider.Value);
                 TimeSpan breakDuration = TimeSpan.FromMinutes((int)BreakTimeSlider.Value);
                 int customCycles = (int)CycleCountSlider.Value;
 
-                // On navigue vers la TimerPage en passant les durées personnalisées
-                // et l'état du Mode Focus.
                 this.NavigationService?.Navigate(new TimerPage(workDuration, breakDuration, customCycles, isFocusMode));
             }
         }
@@ -208,11 +195,9 @@ namespace Concentrade
 
         private void Tutorial_Click(object sender, RoutedEventArgs e)
         {
-            // Lancer le tutoriel interactif
             StartTutorial();
         }
 
-        // Méthode pour lancer le tutoriel interactif
         private void StartTutorial()
         {
             var targets = new UIElement[] {

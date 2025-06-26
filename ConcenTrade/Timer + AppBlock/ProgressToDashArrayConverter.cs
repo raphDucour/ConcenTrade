@@ -13,9 +13,9 @@ namespace Concentrade
     /// </summary>
     public class ProgressToDashArrayConverter : IMultiValueConverter
     {
+        // Convertit une valeur de progression en collection de tirets pour dessiner un arc de cercle
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            // S'assure que toutes les valeurs nécessaires sont présentes et valides..
             if (values == null || values.Length < 4 ||
                 !double.TryParse(values[0]?.ToString(), out double progress) ||
                 !double.TryParse(values[1]?.ToString(), out double width) ||
@@ -39,9 +39,9 @@ namespace Concentrade
             return new DoubleCollection(new[] { dashLength, circumference });
         }
 
+        // La conversion inverse n'est pas implémentée
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            // La conversion inverse n'est pas nécessaire pour cette application.
             throw new NotImplementedException();
         }
     }

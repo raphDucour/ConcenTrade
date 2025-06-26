@@ -22,21 +22,18 @@ namespace Concentrade
         private readonly object _promptLock = new object();
         private bool _isActive = false;
 
-        // --- MODIFIÉ ---
-        // La liste est maintenant une List<string> et n'est plus initialisée depuis les Settings..
         private List<string> _blockedApps = LoadBlockedApps();
 
         private readonly Dictionary<string, string> _displayNameCache = new();
 
-        // --- MODIFIÉ ---
-        // Cooldown global pour éviter les popups multiples de différents processus.
         private DateTime _lastGlobalPromptTime = DateTime.MinValue;
-        private readonly TimeSpan _popupCooldown = TimeSpan.FromSeconds(15); // Augmenté pour être sûr
+        private readonly TimeSpan _popupCooldown = TimeSpan.FromSeconds(15);
 
         private readonly Dictionary<string, DateTime> _temporaryAllowances = new();
 
         public event EventHandler<TemporaryAllowanceEventArgs>? OnTemporaryAllowance;
 
+        // Autorise temporairement une application pour une durée donnée
         public void AllowTemporarily(string processName, TimeSpan duration)
         {
             var mainProcessName = GetMainProcessName(processName);
@@ -44,27 +41,25 @@ namespace Concentrade
             OnTemporaryAllowance?.Invoke(this, new TemporaryAllowanceEventArgs(mainProcessName, duration));
         }
 
-
+        // Initialise le bloqueur d'applications
         public AppBlocker()
         {
         }
 
+        // Met à jour la liste des applications bloquées
         public void UpdateBlockedApps(IEnumerable<string> newBlockedApps)
         {
             _blockedApps = new List<string>(newBlockedApps.Select(app => NormalizeAppName(app)));
-            _displayNameCache.Clear(); // Vider le cache quand la liste change
+            _displayNameCache.Clear();
         }
 
-        // --- SUPPRIMÉ ---
-        // La méthode SaveBlockedApps() a été complètement supprimée.
-
-        // --- MODIFIÉ ---
-        // Renvoie maintenant une List<string>.
+        // Retourne la liste des applications bloquées
         public List<string> GetBlockedApps()
         {
             return _blockedApps;
         }
 
+        // Normalise le nom d'une application en utilisant les alias
         private string NormalizeAppName(string appName)
         {
             appName = appName.ToLower().Trim();
@@ -77,6 +72,7 @@ namespace Concentrade
             return appName;
         }
 
+        // Démarre la surveillance des processus
         public void Start()
         {
             try
@@ -93,6 +89,7 @@ namespace Concentrade
             }
         }
 
+        // Gère l'événement de démarrage d'un nouveau processus
         private void OnProcessStarted(object sender, EventArrivedEventArgs e)
         {
             if (!_isActive) return;
@@ -141,7 +138,6 @@ namespace Concentrade
 
                         string displayName = await GetDisplayName(process, mainProcessName);
 
-                        // ▼▼▼ LE BLOC CI-DESSOUS EST LA SEULE PARTIE À REMPLACER ▼▼▼
                         await Application.Current.Dispatcher.InvokeAsync(() =>
                         {
                             lock (_promptLock)
@@ -155,34 +151,27 @@ namespace Concentrade
                                 ShowWindow(process.MainWindowHandle, SW_MINIMIZE);
                             }
 
-                            // On vérifie si la session actuelle est en "Mode Focus"
                             if (_isFocusModeSessionActive)
                             {
-                                // Si oui, on affiche le popup strict qui ne propose que de fermer.
                                 var focusPopup = new FocusModePopup(displayName, process);
                                 focusPopup.ShowDialog();
-                                // La logique pour fermer l'application est gérée à l'intérieur du FocusModePopup.
                             }
                             else
                             {
-                                // Sinon, on affiche le popup de blocage normal avec l'option de prolonger.
                                 var popup = new BlocagePopup(displayName, process);
                                 popup.Activate();
                                 bool? dialogResult = popup.ShowDialog();
 
                                 if (dialogResult == true && popup.TemporarilyAllowed)
                                 {
-                                    // L'utilisateur a cliqué sur "Autoriser".
                                     AllowTemporarily(mainProcessName, popup.AllowedDuration);
                                 }
                                 else
                                 {
-                                    // L'utilisateur a cliqué sur "Fermer" ou a fermé la fenêtre.
                                     KillApplication(mainProcessName);
                                 }
                             }
                         });
-                        // ▲▲▲ FIN DU BLOC À REMPLACER ▲▲▲
                     }
                 }
                 catch (Exception ex)
@@ -192,6 +181,7 @@ namespace Concentrade
             });
         }
 
+        // Arrête la surveillance des processus
         public void Stop()
         {
             _watcher?.Stop();
@@ -199,38 +189,34 @@ namespace Concentrade
             _temporaryAllowances.Clear();
         }
 
+        // Active ou désactive le bloqueur avec option de mode focus
         public void SetActive(bool active, bool isFocusMode = false)
         {
             _isActive = active;
 
-            // La session en Mode Focus n'est considérée comme "active" que si 
-            // la session de travail est démarrée ET que l'utilisateur a coché la case.
             _isFocusModeSessionActive = active && isFocusMode;
 
             if (!active)
             {
-                // Cette partie ne change pas, elle nettoie tout à la fin d'une session.
                 _temporaryAllowances.Clear();
                 _lastGlobalPromptTime = DateTime.MinValue;
             }
         }
 
+        // Vérifie si une application est considérée comme distrayante
         public bool IsDistractingApp(string processName)
         {
             string mainProcessName = GetMainProcessName(processName.ToLower());
 
             return _blockedApps.Any(blockedApp =>
             {
-                // On utilise toujours NormalizeAppName pour gérer les alias (ex: "lol" -> "league of legends")
                 var normalizedBlockedApp = NormalizeAppName(blockedApp);
 
-                // On utilise notre nouvelle logique de comparaison plus intelligente
                 if (AreNamesAlike(mainProcessName, normalizedBlockedApp))
                 {
                     return true;
                 }
 
-                // On conserve la logique pour les processus liés (ex: pour Discord, Steam, etc.)
                 if (_relatedProcesses.ContainsKey(normalizedBlockedApp))
                 {
                     if (_relatedProcesses[normalizedBlockedApp].Any(relatedProc => AreNamesAlike(mainProcessName, relatedProc)))
@@ -243,6 +229,7 @@ namespace Concentrade
             });
         }
 
+        // Récupère le nom d'affichage d'un processus
         private async Task<string> GetDisplayName(Process process, string fallbackName)
         {
             try
@@ -260,7 +247,7 @@ namespace Concentrade
                     else if (!string.IsNullOrEmpty(process.MainModule?.FileVersionInfo.ProductName))
                         displayName = process.MainModule.FileVersionInfo.ProductName;
                 }
-                catch { /* Ignorer les erreurs d'accès */ }
+                catch { }
 
                 if (string.IsNullOrEmpty(displayName))
                     displayName = char.ToUpper(fallbackName[0]) + fallbackName[1..];
@@ -271,6 +258,7 @@ namespace Concentrade
             catch { return char.ToUpper(fallbackName[0]) + fallbackName[1..]; }
         }
 
+        // Obtient le nom principal d'un processus en tenant compte des processus liés
         private string GetMainProcessName(string processName)
         {
             processName = processName.ToLower();
@@ -287,6 +275,7 @@ namespace Concentrade
             return processName;
         }
 
+        // Attend qu'une fenêtre principale soit disponible
         private async Task<bool> WaitForMainWindow(Process process, TimeSpan timeout)
         {
             var start = DateTime.Now;
@@ -304,12 +293,9 @@ namespace Concentrade
             return false;
         }
 
+        // Compare deux noms d'applications en les normalisant
         private bool AreNamesAlike(string name1, string name2)
         {
-            // Fonction interne pour normaliser une chaîne de caractères :
-            // - Met tout en minuscules.
-            // - Ne garde que les lettres et les chiffres.
-            // Par exemple, "My Super Game" devient "mysupergame" et "my_super_game" devient aussi "mysupergame".
             string Normalize(string s) => new string(s.ToLower().Where(char.IsLetterOrDigit).ToArray());
 
             string normalizedName1 = Normalize(name1);
@@ -320,10 +306,10 @@ namespace Concentrade
                 return false;
             }
 
-            // Vérifie si l'un des noms normalisés contient l'autre.
             return normalizedName1.Contains(normalizedName2) || normalizedName2.Contains(normalizedName1);
         }
 
+        // Ferme une application et tous ses processus liés
         public void KillApplication(string mainAppName)
         {
             mainAppName = mainAppName.ToLower();
@@ -376,6 +362,7 @@ namespace Concentrade
             { "firefox", "mozilla firefox" }
         };
         
+        // Charge la liste des applications bloquées depuis les paramètres
         public static List<string> LoadBlockedApps()
         {
             return Settings.Default.BlockedApps

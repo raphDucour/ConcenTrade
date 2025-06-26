@@ -15,71 +15,57 @@ namespace Concentrade
         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
         private const int SW_MINIMIZE = 6;
 
-        // La seule information de sortie qui nous intÈresse maintenant..
         public bool TemporarilyAllowed { get; private set; }
         public TimeSpan AllowedDuration { get; private set; }
 
         private readonly Process? _processToBlock;
         private readonly DispatcherTimer _focusTimer;
 
-        // Constructeur par dÈfaut
+        // Constructeur par d√©faut
         public BlocagePopup()
         {
             InitializeComponent();
         }
 
-        // Constructeur principal, qui configure notre nouvelle logique
-        // Dans le fichier Concentrade/Timer + AppBlock/BlocagePopUp.xaml.cs
-
+        // Initialise le popup de blocage avec le nom de l'application et le processus
         public BlocagePopup(string appName, Process processToBlock)
         {
             InitializeComponent();
             this.Topmost = true;
             _processToBlock = processToBlock;
 
-            // Logique pour garder le focus (de la rÈponse prÈcÈdente)
             _focusTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(250) };
             _focusTimer.Tick += FocusTimer_Tick;
             this.Loaded += (s, e) => _focusTimer.Start();
             this.Closed += (s, e) => _focusTimer.Stop();
 
-            MessageText.Text = $"{appName} est bloquÈ.\nAutoriser temporairement ou fermer ?";
+            MessageText.Text = $"{appName} est bloqu√©.\nAutoriser temporairement ou fermer ?";
 
-            // --- NOUVEAU BLOC POUR LE DESIGN ---
-
-            // 1. On stylise la ComboBox elle-mÍme pour qu'elle soit sombre
-            TimeSelection.Background = new SolidColorBrush(Color.FromRgb(45, 45, 48)); // Un gris trËs sombre
+            TimeSelection.Background = new SolidColorBrush(Color.FromRgb(45, 45, 48));
             TimeSelection.BorderBrush = new SolidColorBrush(Colors.DimGray);
             TimeSelection.Foreground = Brushes.White;
 
-            // 2. On crÈe un style pour les ÈlÈments de la liste dÈroulante
             var itemStyle = new Style(typeof(ComboBoxItem));
 
-            // Couleur de fond et de texte pour chaque option
             itemStyle.Setters.Add(new Setter(ComboBoxItem.BackgroundProperty, new SolidColorBrush(Color.FromRgb(45, 45, 48))));
             itemStyle.Setters.Add(new Setter(ComboBoxItem.ForegroundProperty, Brushes.White));
 
-            // On crÈe un "dÈclencheur" pour changer la couleur quand la souris passe sur une option
             var mouseOverTrigger = new Trigger { Property = IsMouseOverProperty, Value = true };
             mouseOverTrigger.Setters.Add(new Setter(BackgroundProperty, new SolidColorBrush(Colors.DimGray)));
             itemStyle.Triggers.Add(mouseOverTrigger);
 
-            // On applique ce style aux ÈlÈments de notre ComboBox
             TimeSelection.ItemContainerStyle = itemStyle;
 
-            // --- FIN DU BLOC POUR LE DESIGN ---
-
-            // Logique pour remplir la ComboBox (de la rÈponse prÈcÈdente)
             TimeSelection.Items.Clear();
             TimeSelection.ItemsSource = Enumerable.Range(1, 10).Select(i => $"{i} minute{(i > 1 ? "s" : "")}");
-            TimeSelection.SelectedIndex = 4; // DÈfaut ‡ 5 minutes
+            TimeSelection.SelectedIndex = 4;
 
-            // On cache les anciens contrÙles
             AlwaysAllowCheckbox.Visibility = Visibility.Collapsed;
             TimeSelectionGrid.Visibility = Visibility.Visible;
             ContinueButton.Content = "Autoriser";
         }
-        // Le clic sur "Autoriser" (anciennement "Continuer")
+
+        // G√®re le clic sur le bouton autoriser
         private void Continue_Click(object sender, RoutedEventArgs e)
         {
             TemporarilyAllowed = true;
@@ -88,7 +74,7 @@ namespace Concentrade
             Close();
         }
 
-        // Le clic sur "Fermer" ne change pas
+        // G√®re le clic sur le bouton fermer
         private void CloseApp_Click(object sender, RoutedEventArgs e)
         {
             TemporarilyAllowed = false;
@@ -96,6 +82,7 @@ namespace Concentrade
             Close();
         }
 
+        // R√©cup√®re la dur√©e s√©lectionn√©e dans la combobox
         private TimeSpan GetSelectedTimeSpan()
         {
             if (TimeSelection?.SelectedItem is string selectedItem)
@@ -105,9 +92,10 @@ namespace Concentrade
                     return TimeSpan.FromMinutes(minutes);
                 }
             }
-            return TimeSpan.FromMinutes(5); // Valeur par dÈfaut
+            return TimeSpan.FromMinutes(5);
         }
 
+        // Garde le focus sur le popup et minimise l'application bloqu√©e
         private void FocusTimer_Tick(object? sender, EventArgs e)
         {
             if (_processToBlock == null || _processToBlock.HasExited)
@@ -122,7 +110,7 @@ namespace Concentrade
             catch { _focusTimer.Stop(); }
         }
 
-        // MÈthode non utilisÈe mais requise par le XAML existant
+        // M√©thode non utilis√©e mais requise par le XAML existant
         private void SetupWindow() { }
     }
 }
