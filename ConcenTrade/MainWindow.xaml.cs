@@ -29,7 +29,7 @@ namespace Concentrade
                 //faire une methode FireAndForget, ou on verifie si tout les champs sont les memes, si c'est pas les memes prendre celui ou il y a plus de cartes en priorité, puis celui ou il y a le plus de points, sinon si c'est les appbloqué qui change on prend celui ou il y a le plus d'app.
                 //autre option et de creer une propriété et colone modification date et choisir la plus recente
                 //voir UserManager.LoadUser();
-
+                UserManager.LoadProperties_FireAndForget(userEmail);
                 bool questionnaireDone = Properties.Settings.Default.QuestionnaireDone;
                 if (questionnaireDone)
                 {

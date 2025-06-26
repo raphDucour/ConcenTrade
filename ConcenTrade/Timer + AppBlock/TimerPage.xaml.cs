@@ -504,11 +504,14 @@ namespace Concentrade
         // Gère le clic sur le bouton stop
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
+            
             StopPulsing();
             _timer.Stop();
             _distractionPauseTimer?.Stop();
             SavePoints();
             _blocker.SetActive(false); 
+            
+            UserManager.PushIntoBDD_FireAndForget();
 
             if (this.NavigationService != null)
             {

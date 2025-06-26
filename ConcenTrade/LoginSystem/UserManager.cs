@@ -172,6 +172,21 @@ namespace Concentrade
                 MessageBox.Show($"Erreur lors du chargement des propriétés : {ex.Message}");
             }
         }
+        public static void LoadProperties_FireAndForget(string email)
+        {
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await LoadProperties(email);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Erreur dans LoadProperiesFireAndForget : " + ex.Message);
+                }
+            });
+        }
+
 
         /// <summary>Sauvegarde les points d'un utilisateur dans la base de données</summary>
         public static async Task SavePoints(string email, long points)

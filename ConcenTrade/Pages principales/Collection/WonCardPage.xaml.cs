@@ -17,6 +17,7 @@ namespace Concentrade.Pages_principales.Collection
         // Navigue vers la page de collection
         private void VoirCollection_Click(object sender, RoutedEventArgs e)
         {
+            UserManager.PushIntoBDD_FireAndForget();
             this.NavigationService?.Navigate(new CollectionPage());
         }
     }

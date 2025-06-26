@@ -74,7 +74,7 @@ namespace Concentrade.Collections_de_cartes
                 new Card("PeliCalme", CardRarity.Epic, "/Images/Cards/epics/pelican epic.png","Planifie ta journée, évite les distractions numériques."),
 
                 // legendaires
-                new Card("AntaGoat", CardRarity.Legendary, "/Images/Cards/legendaires/chevre legendaire.png","Ne te laisse pas distraire par les actions des autres. Suis ton propre chemin."),
+                new Card("AntaGoat", CardRarity.Legendary, "/Images/Cards/legendaires/chevre legendaire.png","Ne te laisse pas distraire par les actions des autres."),
                 new Card("Vincent", CardRarity.Legendary, "/Images/Cards/legendaires/dragon legendaire.png","Ton esprit, tel un dragon enflammé, consume le doute et forge la réussite."),
                 new Card("Pwin Tu", CardRarity.Legendary, "/Images/Cards/legendaires/grosnez legendaire.png","Une idée aiguisée ne tranche que si elle est poussée jusqu’au bout."),
                 new Card("Garou", CardRarity.Legendary, "/Images/Cards/legendaires/loup legendaire.png","Gare à toi si tu ne te concentres pas."),
