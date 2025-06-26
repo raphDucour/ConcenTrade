@@ -116,7 +116,7 @@ namespace Concentrade.Pages_principales
                 MessageBox.Show("Tu possèdes déjà toutes les cartes de cette caisse !");
                 return;
             }
-            this.NavigationService?.Navigate(new Caisse(CaisseCards, 100)); // Caisse Poules
+            this.NavigationService?.Navigate(new Caisse(CaisseCards, 10)); // Caisse Poules
         }
 
         private void BuyDog_Click(object sender, RoutedEventArgs e)
@@ -127,7 +127,7 @@ namespace Concentrade.Pages_principales
                 MessageBox.Show("Tu possèdes déjà toutes les cartes de cette caisse !");
                 return;
             }
-            this.NavigationService?.Navigate(new Caisse(CaisseCards, 300));
+            this.NavigationService?.Navigate(new Caisse(CaisseCards, 25));
         }
 
         private void BuyDragon_Click(object sender, RoutedEventArgs e)
@@ -138,7 +138,7 @@ namespace Concentrade.Pages_principales
                 MessageBox.Show("Tu possèdes déjà toutes les cartes de cette caisse !");
                 return;
             }
-            this.NavigationService?.Navigate(new Caisse(CaisseCards, 800));
+            this.NavigationService?.Navigate(new Caisse(CaisseCards, 60));
         }
 
         private void BuyCaisse4_Click(object sender, RoutedEventArgs e)
@@ -149,7 +149,7 @@ namespace Concentrade.Pages_principales
                 MessageBox.Show("Tu possèdes déjà toutes les cartes de cette caisse !");
                 return;
             }
-            this.NavigationService?.Navigate(new Caisse(CaisseCards, 2000));
+            this.NavigationService?.Navigate(new Caisse(CaisseCards, 100));
         }
 
         private bool HasAllCards(List<Card> caisseCards)
