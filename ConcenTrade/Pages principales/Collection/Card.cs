@@ -125,7 +125,7 @@ namespace Concentrade.Collections_de_cartes
                 new Card("Œil de Mouche", CardRarity.Rare, "/Images/Cards/rares/mouche rare.png","?"),
                 new Card("Mélodie du Panda", CardRarity.Rare, "/Images/Cards/rares/panda.png","?"),
                 new Card("Ver de Livre", CardRarity.Rare, "/Images/Cards/rares/verre de terrre rare.png","?"),
-                new Card("Zêrbe", CardRarity.Rare, "/Images/Cards/rares/zebre rare.png","?"),
+                new Card("Zèbre Zêrbe", CardRarity.Rare, "/Images/Cards/rares/zebre rare.png","?"),
             };
             ListCaisse = GetSortedByRarity(ListCaisse);
             return filterByOptainedCards(ListCaisse);
@@ -138,7 +138,7 @@ namespace Concentrade.Collections_de_cartes
                 // epics
                 new Card("Hippo Boss", CardRarity.Epic, "/Images/Cards/epics/hipo epic.png","?"),
                 new Card("R-Aigle", CardRarity.Epic, "/Images/Cards/epics/aigle epic.png ","?"),
-                new Card("Hibourge", CardRarity.Epic, "/Images/Cards/epics/hibou epic.png ","?"),
+                new Card("HiBoom", CardRarity.Epic, "/Images/Cards/epics/hibou epic.png ","?"),
                 new Card("Elegang", CardRarity.Epic, "/Images/Cards/epics/elephant epic.png","?"),
                 new Card("Lez", CardRarity.Epic, "/Images/Cards/epics/lezard epic.png","?"),
                 new Card("PeliCalme", CardRarity.Epic, "/Images/Cards/epics/pelican epic.png","?"),
