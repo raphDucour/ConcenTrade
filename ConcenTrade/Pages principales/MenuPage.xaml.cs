@@ -114,10 +114,7 @@ namespace Concentrade
 
         private int ConvertirPositionEnCycles(double position)
         {
-            int index = _positionsSlider.Select((p, i) => new { Index = i, Distance = Math.Abs(p - position) })
-                                         .OrderBy(p => p.Distance)
-                                         .First().Index;
-            return _cyclesPossibles[index];
+            return (int)Math.Round(position);
         }
 
         private void DureeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

@@ -445,13 +445,19 @@ namespace Concentrade
             switch (_currentState)
             {
                 case PomodoroState.Work:
-                    stateInfo = "Travail";
+                    stateInfo = $"Cycle {_currentCycle}/{_totalCycles} - Travail";
                     break;
                 case PomodoroState.ShortBreak:
-                    stateInfo = "Petite pause";
+                    stateInfo = $"Cycle {_currentCycle}/{_totalCycles} - Petite pause";
+                    break;
+                case PomodoroState.Finished:
+                    stateInfo = "Félicitations !";
+                    break;
+                default:
+                    stateInfo = "";
                     break;
             }
-            if (_isPaused)
+            if (_isPaused && _currentState != PomodoroState.Finished)
             {
                 stateInfo += " (En pause)";
             }
