@@ -23,7 +23,7 @@ namespace Concentrade
         private bool _isActive = false;
 
         // --- MODIFIÉ ---
-        // La liste est maintenant une List<string> et n'est plus initialisée depuis les Settings.
+        // La liste est maintenant une List<string> et n'est plus initialisée depuis les Settings..
         private List<string> _blockedApps = LoadBlockedApps();
 
         private readonly Dictionary<string, string> _displayNameCache = new();
