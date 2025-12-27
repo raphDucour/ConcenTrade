@@ -1,5 +1,6 @@
 # ConcenTrade
 
+**Branche finale : `Version-Finale-2`**
 **ConcenTrade** est une application Windows de productivité combinant un **système Pomodoro** et un **mécanisme de récompenses**.  
 Elle aide l’utilisateur à rester concentré en **bloquant automatiquement les applications distrayantes** pendant les sessions de travail, tout en proposant une progression ludique (cartes, coffres, points).
 
