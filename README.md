@@ -15,7 +15,7 @@ Projet réalisé à cinq, avec une répartition claire des responsabilités :
 
 - **Antoine Dupuy** : Backend, surveillance système Windows (WMI), gestion des processus actifs et configuration des règles de blocage.
 - **Raphaël Ducournau** : paramètres globaux, système d'authentification/session, logique de collection de cartes et Architecture de données (Supabase).
-- **Leonardo Dib** : Moteur Pomodoro (timers, cycles travail/pause, calcul des points) / Outillage et workflow / Optimisation du développement.
+- **Leonardo Dib** : Moteur Pomodoro (timers, cycles travail/pause) / Outillage et workflow / Optimisation du développement.
 - **Oscar Brochard** : UI/UX (WPF), animations et logique visuelle de la boutique.
 - **Volcy Desmazures** : Navigation, et tutoriel interactif, base de données.
 
