@@ -15,7 +15,7 @@ Projet réalisé à cinq, avec une répartition claire des responsabilités :
 
 - **Antoine Dupuy** : Backend, surveillance système Windows (WMI), gestion des processus actifs et configuration des règles de blocage.
 - **Raphaël Ducournau** : paramètres globaux, système d'authentification/session, logique de collection de cartes et Architecture de données (Supabase).
-- **Leonardo Dib** : Moteur Pomodoro (timers, cycles travail/pause) / Outillage et workflow / Optimisation du développement.
+- **Leonardo Dib** : Moteur Pomodoro (timers, cycles travail/pause, calcul de points) / Outillage et workflow / Optimisation du développement.
 - **Oscar Brochard** : UI/UX (WPF), animations et logique visuelle de la boutique.
 - **Volcy Desmazures** : Navigation, et tutoriel interactif, base de données.
 
@@ -43,5 +43,6 @@ J'ai conçu l'infrastructure de données et le système de progression du projet
 ## Détails techniques – Leonardo Dib
 
 - **Moteur Logique : Développement complet du système de cycles Pomodoro (travail / pause) et gestion des timers.**
+- **Logique de Gamification : Conception du système de calcul de points.**
 - **Outillage et Workflow : Création de fonctionnalités d'administration internes pour faciliter les phases de test et la gestion des données de session.**
 - **Optimisation du développement : Automatisation de la réinitialisation des environnements de test pour fluidifier le travail de l'équipe.**
