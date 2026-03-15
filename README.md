@@ -27,7 +27,6 @@ J'ai implémenté :
 
 - **Moteur de surveillance (`AppBlocker.cs`)** : Détection événementielle via **WMI** (`Win32_ProcessStartTrace`) pour intercepter les processus en temps réel sans surcharger le CPU, avec gestion des arbres de processus liés (ex. Steam et ses sous-services).
 - **Analyse d’état initial (`DistractingAppsConfirmation.xaml.cs`)** : Scan au lancement des processus actifs (`Process.GetProcesses`), filtrage via liste noire et proposition de fermeture groupée intelligente.
-- **Gestion des règles (`BlockedAppsSettings.xaml.cs`)** : Configuration dynamique basée sur des collections observables et des `HashSet` pour une gestion efficace des applications ciblées.
 
 
 ## Détails techniques – Raphaël Ducournau
